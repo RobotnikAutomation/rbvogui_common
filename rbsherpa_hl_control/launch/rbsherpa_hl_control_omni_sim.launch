@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="model" value="$(env ROBOT_MODEL)" />
+  <arg name="sim" default="false"/>
+
+  <rosparam file="$(find rbsherpa_hl_control)/config/rbsherpa_hl_control_$(arg model)_sim.yaml" command="load"/>
+
+  <!-- Controller spawner for omni model -->
+  <node name="controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn base_controller" respawn="false" output="screen"/>
+  <node name="base_joint_read_state_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_state_controller" respawn="false" output="screen"/>
+  <node name="base_joint_read_command_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_command_controller" respawn="false" output="screen"/>
+
+  <node name="elevator_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn structure_position_controller" respawn="false" output="screen"/>
+  <node name="tilt_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn tilt_position_controller" respawn="false" output="screen"/>
+  <node name="pan_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn pan_position_controller" respawn="false" output="screen"/>
+  <node name="gimbal_yaw_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn gimbal_yaw_controller" respawn="false" output="screen"/>
+  <node name="gimbal_roll_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn gimbal_roll_controller" respawn="false" output="screen"/>
+  <node name="gimbal_pitch_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn gimbal_pitch_controller" respawn="false" output="screen"/>
+
+</launch>

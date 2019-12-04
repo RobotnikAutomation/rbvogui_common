@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <name>rbsherpa_hl_control</name>
+  <version>0.0.0</version>
+  <description>The rbsherpa_hl_control package</description>
+
+  <maintainer email="alvaro@todo.todo">alvaro</maintainer>
+  <maintainer email="asoriano@robotnik.es">asoriano</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>ros_controllers</run_depend>
+  <run_depend>ros_control</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>rbsherpa_hl_pad</run_depend>
+
+</package>

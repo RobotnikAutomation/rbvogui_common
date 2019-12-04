@@ -1,0 +1,13 @@
+structure_joint_state_controller:
+   type:         joint_state_controller/JointStateController
+   publish_rate: 50
+
+torso_position_joint_trajectory_controller:
+   type: position_controllers/JointTrajectoryController
+   joints:
+      - rbsherpa_hl_torso_torso_pan_joint
+      - rbsherpa_hl_torso_torso_tilt_joint
+
+structure_position_controller:
+   type: position_controllers/JointPositionController
+   joint: rbsherpa_hl_torso_elevator_joint

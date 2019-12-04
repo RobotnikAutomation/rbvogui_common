@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="prefix" default="rbsherpa_hl_a"/>
+	<arg name="cmd_vel_topic" default="base/move_base/cmd_vel"/>
+	<!-- using twist mux -->
+	<arg name="odom_topic" default="/base/odom"/>
+	<arg name="global_frame" default="$(arg prefix)_odom"/>
+	<arg name="odom_frame" default="$(arg prefix)_odom"/>
+	<arg name="base_frame" default="$(arg prefix)_base_footprint"/>
+	<arg name="laser_frame" default="$(arg prefix)_front_laser_link"/>
+	<arg name="scan_topic" default="/base/front_laser/scan"/>
+	<arg name="model" default="$(env ROBOT_MODEL)"/>
+
+	<!-- Run move_base -->
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+		<rosparam file="$(find rbsherpa_hl_navigation)/config/move_base_params.yaml" command="load" />
+		<rosparam file="$(find rbsherpa_hl_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find rbsherpa_hl_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+		<rosparam file="$(find rbsherpa_hl_navigation)/config/local_costmap_params.yaml" command="load" />
+		<rosparam file="$(find rbsherpa_hl_navigation)/config/global_costmap_params_map.yaml" command="load" />
+		<rosparam file="$(find rbsherpa_hl_navigation)/config/teb_local_planner_params_$(arg model).yaml" command="load" />
+
+		<!-- reset frame_id parameters using user input data -->
+		<param name="global_costmap/obstacles_layer/scan/sensor_frame" value="$(arg laser_frame)"/>
+		<param name="local_costmap/obstacles_layer/scan/sensor_frame" value="$(arg laser_frame)"/>
+		<param name="global_costmap/obstacles_layer/scan/topic" value="$(arg scan_topic)"/>
+		<param name="local_costmap/obstacles_layer/scan/topic" value="$(arg scan_topic)"/>
+		<param name="local_costmap/global_frame" value="$(arg odom_frame)"/>
+		<param name="local_costmap/robot_base_frame" value="$(arg base_frame)"/>
+		<param name="global_costmap/global_frame" value="$(arg global_frame)"/>
+		<param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
+		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
+		<param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
+		<param name="controller_frequency" value="5.0"/>
+		<param name="controller_patience" value="15.0"/>
+		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
+		<remap from="odom" to="$(arg odom_topic)" />
+	</node>
+
+</launch>
