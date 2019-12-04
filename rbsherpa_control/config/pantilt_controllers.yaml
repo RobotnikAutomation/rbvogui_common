@@ -1,0 +1,21 @@
+pantilt_joint_state_controller:
+   type:         joint_state_controller/JointStateController
+   publish_rate: 50
+
+pantilt_joint_read_command_controller:
+   type:         joint_read_command_controller/JointReadCommandController
+   publish_rate: 50
+
+pantilt_position_joint_trajectory_controller:
+   type: position_controllers/JointTrajectoryController
+   joints:
+      - rbsherpa_torso_pantilt_pan_joint
+      - rbsherpa_torso_pantilt_tilt_joint
+
+tilt_position_controller:
+   type: position_controllers/JointPositionController
+   joint: rbsherpa_torso_pantilt_tilt_joint
+
+pan_position_controller:
+   type: position_controllers/JointPositionController
+   joint: rbsherpa_torso_pantilt_pan_joint

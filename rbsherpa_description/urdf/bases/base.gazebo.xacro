@@ -17,7 +17,7 @@
   <xacro:macro name="omni_drive_ackermann">
 		<gazebo>
 		<plugin name="omni_drive_ackermann" filename="libomnidrive_ackermann_plugin.so">
-			<!--<robotNamespace>/sherpa</robotNamespace>-->
+			<!--<robotNamespace>/rbsherpa</robotNamespace>-->
 			<!--<robotParam>robot_description</robotParam>-->
 			<broadcastTF>1</broadcastTF>
 			<wheelDiameter>0.220</wheelDiameter>
