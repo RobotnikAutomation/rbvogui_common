@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="model" value="$(env ROBOT_MODEL)" />
+		<arg name="id_robot" default="rbsherpa"/>
+    <arg name="prefix" default="$(arg id_robot)_"/>
+    <arg name="kinematics" default="ackermann" />
     <arg name="sim" default="false"/>
+		<arg name="launch_robot_localization" default="false"/>
     
-      <rosparam file="$(find rbsherpa_control)/config/rbsherpa_control_sim.yaml" command="load"/>
+      <rosparam file="$(find rbsherpa_control)/config/rbsherpa_control_$(arg kinematics)_sim.yaml" command="load"/>
 
         <!-- load the planar ros controllers by urdf -->
         <!-- Controller spawner for ackermann model -->

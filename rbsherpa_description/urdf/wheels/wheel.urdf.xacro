@@ -3,9 +3,9 @@
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
   <!-- Wheels -->
-  <property name="wheel_radius" value="0.110" />
-  <property name="wheel_height" value="0.110" />
-  <property name="wheel_mass" value="5.0" />
+  <xacro:property name="wheel_radius" value="0.110" />
+  <xacro:property name="wheel_height" value="0.110" />
+  <xacro:property name="wheel_mass" value="5.0" />
   <!-- in kg-->
 
   <xacro:property name="steer_joint_damping" value="2.0" />
@@ -30,7 +30,7 @@
     <joint name="${prefix}wheel_joint" type="continuous">
       <parent link="${parent}"/>
       <child link="${prefix}wheel"/>
-      <insert_block name="origin" />
+      <xacro:insert_block name="origin" />
       <axis xyz="0 1 0" rpy="0 0 0" />
       <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
       <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
