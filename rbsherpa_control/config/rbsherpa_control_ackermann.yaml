@@ -24,7 +24,7 @@ back_right_wheel_traction_joint_controller:
 
 
 base_controller:
-  type: rbsherpa_ackermann_controller/RbSherpaHlAckermannController
+  type: rbsherpa_hl_ackermann_controller/RbSherpaHlAckermannController
   traction:
     front_right:
       joint_name: rbsherpa_front_right_wheel_traction_joint
