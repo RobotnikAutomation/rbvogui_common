@@ -2,7 +2,7 @@
 <launch>
 
     <!-- ackermann, omni -->
-    <arg name="kinematics" value="$(optenv ROBOT_KINEMATICS ackermann)" />
+    <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS ackermann)" />
 	  <arg name="wheel_diameter" default="$(optenv ROBOT_WHEEL_DIAMETER 0.22)"/>
     <arg name="sim" default="false"/>
     <arg name="prefix" default="rbsherpa_"/>

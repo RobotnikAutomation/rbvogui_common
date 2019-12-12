@@ -18,9 +18,17 @@ back_left_wheel_joint_controller:
   type: velocity_controllers/JointVelocityController
   joint: rbsherpa_back_left_wheel_joint
 
+back_left_motor_wheel_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: rbsherpa_back_left_motor_wheel_joint
+
 back_right_wheel_joint_controller:
   type: velocity_controllers/JointVelocityController
   joint: rbsherpa_back_right_wheel_joint
+
+back_right_motor_wheel_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: rbsherpa_back_right_motor_wheel_joint
 
 pantilt_pan_controller:
   type: position_controllers/JointPositionController
@@ -32,7 +40,7 @@ pantilt_tilt_controller:
 
 
 base_controller:
-  type: rbsherpa_hl_ackermann_controller/RbSherpaHlAckermannController
+  type: omni_drive_controller/AckermannDriveController
   traction:
     front_right:
       joint_name: rbsherpa_front_right_wheel_joint
@@ -55,15 +63,23 @@ base_controller:
       joint_name: rbsherpa_front_left_motor_wheel_joint
       min_angle: -2.6 # rads
       max_angle: 2.6
-  linear_speed_limit: 2.8
-  linear_acceleration_limit: 2.0
+    back_right:
+      joint_name: rbsherpa_back_right_motor_wheel_joint
+      min_angle: -2.6 # rads
+      max_angle: 2.6
+    back_left:
+      joint_name: rbsherpa_back_left_motor_wheel_joint
+      min_angle: -2.6 # rads
+      max_angle: 2.6
+  linear_speed_limit: 0.8
+  linear_acceleration_limit: 1.0
   angular_speed_limit: 2.0
   angular_acceleration_limit: 2.0
   odom_frame: rbsherpa_odom
   robot_base_frame: rbsherpa_base_footprint
   odom_broadcast_tf: true
   odom_topic: /rbsherpa/rbsherpa_control/odom
-  command_topic: /rbsherpa/rbsherpa_control/cmd_vel
+  command_topic: /rbsherpa/rbsherpa_control/cmd_ack
   wheel_base: 1.244 #from cad
   track_width: 0.734 #from cad
   wheel_diameter: 0.31 #  from cad

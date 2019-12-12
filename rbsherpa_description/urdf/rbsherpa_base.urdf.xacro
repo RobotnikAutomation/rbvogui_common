@@ -8,7 +8,7 @@
   <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
   <xacro:include filename="$(find rbsherpa_description)/urdf/bases/base.urdf.xacro" />
-  <xacro:include filename="$(find rbsherpa_description)/urdf/bases/base.gazebo.xacro" />
+  <!--xacro:include filename="$(find rbsherpa_description)/urdf/bases/base.gazebo.xacro" /-->
 
   <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/motor_wheel.urdf.xacro" />
   <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/wheel.urdf.xacro" />
@@ -45,13 +45,13 @@
       <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 ${180.0*deg2rad}"/>
     </xacro:motor_wheel>
 
-    <xacro:wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="true">
+    <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="true">
       <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 ${180.0*deg2rad}"/>
-    </xacro:wheel>
+    </xacro:motor_wheel>
 
-    <xacro:wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+    <xacro:motor_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
       <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-    </xacro:wheel>
+    </xacro:motor_wheel>
 
     <!-- SENSORS see robotnik_sensors for the specific configuration -->
     <xacro:sensor_imu_hector prefix="$(arg prefix)imu" parent="$(arg prefix)base_link">
@@ -64,12 +64,12 @@
       <origin xyz="-0.22 0 0.275" rpy="0 0 0"/>
     </xacro:sensor_gps>
 
-    <!--xacro:sensor_sick_s300 name="front_left" parent="${prefix}base_link">
+    <xacro:sensor_sick_s300 prefix="front_left" parent="${prefix}base_link">
       <origin xyz="0.606321 0.345821 0.3095" rpy="${180*deg2rad} 0 ${45*deg2rad}"/>
     </xacro:sensor_sick_s300>
         
-    <xacro:sensor_sick_s300 name="back_right" parent="${prefix}base_link">
+    <xacro:sensor_sick_s300 prefix="back_right" parent="${prefix}base_link">
         <origin xyz="-0.606321 -0.345821 0.3095" rpy="${180*deg2rad} 0 ${235*deg2rad}"/>
-    </xacro:sensor_sick_s300 -->
+    </xacro:sensor_sick_s300>
   </xacro:macro>
 </robot>
