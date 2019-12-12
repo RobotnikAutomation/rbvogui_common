@@ -64,12 +64,12 @@
       <origin xyz="-0.22 0 0.275" rpy="0 0 0"/>
     </xacro:sensor_gps>
 
-    <xacro:sensor_sick_s300 prefix="front_left" parent="${prefix}base_link">
-      <origin xyz="0.606321 0.345821 0.3095" rpy="${180*deg2rad} 0 ${45*deg2rad}"/>
+    <xacro:sensor_sick_s300 prefix="$(arg prefix)front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
+      <origin xyz="0.53 0.325821 0.3095" rpy="${180*deg2rad} 0 ${45*deg2rad}"/>
     </xacro:sensor_sick_s300>
         
-    <xacro:sensor_sick_s300 prefix="back_right" parent="${prefix}base_link">
-        <origin xyz="-0.606321 -0.345821 0.3095" rpy="${180*deg2rad} 0 ${235*deg2rad}"/>
+    <xacro:sensor_sick_s300 prefix="$(arg prefix)rear_laser" parent="${prefix}base_link" prefix_topic="rear_laser">
+        <origin xyz="-0.532 -0.323821 0.3095" rpy="${180*deg2rad} 0 ${225*deg2rad}"/>
     </xacro:sensor_sick_s300>
   </xacro:macro>
 </robot>
