@@ -40,7 +40,7 @@ pantilt_tilt_controller:
 
 
 base_controller:
-  type: omni_drive_controller/AckermannDriveController
+  type: ackermann_drive_controller/AckermannDriveController
   traction:
     front_right:
       joint_name: rbsherpa_front_right_wheel_joint
