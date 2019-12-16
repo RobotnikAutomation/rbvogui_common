@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <launch>
-	<arg name="prefix" default="rbsherpa_a"/>
-	<arg name="cmd_vel_topic" default="base/move_base/cmd_vel"/>
+	<arg name="id_robot" default="rbsherpa"/>
+	<arg name="prefix" default="$(arg id_robot)_"/>
+	<arg name="kinematics" default="ackermann"/>
+	<arg name="cmd_vel_topic" default="move_base/cmd_vel"/>
 	<!-- using twist mux -->
-	<arg name="odom_topic" default="/base/odom"/>
-	<arg name="global_frame" default="$(arg prefix)_odom"/>
-	<arg name="odom_frame" default="$(arg prefix)_odom"/>
-	<arg name="base_frame" default="$(arg prefix)_base_footprint"/>
-	<arg name="laser_frame" default="$(arg prefix)_front_laser_link"/>
-	<arg name="scan_topic" default="/base/front_laser/scan"/>
-	<arg name="model" default="$(env ROBOT_MODEL)"/>
+	<arg name="odom_topic" default="odom"/>
+	<arg name="global_frame" default="$(arg prefix)odom"/>
+	<arg name="odom_frame" default="$(arg prefix)odom"/>
+	<arg name="base_frame" default="$(arg prefix)base_footprint"/>
+	<arg name="laser_frame" default="$(arg prefix)front_laser_link"/>
+	<arg name="scan_topic" default="front_laser/scan"/>
 
 	<!-- Run move_base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -18,7 +19,7 @@
 		<rosparam file="$(find rbsherpa_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
 		<rosparam file="$(find rbsherpa_navigation)/config/local_costmap_params.yaml" command="load" />
 		<rosparam file="$(find rbsherpa_navigation)/config/global_costmap_params_map.yaml" command="load" />
-		<rosparam file="$(find rbsherpa_navigation)/config/teb_local_planner_params_$(arg model).yaml" command="load" />
+		<rosparam file="$(find rbsherpa_navigation)/config/teb_local_planner_params_$(arg kinematics).yaml" command="load" />
 
 		<!-- reset frame_id parameters using user input data -->
 		<param name="global_costmap/obstacles_layer/scan/sensor_frame" value="$(arg laser_frame)"/>
