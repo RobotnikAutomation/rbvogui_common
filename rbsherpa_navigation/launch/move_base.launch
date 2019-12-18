@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-	<arg name="id_robot" default="rbsherpa"/>
+	<arg name="id_robot" default="robot"/>
 	<arg name="prefix" default="$(arg id_robot)_"/>
 	<arg name="kinematics" default="omni"/>
 	<arg name="cmd_vel_topic" default="move_base/cmd_vel"/>

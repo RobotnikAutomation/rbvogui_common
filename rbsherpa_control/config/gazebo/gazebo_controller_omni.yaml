@@ -1,6 +1,6 @@
 gazebo_ros_control:
   pid_gains:
-    rbsherpa_a_front_right_wheel_steer_joint:
+    rbsherpa_front_right_wheel_steer_joint:
       p: 100.0
       i: 0.01
       d: 10.0
@@ -8,7 +8,7 @@ gazebo_ros_control:
       antiwindup: false
       publish_state: true
     
-    rbsherpa_a_front_left_wheel_steer_joint:
+    rbsherpa_front_left_wheel_steer_joint:
       p: 100.0
       i: 0.01
       d: 10.0
@@ -16,7 +16,7 @@ gazebo_ros_control:
       antiwindup: false
       publish_state: true
 
-    rbsherpa_a_back_right_wheel_steer_joint:
+    rbsherpa_back_right_wheel_steer_joint:
       p: 100.0
       i: 0.01
       d: 10.0
@@ -24,7 +24,7 @@ gazebo_ros_control:
       antiwindup: false
       publish_state: true
     
-    rbsherpa_a_back_left_wheel_steer_joint:
+    rbsherpa_back_left_wheel_steer_joint:
       p: 100.0
       i: 0.01
       d: 10.0
@@ -32,7 +32,7 @@ gazebo_ros_control:
       antiwindup: false
       publish_state: true
 
-    rbsherpa_a_torso_elevator_joint:
+    rbsherpa_torso_elevator_joint:
       p: 200.0
       i: 0.01
       d: 10.0
@@ -40,7 +40,7 @@ gazebo_ros_control:
       antiwindup: false
       publish_state: true
 
-    rbsherpa_a_torso_pantilt_pan_joint:
+    rbsherpa_torso_pantilt_pan_joint:
       p: 100.0
       i: 0.01
       d: 10.0
@@ -48,7 +48,7 @@ gazebo_ros_control:
       antiwindup: false
       publish_state: true
 
-    rbsherpa_a_torso_pantilt_tilt_joint:
+    rbsherpa_torso_pantilt_tilt_joint:
       p: 2.0
       i: 0.1
       d: 0.01
@@ -56,17 +56,17 @@ gazebo_ros_control:
       antiwindup: false
       publish_state: true
 
-    rbsherpa_a_gimbal_roll_joint:
+    rbsherpa_gimbal_roll_joint:
       p: 2.0
       i: 0.05
       d: 0.01
 
-    rbsherpa_a_gimbal_pitch_joint:
+    rbsherpa_gimbal_pitch_joint:
       p: 2.0
       i: 0.05
       d: 0.01
 
-    rbsherpa_a_gimbal_yaw_joint:
+    rbsherpa_gimbal_yaw_joint:
       p: 2.0
       i: 0.05
       d: 0.01

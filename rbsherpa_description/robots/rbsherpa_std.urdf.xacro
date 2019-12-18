@@ -14,7 +14,7 @@
 	<!-- Import all available sensors -->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
-	<xacro:property name="prefix" value="rbsherpa_" />
+	<xacro:property name="prefix" value="robot_" />
 	<xacro:property name="publish_bf" value="true" />
 	<xacro:property name="hq" value="true" />
 

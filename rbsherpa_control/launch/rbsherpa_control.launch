@@ -2,16 +2,16 @@
 <launch>
 
     <!-- ackermann, omni -->
-    <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS ackermann)" />
+    <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS omni)" />
 	  <arg name="wheel_diameter" default="$(optenv ROBOT_WHEEL_DIAMETER 0.22)"/>
     <arg name="sim" default="false"/>
-    <arg name="prefix" default="rbsherpa_"/>
-		<arg name="id_robot" default="rbsherpa"/>
+		<arg name="id_robot" default="robot"/>
+    <arg name="prefix" default="$(arg id_robot)_"/>
 		<arg name="launch_robot_localization" default="false"/>
 
     <!-- Robot - Load joint controller configurations from YAML file to parameter server -->
     <group unless="$(arg sim)">
-      <rosparam file="$(find rbsherpa_control)/config/rbsherpa_control_$(arg kinematics).yaml" command="load"/>
+      <rosparam file="$(find rbsherpa_control)/config/$(arg prefix)control_$(arg kinematics).yaml" command="load"/>
 
       <param name="robotnik_base_control/odom_frame" value="$(arg prefix)odom"/>
       <param name="robotnik_base_control/robot_base_frame" value="$(arg prefix)base_footprint"/>
@@ -27,25 +27,13 @@
 
     <!-- Simulation - Load joint controller configurations from YAML file to parameter server -->
 	  <group if="$(arg sim)">
-      <rosparam file="$(find rbsherpa_control)/config/rbsherpa_control_$(arg kinematics)_sim.yaml" command="load"/>
+      <rosparam file="$(find rbsherpa_control)/config/$(arg prefix)control_$(arg kinematics)_sim.yaml" command="load"/>
 
       <!-- Controller spawner for ackermann model -->
       <node name="controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn base_controller" respawn="false" output="screen"/>
 
       <node name="base_joint_read_state_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_state_controller" respawn="false" output="screen"/>
       <node name="base_joint_read_command_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_command_controller" respawn="false" output="screen"/>
-
-      <!-- Controller spawner for ackermann model -->
-      <!--node name="pantilt_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn pantilt_tilt_controller" respawn="false" output="screen"/>
-      <node name="panpan_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn pantilt_pan_controller" respawn="false" output="screen"/-->
-
-      <!-- Controller spawner for omni model -->
-      <!--node name="elevator_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn structure_position_controller" respawn="false" output="screen"/>
-      <node name="tilt_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn tilt_position_controller" respawn="false" output="screen"/>
-      <node name="pan_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn pan_position_controller" respawn="false" output="screen"/>
-      <node name="gimbal_yaw_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn gimbal_yaw_controller" respawn="false" output="screen"/>
-      <node name="gimbal_roll_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn gimbal_roll_controller" respawn="false" output="screen"/>
-      <node name="gimbal_pitch_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn gimbal_pitch_controller" respawn="false" output="screen"/-->
 
     </group>
 
