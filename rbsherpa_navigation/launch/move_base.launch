@@ -2,7 +2,7 @@
 <launch>
 	<arg name="id_robot" default="rbsherpa"/>
 	<arg name="prefix" default="$(arg id_robot)_"/>
-	<arg name="kinematics" default="ackermann"/>
+	<arg name="kinematics" default="omni"/>
 	<arg name="cmd_vel_topic" default="move_base/cmd_vel"/>
 	<!-- using twist mux -->
 	<arg name="odom_topic" default="odom"/>

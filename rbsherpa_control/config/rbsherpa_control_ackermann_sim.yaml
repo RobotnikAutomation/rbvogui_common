@@ -30,14 +30,6 @@ back_right_motor_wheel_joint_controller:
   type: position_controllers/JointPositionController
   joint: rbsherpa_back_right_motor_wheel_joint
 
-pantilt_pan_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_torso_pantilt_pan_joint
-
-pantilt_tilt_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_torso_pantilt_tilt_joint
-
 
 base_controller:
   type: ackermann_drive_controller/AckermannDriveController

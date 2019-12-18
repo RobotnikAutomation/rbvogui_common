@@ -30,30 +30,6 @@ back_right_motor_wheel_joint_controller:
   type: position_controllers/JointPositionController
   joint: rbsherpa_back_right_motor_wheel_joint
 
-structure_position_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_torso_elevator_joint
-
-pan_position_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_torso_pantilt_pan_joint
-
-tilt_position_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_torso_pantilt_tilt_joint 
-
-gimbal_roll_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_gimbal_roll_joint
-
-gimbal_pitch_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_gimbal_pitch_joint
-
-gimbal_yaw_controller:
-  type: position_controllers/JointPositionController
-  joint: rbsherpa_gimbal_yaw_joint
-
 
 base_controller:
   type: omni_drive_controller/OmniDriveController
