@@ -70,8 +70,8 @@ base_controller:
   odom_frame: rbsherpa_odom
   robot_base_frame: rbsherpa_base_footprint
   odom_broadcast_tf: true
-  odom_topic: rbsherpa_control/odom
-  command_topic: rbsherpa_control/cmd_ack
+  odom_topic: robotnik_base_control/odom
+  command_topic: robotnik_base_control/cmd_ack
   wheel_base: 1.244 #from cad
   track_width: 0.734 #from cad
   wheel_diameter: 0.31 #  from cad
