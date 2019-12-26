@@ -11,11 +11,14 @@ To install dependencies, you need to execute:
 sudo dpkg -i libraries/ros-kinetic-ackermann-drive-controller_0.0.0-0xenial_amd64.deb
 
 sudo dpkg -i libraries/ros-kinetic-omni-drive-controller_0.0.0-0xenial_amd64.deb
+
+sudo dpkg -i libraries/ros-kinetic-robotnik-twist2ackermann_0.0.0-0xenial_amd64.deb
 ```
 
 Also you will need other external dependencies:
 
 - [joint_read_command_controller](https://github.com/RobotnikAutomation/joint_read_command_controller)
+- [robotnik_msgs](https://github.com/RobotnikAutomation/robotnik_msgs)
 
 <h2>rbsherpa_description</h2>
 
