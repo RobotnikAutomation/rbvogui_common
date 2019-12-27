@@ -5,20 +5,27 @@ Common packages of the RB-Sherpa: URDF description of the RB-Sherpa, platform me
 
 Configuration and launch files to load omni_drive_controller.
 
-To install dependencies, you need to execute:
-
-```bash
-sudo dpkg -i libraries/ros-kinetic-ackermann-drive-controller_0.0.0-0xenial_amd64.deb
-
-sudo dpkg -i libraries/ros-kinetic-omni-drive-controller_0.0.0-0xenial_amd64.deb
-
-sudo dpkg -i libraries/ros-kinetic-robotnik-twist2ackermann_0.0.0-0xenial_amd64.deb
-```
-
-Also you will need other external dependencies:
+Install external dependencies:
 
 - [joint_read_command_controller](https://github.com/RobotnikAutomation/joint_read_command_controller)
-- [robotnik_msgs](https://github.com/RobotnikAutomation/robotnik_msgs)
+
+Also you need to install dependencies, you need to execute:
+
+```bash
+sudo dpkg -i libraries/ros-kinetic-robotnik-msgs_1.0.0-0xenial_amd64.deb
+```
+```bash
+sudo dpkg -i libraries/ros-kinetic-rcomponent_1.1.0-0xenial_amd64.deb
+```
+```bash
+sudo dpkg -i libraries/ros-kinetic-ackermann-drive-controller_0.0.0-0xenial_amd64.deb
+```
+```bash
+sudo dpkg -i libraries/ros-kinetic-omni-drive-controller_0.0.0-0xenial_amd64.deb
+```
+```bash
+sudo dpkg -i libraries/ros-kinetic-robotnik-twist2ackermann_0.0.0-0xenial_amd64.deb
+```
 
 <h2>rbsherpa_description</h2>
 
