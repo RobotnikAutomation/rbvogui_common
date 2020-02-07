@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- RBSherpa v3.0 -->
+<!-- RBSherpa v2.0 -->
 <robot name="rbsherpa" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 
@@ -11,7 +11,7 @@
     <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
     <!-- Import rbsherpa base elements-->
-    <xacro:include filename="$(find rbsherpa_description)/urdf/bases/rbsherpa_base_v3.urdf.xacro" />
+    <xacro:include filename="$(find rbsherpa_description)/urdf/bases/rbsherpa_base_v2.urdf.xacro" />
 
     <!-- Import rbsherpa wheels -->
     <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/motor_wheel.urdf.xacro" />
@@ -24,8 +24,8 @@
     <xacro:property name="deg2rad" value="0.01745329251"/>
 
     <!-- Wheel parameters -->
-    <xacro:property name="wheel_offset_x" value="0.380" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
-    <xacro:property name="wheel_offset_y" value="0.23975" />
+    <xacro:property name="wheel_offset_x" value="0.429" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+    <xacro:property name="wheel_offset_y" value="0.227" />
     <xacro:property name="wheel_offset_z" value="0.0" />
 
     <!-- Flag to select the high or low quality model -->
@@ -70,16 +70,16 @@
         </xacro:sensor_imu_hector>
         <!-- GPS -->
         <xacro:sensor_gps prefix="$(arg prefix)gps" parent="$(arg prefix)base_link">
-            <origin xyz="0.33375 0.0 1.115" rpy="0 0 0"/>
+            <origin xyz="-0.22 0 0.275" rpy="0 0 0"/>
         </xacro:sensor_gps>
-        <!-- Solid-State laser -->
-        <xacro:sensor_benewake_ce30 prefix="$(arg prefix)front_ss_laser" parent="${prefix}base_link" range_min="35" range_max="305" hfov="120" vfov="9" fps="20" gpu="false">
-            <origin xyz="0.5642 0.0 0.1857" rpy="${180*deg2rad} 0 0"/>
-        </xacro:sensor_benewake_ce30>
         <!-- 2d laser -->
-        <xacro:sensor_sick_tim551 prefix="$(arg prefix)front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
-            <origin xyz="0.5307 0.0 0.157" rpy="${180*deg2rad} 0 0"/>
-        </xacro:sensor_sick_tim551>
+        <xacro:sensor_sick_s300 prefix="$(arg prefix)front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
+            <origin xyz="0.53 0.325821 0.3095" rpy="${180*deg2rad} 0 ${45*deg2rad}"/>
+        </xacro:sensor_sick_s300>
+        <!-- 2d laser -->
+        <xacro:sensor_sick_s300 prefix="$(arg prefix)rear_laser" parent="${prefix}base_link" prefix_topic="rear_laser">
+            <origin xyz="-0.532 -0.323821 0.3095" rpy="${180*deg2rad} 0 ${225*deg2rad}"/>
+        </xacro:sensor_sick_s300>
 
     </xacro:macro>
 
