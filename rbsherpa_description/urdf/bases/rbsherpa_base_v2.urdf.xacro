@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="base" params="prefix publish_bf hq">
+
+  <xacro:include filename="$(find rbsherpa_description)/urdf/bases/rbsherpa_base.gazebo.xacro" />
+
+  <xacro:macro name="rbsherpa_base" params="prefix publish_bf hq">
 
     <!-- Robot mechanical and motor parameters -->
     <xacro:property name="PI" value="3.1415926535897931"/>
