@@ -15,7 +15,7 @@
 
     <!-- Import rbsherpa wheels -->
     <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/motor_wheel.urdf.xacro" />
-    <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/wheel.urdf.xacro" />
+    <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/wheel_v2.urdf.xacro" />
 
     <!-- Import all available sensors -->
     <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />

@@ -40,12 +40,12 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
-            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis.dae"/>
+            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis_v2.stl"/>
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
-            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis.dae"/>
+            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis_v2.dae"/>
           </geometry>
         </xacro:unless>
         <material name="darkgrey">
@@ -55,7 +55,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0 " />
         <geometry>
-          <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis.dae"/>
+          <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis_v2.dae"/>
         </geometry>
       </collision>
     </link>

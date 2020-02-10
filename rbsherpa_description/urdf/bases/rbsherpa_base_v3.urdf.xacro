@@ -40,12 +40,12 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
-            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis.dae"/>
+            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis_v3.stl"/>
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
-            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis.dae"/>
+            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis_v3.dae"/>
           </geometry>
         </xacro:unless>
         <material name="darkgrey">
@@ -55,7 +55,40 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0 " />
         <geometry>
-          <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis.dae"/>
+          <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis_v3.dae"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Logos -->
+		<joint name="${prefix}base_logos_joint" type="fixed">
+			<origin xyz="0 0 0" rpy="0 0 0 " />
+			<parent link="${prefix}base_link"/>
+			<child link="${prefix}base_logos_link" />
+		</joint>
+
+		<!-- Logos -->
+		<link name="${prefix}base_logos_link" >
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <xacro:if value="${hq}">
+          <geometry>
+            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_logos_v3.stl" scale="1.001 1.001 1.001"/>
+          </geometry>
+        </xacro:if>
+        <xacro:unless value="${hq}">
+          <geometry>
+            <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_logos_v3.dae" scale="1.001 1.001 1.001"/>
+          </geometry>
+        </xacro:unless>
+        <material name="lightgrey">
+          <color rgba="0.9 0.9 0.9 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0 " />
+        <geometry>
+          <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_chassis_v3.dae" scale="1.001 1.001 1.001"/>
         </geometry>
       </collision>
     </link>
