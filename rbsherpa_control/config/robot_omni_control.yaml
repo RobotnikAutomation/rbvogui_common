@@ -31,46 +31,46 @@ back_right_wheel_steer_joint_controller:
   joint: rbsherpa_back_right_wheel_steer_joint
 
 
-base_controller:
+robotnik_base_control:
   type: rbsherpa_omni_controller/RbSherpaHlOmniController
   traction:
     front_right:
-      joint_name: rbsherpa_front_right_wheel_traction_joint
+      joint_name: robot_front_right_wheel_traction_joint
       max_speed: 20.0 # rad/s
     front_left:
-      joint_name: rbsherpa_front_left_wheel_traction_joint
+      joint_name: robot_front_left_wheel_traction_joint
       max_speed: 20.0 # rad/s
     back_right:
-      joint_name: rbsherpa_back_right_wheel_traction_joint
+      joint_name: robot_back_right_wheel_traction_joint
       max_speed: 20.0 # rad/s
     back_left:
-      joint_name: rbsherpa_back_left_wheel_traction_joint
+      joint_name: robot_back_left_wheel_traction_joint
       max_speed: 20.0 # rad/s
   steer:
     front_right:
-      joint_name: rbsherpa_front_right_wheel_steer_joint
+      joint_name: robot_front_right_wheel_steer_joint
       min_angle: -3.1 # rads
       max_angle: 3.1
     front_left:
-      joint_name: rbsherpa_front_left_wheel_steer_joint
+      joint_name: robot_front_left_wheel_steer_joint
       min_angle: -3.1 # rads
       max_angle: 3.1
     back_right:
-      joint_name: rbsherpa_back_right_wheel_steer_joint
+      joint_name: robot_back_right_wheel_steer_joint
       min_angle: -3.1 # rads
       max_angle: 3.1
     back_left:
-      joint_name: rbsherpa_back_left_wheel_steer_joint
+      joint_name: robot_back_left_wheel_steer_joint
       min_angle: -3.1 # rads
       max_angle: 3.1
   linear_speed_limit: 2.8
   linear_acceleration_limit: 2.0
   angular_speed_limit: 2.0
   angular_acceleration_limit: 2.0
-  odom_frame: rbsherpa_odom
-  robot_base_frame: rbsherpa_base_footprint
+  odom_frame: robot_odom
+  robot_base_frame: robot_base_footprint
   odom_broadcast_tf: true
-  odom_topic: odom
+  odom_topic: robotnik_base_control/odom
   wheel_base: 1.244 #from cad # 1.244 or 1.42
   track_width: 0.734 #from cad # 0.734 or 0.72
   wheel_diameter: 0.315 #  from cad

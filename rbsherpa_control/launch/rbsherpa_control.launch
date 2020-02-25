@@ -1,40 +1,53 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- ackermann, omni -->
-    <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS omni)" />
-	  <arg name="wheel_diameter" default="$(optenv ROBOT_WHEEL_DIAMETER 0.22)"/>
-    <arg name="sim" default="false"/>
-		<arg name="id_robot" default="robot"/>
-    <arg name="prefix" default="$(arg id_robot)_"/>
-		<arg name="launch_robot_localization" default="false"/>
+  <!-- ackermann, omni -->
+  <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS omni)" />
+  <arg name="wheel_diameter" default="$(optenv ROBOT_WHEEL_DIAMETER 0.22)"/>
+  <arg name="track_width" default="$(optenv ROBOT_TRACK_WIDTH 0.439)"/>
+  <arg name="wheel_base" default="$(optenv ROBOT_WHEEL_BASE 0.439)"/>
+  <arg name="sim" default="false"/>
+  <arg name="id_robot" default="robot"/>
+  <arg name="prefix" default="$(arg id_robot)_"/>
+  <arg name="launch_robot_localization" default="false"/>
 
-    <!-- Robot - Load joint controller configurations from YAML file to parameter server -->
-    <group unless="$(arg sim)">
-      <rosparam file="$(find rbsherpa_control)/config/$(arg prefix)control_$(arg kinematics).yaml" command="load"/>
+  <!-- Robot - Load joint controller configurations from YAML file to parameter server -->
+  <group unless="$(arg sim)">
+    <rosparam file="$(find rbsherpa_control)/config/robot_$(arg kinematics)_control.yaml" command="load"/>
 
-      <param name="robotnik_base_control/odom_frame" value="$(arg prefix)odom"/>
-      <param name="robotnik_base_control/robot_base_frame" value="$(arg prefix)base_footprint"/>
-      <param name="robotnik_base_control/wheel_diameter" value="$(arg wheel_diameter)"/>
+    <param name="robotnik_base_control/traction/back_left/joint_name" value="$(arg prefix)back_left_wheel_traction_joint"/>
+    <param name="robotnik_base_control/traction/back_right/joint_name" value="$(arg prefix)back_right_wheel_traction_joint"/>
+    <param name="robotnik_base_control/traction/front_right/joint_name" value="$(arg prefix)front_right_wheel_traction_joint"/>
+    <param name="robotnik_base_control/traction/front_left/joint_name" value="$(arg prefix)front_left_wheel_traction_joint"/>
+    <param name="robotnik_base_control/steer/back_left/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
+    <param name="robotnik_base_control/steer/back_right/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
+    <param name="robotnik_base_control/steer/front_right/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
+    <param name="robotnik_base_control/steer/front_left/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
 
-      <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
-        base_controller
+    <param name="robotnik_base_control/odom_frame" value="$(arg prefix)odom"/>
+    <param name="robotnik_base_control/robot_base_frame" value="$(arg prefix)base_footprint"/>
+    <param name="robotnik_base_control/wheel_diameter" value="$(arg wheel_diameter)"/>
+    <param name="robotnik_base_control/wheel_base" value="$(arg wheel_base)"/>
+    <param name="robotnik_base_control/track_width" value="$(arg track_width)"/>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
+        robotnik_base_control
         joint_read_state_controller
         joint_read_command_controller
         ">
-      </node>
-    </group>
+    </node>
+  </group>
 
-    <!-- Simulation - Load joint controller configurations from YAML file to parameter server -->
-	  <group if="$(arg sim)">
-      <rosparam file="$(find rbsherpa_control)/config/$(arg prefix)control_$(arg kinematics)_sim.yaml" command="load"/>
+  <!-- Simulation - Load joint controller configurations from YAML file to parameter server -->
+  <group if="$(arg sim)">
+    <rosparam file="$(find rbsherpa_control)/config/robot_$(arg kinematics)_control_sim.yaml" command="load"/>
 
-      <!-- Controller spawner for ackermann model -->
-      <node name="controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn base_controller" respawn="false" output="screen"/>
+    <!-- Controller spawner for ackermann model -->
+    <node name="controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn base_controller" respawn="false" output="screen"/>
 
-      <node name="base_joint_read_state_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_state_controller" respawn="false" output="screen"/>
-      <node name="base_joint_read_command_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_command_controller" respawn="false" output="screen"/>
+    <node name="base_joint_read_state_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_state_controller" respawn="false" output="screen"/>
+    <node name="base_joint_read_command_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_command_controller" respawn="false" output="screen"/>
 
-    </group>
+  </group>
 
 </launch>
