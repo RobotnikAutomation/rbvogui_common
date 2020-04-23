@@ -1,68 +1,68 @@
 front_left_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbsherpa_front_left_wheel_traction_joint
+  joint: robot_front_left_wheel_joint
 
 front_left_wheel_steer_joint_controller:
   type: position_controllers/JointPositionController
-  joint: rbsherpa_front_left_wheel_steer_joint
+  joint: robot_front_left_motor_wheel_joint
 
 front_right_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbsherpa_front_right_wheel_traction_joint
+  joint: robot_front_right_wheel_joint
 
 front_right_wheel_steer_joint_controller:
   type: position_controllers/JointPositionController
-  joint: rbsherpa_front_right_wheel_steer_joint
+  joint: robot_front_right_motor_wheel_joint
 
 back_left_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbsherpa_back_left_wheel_traction_joint
+  joint: robot_back_left_wheel_joint
 
 back_left_wheel_steer_joint_controller:
   type: position_controllers/JointPositionController
-  joint: rbsherpa_back_left_wheel_steer_joint
+  joint: robot_back_left_motor_wheel_joint
 
 back_right_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbsherpa_back_right_wheel_traction_joint
+  joint: robot_back_right_wheel_joint
 
 back_right_wheel_steer_joint_controller:
   type: position_controllers/JointPositionController
-  joint: rbsherpa_back_right_wheel_steer_joint
+  joint: robot_back_right_motor_wheel_joint
 
 
 robotnik_base_control:
-  type: rbsherpa_omni_controller/RbSherpaHlOmniController
+  type: rbsherpa_hl_omni_controller/RbSherpaHlOmniController
   traction:
     front_right:
-      joint_name: robot_front_right_wheel_traction_joint
+      joint_name: robot_front_right_wheel_joint
       max_speed: 20.0 # rad/s
     front_left:
-      joint_name: robot_front_left_wheel_traction_joint
+      joint_name: robot_front_left_wheel_joint
       max_speed: 20.0 # rad/s
     back_right:
-      joint_name: robot_back_right_wheel_traction_joint
+      joint_name: robot_back_right_wheel_joint
       max_speed: 20.0 # rad/s
     back_left:
-      joint_name: robot_back_left_wheel_traction_joint
+      joint_name: robot_back_left_wheel_joint
       max_speed: 20.0 # rad/s
   steer:
     front_right:
-      joint_name: robot_front_right_wheel_steer_joint
-      min_angle: -3.1 # rads
-      max_angle: 3.1
+      joint_name: robot_front_right_motor_wheel_joint
+      min_angle: -2.9 # rads
+      max_angle: 2.9
     front_left:
-      joint_name: robot_front_left_wheel_steer_joint
-      min_angle: -3.1 # rads
-      max_angle: 3.1
+      joint_name: robot_front_left_motor_wheel_joint
+      min_angle: -2.9 # rads
+      max_angle: 2.9
     back_right:
-      joint_name: robot_back_right_wheel_steer_joint
-      min_angle: -3.1 # rads
-      max_angle: 3.1
+      joint_name: robot_back_right_motor_wheel_joint
+      min_angle: -2.9 # rads
+      max_angle: 2.9
     back_left:
-      joint_name: robot_back_left_wheel_steer_joint
-      min_angle: -3.1 # rads
-      max_angle: 3.1
+      joint_name: robot_back_left_motor_wheel_joint
+      min_angle: -2.9 # rads
+      max_angle: 2.9
   linear_speed_limit: 2.8
   linear_acceleration_limit: 2.0
   angular_speed_limit: 2.0

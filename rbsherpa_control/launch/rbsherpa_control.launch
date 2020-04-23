@@ -10,19 +10,20 @@
   <arg name="id_robot" default="robot"/>
   <arg name="prefix" default="$(arg id_robot)_"/>
   <arg name="launch_robot_localization" default="false"/>
+  <arg name="cmd_vel" default="cmd_vel"/>
 
   <!-- Robot - Load joint controller configurations from YAML file to parameter server -->
   <group unless="$(arg sim)">
     <rosparam file="$(find rbsherpa_control)/config/robot_$(arg kinematics)_control.yaml" command="load"/>
 
-    <param name="robotnik_base_control/traction/back_left/joint_name" value="$(arg prefix)back_left_wheel_traction_joint"/>
-    <param name="robotnik_base_control/traction/back_right/joint_name" value="$(arg prefix)back_right_wheel_traction_joint"/>
-    <param name="robotnik_base_control/traction/front_right/joint_name" value="$(arg prefix)front_right_wheel_traction_joint"/>
-    <param name="robotnik_base_control/traction/front_left/joint_name" value="$(arg prefix)front_left_wheel_traction_joint"/>
-    <param name="robotnik_base_control/steer/back_left/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
-    <param name="robotnik_base_control/steer/back_right/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
-    <param name="robotnik_base_control/steer/front_right/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
-    <param name="robotnik_base_control/steer/front_left/joint_name" value="$(arg prefix)front_left_wheel_steer_joint"/>
+    <param name="robotnik_base_control/traction/back_left/joint_name" value="$(arg prefix)back_left_wheel_joint"/>
+    <param name="robotnik_base_control/traction/back_right/joint_name" value="$(arg prefix)back_right_wheel_joint"/>
+    <param name="robotnik_base_control/traction/front_right/joint_name" value="$(arg prefix)front_right_wheel_joint"/>
+    <param name="robotnik_base_control/traction/front_left/joint_name" value="$(arg prefix)front_left_wheel_joint"/>
+    <param name="robotnik_base_control/steer/back_left/joint_name" value="$(arg prefix)back_left_motor_wheel_joint"/>
+    <param name="robotnik_base_control/steer/back_right/joint_name" value="$(arg prefix)back_right_motor_wheel_joint"/>
+    <param name="robotnik_base_control/steer/front_right/joint_name" value="$(arg prefix)front_right_motor_wheel_joint"/>
+    <param name="robotnik_base_control/steer/front_left/joint_name" value="$(arg prefix)front_left_motor_wheel_joint"/>
 
     <param name="robotnik_base_control/odom_frame" value="$(arg prefix)odom"/>
     <param name="robotnik_base_control/robot_base_frame" value="$(arg prefix)base_footprint"/>
@@ -32,8 +33,8 @@
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
         robotnik_base_control
+	joint_read_command_controller
         joint_read_state_controller
-        joint_read_command_controller
         ">
     </node>
   </group>
@@ -49,5 +50,10 @@
     <node name="base_joint_read_command_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_command_controller" respawn="false" output="screen"/>
 
   </group>
+
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+    <rosparam command="load" file="$(find rbsherpa_control)/config/twist_mux.yaml" />
+    <remap from="cmd_vel_out" to="$(arg cmd_vel)" />
+  </node>
 
 </launch>
