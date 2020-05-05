@@ -71,9 +71,9 @@ robotnik_base_control:
   robot_base_frame: robot_base_footprint
   odom_broadcast_tf: true
   odom_topic: robotnik_base_control/odom
-  wheel_base: 1.244 #from cad # 1.244 or 1.42
-  track_width: 0.734 #from cad # 0.734 or 0.72
-  wheel_diameter: 0.315 #  from cad
+  wheel_base: 0.76 #from cad # 1.244 or 1.42
+  track_width: 0.480 #from cad # 0.734 or 0.72
+  wheel_diameter: 0.235 #  from cad
   cmd_watchdog_duration: 0.2
   odom_publish_frequency: 100
   motion_odometry: true
