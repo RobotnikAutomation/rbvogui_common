@@ -83,9 +83,9 @@
             <origin xyz="0.3 0.3 0.250" rpy="0 0 0"/>
         </xacro:sensor_imu_hector>
         <!-- GPS -->
-        <xacro:sensor_gps prefix="$(arg prefix)gps" parent="$(arg prefix)base_link">
+        <!--xacro:sensor_gps prefix="$(arg prefix)gps" parent="$(arg prefix)base_link">
             <origin xyz="-0.04625 0.0 1.115" rpy="0 0 0"/>
-        </xacro:sensor_gps>
+        </xacro:sensor_gps-->
         <!-- Solid-State laser -->
         <xacro:sensor_benewake_ce30c prefix="$(arg prefix)front_ss_laser" parent="${prefix}base_link" gpu="false">
             <origin xyz="0.5657 0.0 0.1622" rpy="0 0 0"/>
