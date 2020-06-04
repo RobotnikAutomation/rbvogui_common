@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="version" default="rbsherpa_std.urdf.xacro" />
-  <arg name="prefix" default="rbsherpa_"/>
+  <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
+  <arg name="prefix" default="$(arg robot_id)_"/>
+  <arg name="robot_xacro" default="$(optenv ROBOT_XACRO rbsherpa_xl_std.urdf.xacro)" />
 
   <param name="robot_description"
-    command="$(find xacro)/xacro --inorder '$(find rbsherpa_description)/robots/$(arg version)' prefix:=$(arg prefix)" />
+    command="$(find xacro)/xacro --inorder '$(find rbsherpa_description)/robots/$(arg robot_xacro)' prefix:=$(arg prefix)" />
 
   <!-- publish tfs through the robot_state_publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
