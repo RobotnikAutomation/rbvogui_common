@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: rbsherpa_description
+    relative_path: robots/rbsherpa_xl_std.urdf.xacro
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/rbsherpa.srdf
+  CONFIG:
+    author_name: Raquel Julia
+    author_email: rjulia@robotnik.es
+    generated_timestamp: 1591349376
