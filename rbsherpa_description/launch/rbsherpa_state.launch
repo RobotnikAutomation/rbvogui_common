@@ -4,10 +4,13 @@
   <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
   <arg name="prefix" default="$(arg robot_id)_"/>
   <arg name="robot_xacro" default="$(optenv ROBOT_XACRO rbsherpa_xl_std.urdf.xacro)" />
+  <arg name="launch_arm" default="false"/>
 
   <param name="robot_description"
-    command="$(find xacro)/xacro --inorder '$(find rbsherpa_description)/robots/$(arg robot_xacro)' prefix:=$(arg prefix)" />
+    command="$(find xacro)/xacro --inorder '$(find rbsherpa_description)/robots/$(arg robot_xacro)' prefix:=$(arg prefix) launch_arm:=$(arg launch_arm)" />
 
   <!-- publish tfs through the robot_state_publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 </launch>
+
+
