@@ -36,7 +36,7 @@ joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-  - name: left_arm_controller
+  - name: left_arm/pos_traj_controller
     action_ns: follow_joint_trajectory
     default: True
     type: FollowJointTrajectory
@@ -47,7 +47,7 @@ controller_list:
       - robot_left_arm_wrist_1_joint
       - robot_left_arm_wrist_2_joint
       - robot_left_arm_wrist_3_joint
-  - name: right_arm_controller
+  - name: right_arm/pos_traj_controller
     action_ns: follow_joint_trajectory
     default: True
     type: FollowJointTrajectory
