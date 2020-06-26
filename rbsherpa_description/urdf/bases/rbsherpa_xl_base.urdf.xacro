@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
 
-
   <xacro:include filename="$(find rbsherpa_description)/urdf/bases/rbsherpa_base.gazebo.xacro" />
   <xacro:include filename="$(find rbsherpa_description)/urdf/inertia.urdf.xacro" />
 
