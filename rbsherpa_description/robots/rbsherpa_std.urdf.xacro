@@ -65,19 +65,19 @@
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
         <!-- IMU -->
-        <xacro:sensor_imu_hector prefix="$(arg prefix)imu" parent="$(arg prefix)base_link">
+        <xacro:sensor_imu_hector prefix="${prefix}imu" parent="${prefix}base_link">
             <origin xyz="0.3 0.3 0.250" rpy="0 0 0"/>
         </xacro:sensor_imu_hector>
         <!-- GPS -->
-        <xacro:sensor_gps prefix="$(arg prefix)gps" parent="$(arg prefix)base_link">
+        <xacro:sensor_gps prefix="${prefix}gps" parent="${prefix}base_link">
             <origin xyz="-0.04625 0.0 1.115" rpy="0 0 0"/>
         </xacro:sensor_gps>
         <!-- Solid-State laser -->
-        <xacro:sensor_benewake_ce30c prefix="$(arg prefix)front_ss_laser" parent="${prefix}base_link" gpu="false">
+        <xacro:sensor_benewake_ce30c prefix="${prefix}front_ss_laser" parent="${prefix}base_link" gpu="false">
             <origin xyz="0.5657 0.0 0.1622" rpy="0 0 0"/>
         </xacro:sensor_benewake_ce30c>
         <!-- 2d laser -->
-        <xacro:sensor_sick_tim551 prefix="$(arg prefix)front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
+        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
             <origin xyz="0.5307 0.0 0.15389" rpy="${180*deg2rad} 0 0"/>
         </xacro:sensor_sick_tim551>
 
