@@ -37,7 +37,7 @@
 
     <group if="$(arg sim_arm_control)">
 
-      <rosparam file="$(find rbsherpa_gazebo)/config/two_arm_control.yaml" command="load" subst_value="true"/>
+      <rosparam file="$(find rbsherpa_control)/config/arm_config/arm_control.yaml" command="load" subst_value="true"/>
       <node name="controller_spawner_arms" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
         $(arg arm_controllers)
       "/>
