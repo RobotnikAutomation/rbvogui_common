@@ -9,6 +9,8 @@ Install external dependencies:
 
 - [joint_read_command_controller](https://github.com/RobotnikAutomation/joint_read_command_controller)
 
+-[universal_robot](git clone -b calibration_devel https://github.com/fmauch/universal_robot.git)
+
 Also you need to install dependencies, you need to execute:
 
 ```bash
