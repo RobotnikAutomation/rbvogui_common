@@ -4,7 +4,8 @@
   <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
   <arg name="prefix" default="$(arg robot_id)_"/>
   <arg name="robot_xacro" default="$(optenv ROBOT_XACRO rbsherpa_xl_std.urdf.xacro)" />
-  <arg name="launch_arm" default="false"/>
+  <arg name="launch_arm_control" default="false"/>
+  <arg name="launch_arm" default="$(arg launch_arm_control)"/>
   <arg name="load_kinematics_file" default="false"/>
 
   <param name="robot_description"
