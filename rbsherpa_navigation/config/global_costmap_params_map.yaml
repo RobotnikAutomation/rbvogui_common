@@ -1,6 +1,6 @@
 global_costmap:
-  global_frame: $(arg global_frame)
-  robot_base_frame: $(arg base_frame)
+  global_frame: $(arg prefix)odom
+  robot_base_frame: $(arg prefix)base_footprint
   update_frequency: 5.0
   static_map: true
   

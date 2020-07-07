@@ -1,42 +1,32 @@
 <?xml version="1.0"?>
 <launch>
-	<arg name="id_robot" default="robot"/>
-	<arg name="prefix" default="$(arg id_robot)_"/>
-	<arg name="kinematics" default="omni"/>
-	<arg name="cmd_vel_topic" default="move_base/cmd_vel"/>
-	<!-- using twist mux -->
-	<arg name="odom_topic" default="odom"/>
-	<arg name="global_frame" default="$(arg prefix)odom"/>
-	<arg name="odom_frame" default="$(arg prefix)odom"/>
-	<arg name="base_frame" default="$(arg prefix)base_footprint"/>
-	<arg name="laser_frame" default="$(arg prefix)front_laser_link"/>
-	<arg name="scan_topic" default="front_laser/scan"/>
+  <!-- Robot -->
+  <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
+  <arg name="prefix" default="$(arg robot_id)_"/>
 
-	<!-- Run move_base -->
-	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-		<rosparam file="$(find rbsherpa_navigation)/config/move_base_params.yaml" command="load" />
-		<rosparam file="$(find rbsherpa_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
-		<rosparam file="$(find rbsherpa_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-		<rosparam file="$(find rbsherpa_navigation)/config/local_costmap_params.yaml" command="load" />
-		<rosparam file="$(find rbsherpa_navigation)/config/global_costmap_params_map.yaml" command="load" />
-		<rosparam file="$(find rbsherpa_navigation)/config/teb_local_planner_params_$(arg kinematics).yaml" command="load" />
+  <!-- Robot configuration -->
+  <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS diff)"/>
 
-		<!-- reset frame_id parameters using user input data -->
-		<param name="global_costmap/obstacles_layer/scan/sensor_frame" value="$(arg laser_frame)"/>
-		<param name="local_costmap/obstacles_layer/scan/sensor_frame" value="$(arg laser_frame)"/>
-		<param name="global_costmap/obstacles_layer/scan/topic" value="$(arg scan_topic)"/>
-		<param name="local_costmap/obstacles_layer/scan/topic" value="$(arg scan_topic)"/>
-		<param name="local_costmap/global_frame" value="$(arg odom_frame)"/>
-		<param name="local_costmap/robot_base_frame" value="$(arg base_frame)"/>
-		<param name="global_costmap/global_frame" value="$(arg global_frame)"/>
-		<param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
-		<param name="TebLocalPlannerROS/map_frame" value="$(arg global_frame)"/>
-		<param name="TebLocalPlannerROS/odom_topic" value="$(arg odom_topic)"/>
-		<param name="controller_frequency" value="5.0"/>
-		<param name="controller_patience" value="15.0"/>
-		<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
-		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
-		<remap from="odom" to="$(arg odom_topic)" />
-	</node>
+  <!-- Topics argumments -->
+  <arg name="cmd_vel_topic" default="move_base/cmd_vel"/>
+  <arg name="odom_topic" default="odom"/>
+  <arg name="scan_topic" default="front_laser/scan"/>
+  <arg name="front_scan_topic" default="$(optenv ROBOT_NAVIGATION_FRONT_2D_SCAN front_laser/scan_filtered)"/>
+  <arg name="rear_scan_topic" default="$(optenv ROBOT_NAVIGATION_REAR_2D_SCAN rear_laser/scan_filtered)"/>
+  <arg name="front_rgbd_to_scan_topic" default="$(optenv ROBOT_NAVIGATION_FRONT_RGBD_TO_SCAN front_rgbd_camera/point_cloud_scan_filtered)"/>
+
+  <!-- Run move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  	<rosparam file="$(find rbsherpa_navigation)/config/move_base_params.yaml" command="load" />
+  	<rosparam file="$(find rbsherpa_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true"/>
+  	<rosparam file="$(find rbsherpa_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>
+	<rosparam file="$(find rbsherpa_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
+	<rosparam file="$(find rbsherpa_navigation)/config/global_costmap_params_map.yaml" command="load" subst_value="true"/>
+	<rosparam file="$(find rbsherpa_navigation)/config/teb_local_planner_params_$(arg kinematics).yaml" command="load" subst_value="true"/>
+
+	<!-- reset frame_id parameters using user input data -->
+	<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
+	<remap from="odom" to="$(arg odom_topic)" />
+  </node>
 
 </launch>
