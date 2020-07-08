@@ -9,6 +9,10 @@
     
   <arg name="arm_controllers" default="left_arm/pos_traj_controller right_arm/pos_traj_controller"/> <!-- controllers can be listed seprated by a blank space -->
   
+  <arg name="wheel_diameter" default="$(optenv ROBOT_WHEEL_DIAMETER 0.22)"/>
+  <arg name="track_width" default="$(optenv ROBOT_TRACK_WIDTH 0.439)"/>
+  <arg name="wheel_base" default="$(optenv ROBOT_WHEEL_BASE 0.439)"/> 
+
   <arg name="sim" default="true"/>
   <arg name="sim_arm_control" default="true"/>
   <arg name="cmd_vel" default="robotnik_base_control/cmd_vel"/>
@@ -16,6 +20,10 @@
   <!-- Robot - Load joint controller configurations from YAML file to parameter server -->
   <group unless="$(arg sim)">
     <rosparam file="$(find rbsherpa_control)/config/robot_$(arg kinematics)_control.yaml" command="load" subst_value="true"/>
+
+    <param name="robotnik_base_control/wheel_diameter" value="$(arg wheel_diameter)"/>
+    <param name="robotnik_base_control/wheel_base" value="$(arg wheel_base)"/>
+    <param name="robotnik_base_control/track_width" value="$(arg track_width)"/>
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
           args="robotnik_base_control
@@ -27,10 +35,14 @@
   <!-- Simulation - Load joint controller configurations from YAML file to parameter server -->
   <group if="$(arg sim)">
     <rosparam file="$(find rbsherpa_control)/config/robot_$(arg kinematics)_control_sim.yaml" command="load" subst_value="true"/>
-
+    
+    <param name="robotnik_base_control/wheel_diameter" value="$(arg wheel_diameter)"/>
+    <param name="robotnik_base_control/wheel_base" value="$(arg wheel_base)"/>
+    <param name="robotnik_base_control/track_width" value="$(arg track_width)"/>
+    
     <!-- Controller spawner for ackermann model -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
-          args="base_controller
+          args="robotnik_base_control
                 joint_read_state_controller
                 joint_read_command_controller">
     </node>
@@ -42,8 +54,13 @@
         $(arg arm_controllers)
       "/>
 
+
+
     </group>
-  </group>
+    <node name="base_joint_read_state_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_state_controller" respawn="false" output="screen"/>
+    <node name="base_joint_read_command_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_read_command_controller" respawn="false" output="screen"/>
+  
+</group>
 
   <node pkg="twist_mux" type="twist_mux" name="twist_mux">
     <rosparam command="load" file="$(find rbsherpa_control)/config/twist_mux.yaml" />
