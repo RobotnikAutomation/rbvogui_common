@@ -4,6 +4,11 @@ Common packages of the RB-Sherpa: URDF description of the RB-Sherpa, platform me
 <a href="url"><img src="https://www.roscomponents.com/1206-big_default_2x/rb-sherpa.jpg" align="left" height="275" width="275" ></a> 
 ## installation
 
+Install this repo with submodules:
+
+```bash
+git clone --recurse-submodules https://github.com/RobotnikAutomation/rbsherpa_common.git
+```
 Install external dependencies:
 
 - [universal_robot](https://github.com/fmauch/universal_robot.git) and switch to the calibration_devel branch typing the following command.
