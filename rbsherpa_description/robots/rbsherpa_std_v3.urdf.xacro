@@ -14,19 +14,28 @@
     <xacro:include filename="$(find rbsherpa_description)/urdf/bases/rbsherpa_base_v3.urdf.xacro" />
 
     <!-- Import rbsherpa wheels -->
-    <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/motor_wheel.urdf.xacro" />
-    <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/wheel_v3.urdf.xacro" />
+    <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/motor_wheel_hard.urdf.xacro" />
 
     <!-- Import all available sensors -->
     <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+
+    <!-- Include UR-10 ARM -->
+    <xacro:include filename="$(find ur_description)/urdf/ur10.urdf.xacro" />
 
     <xacro:property name="PI" value="3.1415926535897931"/>
     <xacro:property name="deg2rad" value="0.01745329251"/>
 
     <!-- Wheel parameters -->
     <xacro:property name="wheel_offset_x" value="0.38" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
-    <xacro:property name="wheel_offset_y" value="0.24" />
+    <xacro:property name="wheel_offset_y" value="0.235" />
     <xacro:property name="wheel_offset_z" value="0.0" />
+
+    <xacro:property name="arm_position_x" value="0.185"/>
+    <xacro:property name="arm_position_y" value="0"/>
+    <xacro:property name="arm_position_z" value="0.442"/>
+    <xacro:property name="arm_orientation_r" value="0"/>
+    <xacro:property name="arm_orientation_p" value="0"/>
+    <xacro:property name="arm_orientation_y" value="0"/>
 
     <!-- Flag to select the high or low quality model -->
     <xacro:property name="hq" value="true" />
@@ -46,21 +55,21 @@
 
         <xacro:rbsherpa_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
 
-        <xacro:motor_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="false" hq="true">
+        <xacro:motor_wheel_hard prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="false" hq="true">
             <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-        </xacro:motor_wheel>
+        </xacro:motor_wheel_hard>
 
-        <xacro:motor_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="true">
+        <xacro:motor_wheel_hard prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="true">
             <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 ${180.0*deg2rad}"/>
-        </xacro:motor_wheel>
+        </xacro:motor_wheel_hard>
 
-        <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="true">
+        <xacro:motor_wheel_hard prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="true">
             <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 ${180.0*deg2rad}"/>
-        </xacro:motor_wheel>
+        </xacro:motor_wheel_hard>
 
-        <xacro:motor_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+        <xacro:motor_wheel_hard prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
             <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-        </xacro:motor_wheel>
+        </xacro:motor_wheel_hard>
 
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
@@ -74,12 +83,24 @@
         </xacro:sensor_gps>
         <!-- 2d laser -->
         <xacro:sensor_sick_tim551 prefix="$(arg prefix)front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
-            <origin xyz="0.53 0.0 0.153" rpy="${PI} 0 0"/>
+            <origin xyz="0.525 0.0 0.151" rpy="${PI} 0 0"/>
         </xacro:sensor_sick_tim551>
         <!-- 2d laser -->
         <xacro:sensor_benewake_ce30c prefix="$(arg prefix)front_3d_laser" parent="${prefix}base_link" prefix_topic="front_3d_laser">
-            <origin xyz="0.59 0 0.189" rpy="0 0 0"/>
+            <origin xyz="0.560 0 0.16" rpy="0 0 0"/>
         </xacro:sensor_benewake_ce30c>
+
+        <xacro:ur10_robot prefix="$(arg prefix)arm_" joint_limited="true"
+            shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+            wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+            kinematics_file="${load_yaml('$(find rbkairos_control)/config/ur10_calibration.yaml')}">
+        </xacro:ur10_robot>
+        
+	 <joint name="$(arg prefix)arm_base_joint" type="fixed">
+	    <origin xyz="${arm_position_x} ${arm_position_y} ${arm_position_z}" rpy="${arm_orientation_r} ${arm_orientation_p} ${arm_orientation_y}"/>
+	    <parent link="$(arg prefix)base_link" />
+	    <child link="$(arg prefix)arm_base_link" />
+	  </joint>
 
     </xacro:macro>
 
