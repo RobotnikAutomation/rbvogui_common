@@ -32,7 +32,7 @@ back_right_wheel_steer_joint_controller:
 
 
 robotnik_base_control:
-  type: rbsherpa_omni_controller/RbSherpaOmniController
+  type: rbsherpa_hl_omni_controller/RbSherpaHlOmniController
   traction:
     front_right:
       joint_name: $(arg prefix)front_right_wheel_joint
