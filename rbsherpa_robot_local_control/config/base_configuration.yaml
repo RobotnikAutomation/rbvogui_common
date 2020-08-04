@@ -1,4 +1,4 @@
-robot_id: $(arg robot_id)
+robot_id: $(arg id_robot)
 odom_frame: $(arg prefix)odom
 base_frame: $(arg prefix)base_footprint
 global_frame: $(arg prefix)map
