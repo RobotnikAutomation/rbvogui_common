@@ -11,6 +11,7 @@
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ackermann_msgs</buildtool_depend>
   <run_depend>ros_controllers</run_depend>
   <run_depend>ros_control</run_depend>
   <run_depend>robot_state_publisher</run_depend>

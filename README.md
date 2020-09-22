@@ -1,7 +1,9 @@
 # rbsherpa_common
+
+<a href="url"><img src="https://www.roscomponents.com/1206-big_default_2x/rb-sherpa.jpg" height="275" width="275" ></a> 
+
 Common packages of the RB-Sherpa: URDF description of the RB-Sherpa, platform messages and other files for simulation.
 
-<a href="url"><img src="https://www.roscomponents.com/1206-big_default_2x/rb-sherpa.jpg" align="left" height="275" width="275" ></a> 
 ## installation
 
 Install this repo with submodules:
@@ -20,13 +22,11 @@ git clone -b calibration_devel https://github.com/fmauch/universal_robot.git
 Also you need to install dependencies, you need to execute:
 
 ```bash
-ros-melodic-ackermann-drive-controller_0.0.0-0bionic_amd64.deb
+sudo apt install ros-melodic-ackermann-msgs
 ```
+
 ```bash
-ros-melodic-omni-drive-controller_0.0.0-0bionic_amd64.deb
-```
-```bash
-ros-melodic-robotnik-twist2ackermann_0.0.0-0bionic_amd64.deb
+sudo dpkg -i libraries/*
 ```
 
 ## packages
