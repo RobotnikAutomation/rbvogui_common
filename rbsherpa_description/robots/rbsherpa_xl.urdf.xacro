@@ -94,14 +94,13 @@
         <!--xacro:sensor_rslidar_16 prefix="${prefix}front_ss_laser" parent="${prefix}base_link" gpu="true">
             <origin xyz="0.511 0 0.21" rpy="0 0 0"/>
         </xacro:sensor_rslidar_16-->
-        <!-- Solid-State laser -->
-        <!--xacro:sensor_benewake_ce30c prefix="${prefix}front_ss_laser" parent="${prefix}base_link" gpu="false">
-            <origin xyz="0.5657 0.0 0.1622" rpy="0 0 0"/>
-        </xacro:sensor_benewake_ce30c-->
-        <!-- 2d laser -->
-        <!--xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
-            <origin xyz="0.5307 0.0 0.15389" rpy="${180*deg2rad} 0 0"/>
-        </xacro:sensor_sick_tim551-->
+        <!-- Laser -->
+        <xacro:sensor_sick_microscan3 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
+            <origin xyz="0.647 -0.38975 0.40646" rpy="${PI} 0 0"/>
+        </xacro:sensor_sick_microscan3>
+        <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}base_link" prefix_topic="rear_laser">
+            <origin xyz="-0.647 0.38975 0.40646" rpy="${PI} 0 ${PI}"/>
+        </xacro:sensor_sick_microscan3>
 
     </xacro:macro>
 
