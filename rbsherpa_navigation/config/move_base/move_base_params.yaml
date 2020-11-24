@@ -1,8 +1,6 @@
 base_global_planner: global_planner/GlobalPlanner
 
-#max_planning_retries: 10   #How many times to allow for planning retries before executing recovery behaviors. A value of -1.0 corresponds to an infinite retries.
-
-controller_frequency: 5.0         # How long the controller will wait in seconds
+controller_frequency: 20.0         # How long the controller will wait in seconds
                                   # without receiving a valid control before space-clearing 
                                   # operations are performed
 controller_patience: 15.0
