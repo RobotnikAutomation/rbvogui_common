@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+  
+  <xacro:macro name="load_platform" params="prefix parent *origin ">
+
+   <joint name="${prefix}load_platform_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}load_platform_link"/>    
+      <!--origin xyz="0.0 0.0 0.0" rpy="0 0 0"/-->
+      <xacro:insert_block name="origin" />
+      <axis xyz="0 0 1" rpy="0 0 0" />
+    </joint>
+<link name="${prefix}load_platform_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://rbsherpa_description/meshes/structures/load_platform.stl"/>
+          </geometry>
+        <material name="darkgrey">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0 " />
+        <geometry>
+          <mesh filename="package://rbsherpa_description/meshes/structures/load_platform.stl"/>
+        </geometry>
+      </collision>
+    </link>
+
+  </xacro:macro>
+
+</robot>
