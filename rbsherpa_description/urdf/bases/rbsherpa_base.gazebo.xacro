@@ -48,10 +48,30 @@
         </gazebo>
     </xacro:macro>
       
-
-    <gazebo reference="base_footprint">
-        <material>Gazebo/Green</material>
-    </gazebo>
-  
+    <xacro:macro name="gazebo_color_base_link" params="prefix">
+      <gazebo reference="${prefix}base_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+    
+    <xacro:macro name="gazebo_color_logo_link" params="prefix">
+      <gazebo reference="${prefix}base_logos_link">
+        <visual>  
+          <material>  
+            <ambient>1.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.50754 0.50754 0.50754 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
 
 </robot>

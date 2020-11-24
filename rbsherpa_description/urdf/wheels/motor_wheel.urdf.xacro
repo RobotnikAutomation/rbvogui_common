@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:include filename="$(find rbsherpa_description)/urdf/wheels/wheel.gazebo.xacro" />
+
   <xacro:property name="M_PI" value="3.1415926535897931" />
   <!-- Wheels -->
   <xacro:property name="wheel_radius" value="0.110" />
@@ -141,26 +143,18 @@
       <collision>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         <geometry>
-
           <sphere radius="${wheel_radius}" />
         </geometry>
       </collision>
       <inertial>
         <mass value="${wheel_mass}" />
-        <origin xyz="0 0 0" />
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_height}" />
       </inertial>
     </link>
 
-
-    <!-- gazebo reference="${prefix}wheel">
-        <mu1 value="1.0"/>
-        <mu2 value="1.0"/>
-        <kp value="10000000.0" />
-        <kd value="1.0" />
-        <fdir1 value="1 0 0"/>
-        <turnGravityOff>false</turnGravityOff>
-   </gazebo -->
+    <xacro:gazebo_color_wheel prefix="${prefix}"/>
+    <xacro:gazebo_color_steer_wheel prefix="${prefix}"/>
 
   </xacro:macro>
 
