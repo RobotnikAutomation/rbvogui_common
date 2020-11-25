@@ -1,39 +1,22 @@
 # rbsherpa_common
+
+<a href="url"><img src="https://www.roscomponents.com/1206-big_default_2x/rb-sherpa.jpg" height="275" width="275" ></a> 
+
 Common packages of the RB-Sherpa: URDF description of the RB-Sherpa, platform messages and other files for simulation.
 
-<h2>rbsherpa_control</h2>
+## packages
 
-Configuration and launch files to load omni_drive_controller.
+### rbsherpa_control
 
-Install external dependencies:
+This package contains the launch and configuration files to spawn the joint controllers (omni_drive_controller or ackermann_drive_controller) with the ROS controller_manager. 
 
-- [joint_read_command_controller](https://github.com/RobotnikAutomation/joint_read_command_controller)
-
-- [universal_robot](https://github.com/fmauch/universal_robot.git)
-
-
-```bash
-git clone -b calibration_devel https://github.com/fmauch/universal_robot.git
-```
-
-Also you need to install dependencies, you need to execute:
-
-```bash
-sudo dpkg -i libraries/ros-kinetic-robotnik-msgs_1.0.0-0xenial_amd64.deb
-```
-```bash
-sudo dpkg -i libraries/ros-kinetic-rcomponent_1.1.0-0xenial_amd64.deb
-```
-```bash
-sudo dpkg -i libraries/ros-kinetic-ackermann-drive-controller_0.0.0-0xenial_amd64.deb
-```
-```bash
-sudo dpkg -i libraries/ros-kinetic-omni-drive-controller_0.0.0-0xenial_amd64.deb
-```
-```bash
-sudo dpkg -i libraries/ros-kinetic-robotnik-twist2ackermann_0.0.0-0xenial_amd64.deb
-```
-
-<h2>rbsherpa_description</h2>
+### rbsherpa_description
 
 The urdf, meshes, and other elements needed in the description are contained here.
+
+### rbsherpa_localization
+
+This package contains all the configuration files needed to execute the amcl algorithm serving a map or you can use the gmapping to make your own map of a world and test the amcl with it! 
+
+### rbsherpa_localization
+This packages contain the files needed to run move_base or simple goals with move.
