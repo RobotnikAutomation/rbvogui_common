@@ -1,9 +1,6 @@
 [submodule "submodules/robotnik_msgs"]
 	path = submodules/robotnik_msgs
 	url = https://github.com/RobotnikAutomation/robotnik_msgs.git
-[submodule "submodules/joint_read_command_controller"]
-	path = submodules/joint_read_command_controller
-	url = https://github.com/RobotnikAutomation/joint_read_command_controller.git
 [submodule "submodules/rcomponent"]
 	path = submodules/rcomponent
 	url = https://github.com/RobotnikAutomation/rcomponent.git
