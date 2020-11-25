@@ -4,31 +4,6 @@
 
 Common packages of the RB-Sherpa: URDF description of the RB-Sherpa, platform messages and other files for simulation.
 
-## installation
-
-Install this repo with submodules:
-
-```bash
-git clone --recurse-submodules https://github.com/RobotnikAutomation/rbsherpa_common.git
-```
-Install external dependencies:
-
-- [universal_robot](https://github.com/fmauch/universal_robot.git) and switch to the calibration_devel branch typing the following command.
-
-```bash
-git clone -b calibration_devel https://github.com/fmauch/universal_robot.git
-```
-
-Also you need to install dependencies, you need to execute:
-
-```bash
-sudo apt install ros-melodic-ackermann-msgs
-```
-
-```bash
-sudo dpkg -i libraries/*
-```
-
 ## packages
 
 ### rbsherpa_control
@@ -39,9 +14,9 @@ This package contains the launch and configuration files to spawn the joint cont
 
 The urdf, meshes, and other elements needed in the description are contained here.
 
-### rbsherpa_navigation
-
-This package contains all the configuration files needed execute the AMCL algorithms in simulation. 
-
 ### rbsherpa_localization
 
+This package contains all the configuration files needed to execute the amcl algorithm serving a map or you can use the gmapping to make your own map of a world and test the amcl with it! 
+
+### rbsherpa_localization
+This packages contain the files needed to run move_base or simple goals with move.
