@@ -84,13 +84,15 @@
             <origin xyz="0.3 0.0 0.3" rpy="0 0 0"/>
         </xacro:sensor_imu_hector>
         <!-- GPS -->
-        <!--xacro:sensor_gps prefix="${prefix}gps" parent="${prefix}base_link">
+        <xacro:sensor_gps prefix="${prefix}gps" parent="${prefix}base_link">
             <origin xyz="-0.04625 0.0 0.59188" rpy="0 0 0"/>
-        </xacro:sensor_gps-->
+        </xacro:sensor_gps>
+        
         <!-- Camera Zed -->
-        <xacro:sensor_zed prefix="${prefix}zed" parent="${prefix}base_link" prefix_topic="zed">
+        <xacro:sensor_zed prefix="${prefix}zed" parent="${prefix}base_link">
             <origin xyz="0.66135 0 0.31585" rpy="0 0 0"/>
         </xacro:sensor_zed>
+
         <!-- Lidar -->
         <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}base_link" prefix_topic="front_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="true">
             <origin xyz="0.645 0 0.52032" rpy="0 ${90*PI/180} 0"/>
