@@ -49,7 +49,7 @@
         <hardwareInterface>hardware_interface/PositionActuatorInterface</hardwareInterface>
         <mechanicalReduction>${motor_wheel_mechanical_reduction}</mechanicalReduction>
       </actuator>
-    </transmission>
+    </transmission>    
 
     <link name="${prefix}motor_wheel">
       <visual>
@@ -63,8 +63,9 @@
             <xacro:unless value="${reflect}">
               <mesh filename="package://rbsherpa_description/meshes/wheels/hub_rbsherpa_xl.stl" />
             </xacro:unless>
-          </geometry>
+          </geometry> 
         </xacro:if>
+         
         <!-- LOW RESOLUTION WHEELS -->
         <xacro:unless value="${hq}">
           <origin xyz="0 0 0.27952" rpy="0 0 0" />
@@ -77,6 +78,9 @@
             </xacro:unless>
           </geometry>
         </xacro:unless>
+        <material name="red">
+             <color rgba="0.9 0.1 0.1 1"/>     
+        </material>
       </visual>
 
       <collision>
@@ -146,6 +150,9 @@
             </xacro:unless>
           </geometry>
         </xacro:unless>
+        <material name="black_wheel">
+          <color rgba="0.1 0.1 0.1 1"/>     
+        </material>
       </visual>
 
       <collision>

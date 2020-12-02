@@ -22,6 +22,9 @@
         <geometry>
           <mesh filename="package://rbsherpa_description/meshes/bases/bi_arm_support.stl" />
         </geometry>
+        <material name="lightblack">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
       </visual>
 
       <collision>

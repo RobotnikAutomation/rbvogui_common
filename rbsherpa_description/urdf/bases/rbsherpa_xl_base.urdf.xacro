@@ -82,8 +82,8 @@
             <mesh filename="package://rbsherpa_description/meshes/bases/rbsherpa_logos_v3.dae" scale="1.3 1.3 1"/>
           </geometry>
         </xacro:unless>
-        <material name="lightgrey">
-          <color rgba="0.9 0.9 0.9 1"/>
+        <material name="lightred">
+          <color rgba="0.9 0.2 0.2 1"/>
         </material>
       </visual>
     </link>
