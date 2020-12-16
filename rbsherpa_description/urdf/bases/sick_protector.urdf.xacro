@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:include filename="$(find rbsherpa_description)/urdf/inertia.urdf.xacro" />
+
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+  
+  <xacro:macro name="sick_protector" params="prefix parent *origin">
+
+    <joint name="${prefix}sick_support_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}sick_support_link"/>
+      <xacro:insert_block name="origin" />
+    </joint>
+
+    <link name="${prefix}sick_support_link">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 ${M_PI/2.0}" />
+        <geometry>
+          <mesh filename="package://rbsherpa_description/meshes/structures/sick_protector.stl" />
+        </geometry>
+        <material name="black">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 ${M_PI/2.0}" />
+        <geometry>
+          <box size="0.001 0.001 0.001" />
+        </geometry>
+        <material name="black">
+          <color rgba="1.0 1.0 1.0 1"/>
+        </material>
+      </collision>
+
+      <inertial>
+        <mass value="5" />
+        <origin xyz="0 0 0" rpy="0 0 ${M_PI/2.0}"/>
+        <solid_cuboid_inertia  w="0.4" h="0.4" d="0.2" m="5"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="${prefix}sick_support_link">
+
+      <material>Gazebo/Black</material>
+
+      <visual>  
+        <material>  
+          <ambient>0.1 0.1 0.1 1.0</ambient>  
+          <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+          <specular>0.508273 0.508273 0.508273 1.0</specular>  
+          <emissive>0.0 0.0 0.0 0.0</emissive>  
+        </material>  
+      </visual>  
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

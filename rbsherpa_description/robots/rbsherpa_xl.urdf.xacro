@@ -19,6 +19,12 @@
     <!-- Import arm structure -->
     <xacro:include filename="$(find rbsherpa_description)/urdf/bases/bi_arm_support.urdf.xacro" />
 
+    <!-- Import sick support -->
+    <xacro:include filename="$(find rbsherpa_description)/urdf/bases/sick_support.urdf.xacro" />
+
+    <!-- Import sick protector -->
+    <xacro:include filename="$(find rbsherpa_description)/urdf/bases/sick_protector.urdf.xacro" />
+
     <!-- Import all available sensors -->
     <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
@@ -89,7 +95,7 @@
         </xacro:sensor_gps>
         
         <!-- Camera Zed -->
-        <xacro:sensor_zed prefix="${prefix}zed" parent="${prefix}base_link">
+        <xacro:sensor_zed prefix="${prefix}zed" parent="${prefix}base_link" model="zed2">
             <origin xyz="0.66135 0 0.31585" rpy="0 0 0"/>
         </xacro:sensor_zed>
 
@@ -97,13 +103,32 @@
         <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}base_link" prefix_topic="front_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="true">
             <origin xyz="0.645 0 0.52032" rpy="0 ${90*PI/180} 0"/>
         </xacro:sensor_rs_bpearl>
+
+        <!-- laser sick support-->
+        <xacro:sick_support prefix="${prefix}sick_front_support" parent="${prefix}base_link">
+            <origin xyz="0.472 0.3795 0.3774" rpy="0 ${90*PI/180} ${90*PI/180}"/>
+        </xacro:sick_support>
+        <xacro:sick_support prefix="${prefix}sick_rear_support" parent="${prefix}base_link">
+            <origin xyz="-0.472 -0.3795 0.3774" rpy="0 ${90*PI/180} -${90*PI/180}"/>
+        </xacro:sick_support>
+
+        <!-- laser sick protector-->
+        <xacro:sick_protector prefix="${prefix}sick_front_protector" parent="${prefix}base_link">
+            <origin xyz="0.645 0.396 0.3905" rpy="0 0 -${45*PI/180}"/>
+        </xacro:sick_protector>
+        <xacro:sick_protector prefix="${prefix}sick_rear_protector" parent="${prefix}base_link">
+            <origin xyz="-0.645 -0.396 0.3905" rpy="0 0 ${135*PI/180}"/>
+        </xacro:sick_protector>
+
         <!-- Laser -->
         <xacro:sensor_sick_microscan3 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
-            <origin xyz="0.645 -0.396 0.44559" rpy="${PI} 0 -${45*PI/180}"/>
+            <origin xyz="0.645 0.396 0.4455" rpy="${PI} 0 ${45*PI/180}"/>
         </xacro:sensor_sick_microscan3>
         <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}base_link" prefix_topic="rear_laser">
-            <origin xyz="-0.645 0.396 0.44559" rpy="${PI} 0 -${225*PI/180}"/>
+            <origin xyz="-0.645 -0.396 0.4455" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
+
+
 
     </xacro:macro>
 
