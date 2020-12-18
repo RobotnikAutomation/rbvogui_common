@@ -114,18 +114,18 @@
 
         <!-- laser sick protector-->
         <xacro:sick_protector prefix="${prefix}sick_front_protector" parent="${prefix}base_link">
-            <origin xyz="0.645 0.396 0.3905" rpy="0 0 -${45*PI/180}"/>
+            <origin xyz="0.645 0.396 0.39025" rpy="0 0 -${45*PI/180}"/>
         </xacro:sick_protector>
         <xacro:sick_protector prefix="${prefix}sick_rear_protector" parent="${prefix}base_link">
-            <origin xyz="-0.645 -0.396 0.3905" rpy="0 0 ${135*PI/180}"/>
+            <origin xyz="-0.645 -0.396 0.39025" rpy="0 0 ${135*PI/180}"/>
         </xacro:sick_protector>
 
         <!-- Laser -->
         <xacro:sensor_sick_microscan3 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
-            <origin xyz="0.645 0.396 0.4455" rpy="${PI} 0 ${45*PI/180}"/>
+            <origin xyz="0.645 0.396 0.44559" rpy="${PI} 0 ${45*PI/180}"/>
         </xacro:sensor_sick_microscan3>
         <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}base_link" prefix_topic="rear_laser">
-            <origin xyz="-0.645 -0.396 0.4455" rpy="${PI} 0 -${135*PI/180}"/>
+            <origin xyz="-0.645 -0.396 0.44559" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
 
 

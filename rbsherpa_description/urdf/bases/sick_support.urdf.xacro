@@ -43,12 +43,12 @@
 
     <gazebo reference="${prefix}sick_support_link">
 
-      <material>Gazebo/Green</material>
+      <material>Gazebo/Red</material>
 
       <visual>  
         <material>  
-          <ambient>0.0 0.0 0.0 1.0</ambient>  
-          <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+          <ambient>1.0 0.0 0.0 1.0</ambient>  
+          <diffuse>0.52 0.2 0.2 1.0</diffuse>  
           <specular>0.508273 0.508273 0.508273 1.0</specular>  
           <emissive>0.0 0.0 0.0 0.0</emissive>  
         </material>  
