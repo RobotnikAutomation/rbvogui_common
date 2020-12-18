@@ -27,7 +27,7 @@
   <group if="$(arg sim)">
     <rosparam file="$(find rbsherpa_control)/config/robot_$(arg kinematics)_control_sim.yaml" command="load" subst_value="true"/>
     
-    <!-- Controller spawner for ackermann model -->
+    <!-- Controller spawner for ackermann/omni model -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
           args="robotnik_base_control
                 joint_read_state_controller
