@@ -9,7 +9,7 @@
   <arg name="has_safety_controller" default="$(optenv HAS_SAFETY_CONTROLLER false)"/>
   <arg name="has_rear_laser" default="$(optenv ROBOT_HAS_REAR_LASER true)"/>
   <arg name="run_move_base" default="$(optenv ROBOT_RUN_MOVE_BASE true)"/>
-  <arg name="run_move" default="$(optenv ROBOT_RUN_MOVE true)"/>
+  <arg name="run_move" default="$(optenv ROBOT_RUN_MOVE false)"/>
 
 
   <!-- - - - - - --> 
