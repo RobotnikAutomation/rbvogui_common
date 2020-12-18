@@ -2,7 +2,7 @@ base_local_planner: teb_local_planner/TebLocalPlannerROS
 
 TebLocalPlannerROS:
   odom_topic: $(arg prefix)odom
-  map_frame: $(arg prefix)map
+  map_frame: world
 
   # Trajectory
 

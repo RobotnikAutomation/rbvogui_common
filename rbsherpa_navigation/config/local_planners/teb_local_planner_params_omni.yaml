@@ -2,7 +2,7 @@ base_local_planner: teb_local_planner/TebLocalPlannerROS
 
 TebLocalPlannerROS:
   odom_topic: odom
-  map_frame: /rbsherpa_map
+  map_frame: /rbsherpa_world
      
   # Trajectory
    

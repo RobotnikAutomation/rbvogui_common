@@ -15,7 +15,7 @@ global_costmap:
   static_map:
       lethal_cost_threshold: 94
       static_map: true
-      map_topic: map
+      map_topic: world
       unknown_cost_value: 1
       trinary_costmap: false
       use_maximum: false
