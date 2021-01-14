@@ -48,9 +48,10 @@
     <xacro:arg name="prefix" default="robot_" />
     <xacro:arg name="launch_arm" default="false" />
     <xacro:arg name="load_kinematics_file" default="false" />
+    <xacro:arg name="use_gpu" default="false" />
 
 
-    <xacro:macro name="rbsherpa" params="prefix launch_arm load_kinematics_file publish_bf hq">
+    <xacro:macro name="rbsherpa" params="prefix launch_arm load_kinematics_file publish_bf hq use_gpu">
 
         <!-- *************** -->
         <!-- Robots Elements -->
@@ -100,7 +101,7 @@
         </xacro:sensor_zed>
 
         <!-- Lidar -->
-        <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}base_link" prefix_topic="front_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="true">
+        <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}base_link" prefix_topic="front_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="${use_gpu}">
             <origin xyz="0.645 0 0.52032" rpy="0 ${90*PI/180} 0"/>
         </xacro:sensor_rs_bpearl>
 
@@ -120,15 +121,13 @@
             <origin xyz="-0.645 -0.396 0.39025" rpy="0 0 ${135*PI/180}"/>
         </xacro:sick_protector>
 
-        <!-- Laser -->
-        <xacro:sensor_sick_microscan3 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
+        <!-- Laser -->   
+        <xacro:sensor_sick_microscan3 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser" gpu="${use_gpu}">
             <origin xyz="0.645 0.396 0.44559" rpy="${PI} 0 ${45*PI/180}"/>
         </xacro:sensor_sick_microscan3>
-        <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}base_link" prefix_topic="rear_laser">
+        <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}base_link" prefix_topic="rear_laser" gpu="${use_gpu}">
             <origin xyz="-0.645 -0.396 0.44559" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
-
-
 
     </xacro:macro>
 
@@ -136,6 +135,6 @@
     <!-- Gazebo ros control pluggins -->
     <xacro:ros_control/>
 
-    <xacro:rbsherpa prefix="$(arg prefix)" publish_bf="${publish_bf}" hq="${hq}" launch_arm="$(arg launch_arm)" load_kinematics_file="$(arg load_kinematics_file)"/>
+    <xacro:rbsherpa prefix="$(arg prefix)" publish_bf="${publish_bf}" hq="${hq}" launch_arm="$(arg launch_arm)" load_kinematics_file="$(arg load_kinematics_file)" use_gpu="$(arg use_gpu)"/>
 
 </robot>
