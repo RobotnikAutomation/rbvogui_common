@@ -101,7 +101,7 @@
         </xacro:sensor_zed>
 
         <!-- Lidar -->
-        <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}base_link" prefix_topic="front_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="${use_gpu}">
+        <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}base_link" prefix_topic="front_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="${gpu}">
             <origin xyz="0.645 0 0.52032" rpy="0 ${90*PI/180} 0"/>
         </xacro:sensor_rs_bpearl>
 
