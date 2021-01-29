@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base.gazebo.xacro" />
+  <xacro:include filename="$(find rbvogui_description)/urdf/inertia.urdf.xacro" />
+
+  <xacro:macro name="rbvogui_base" params="prefix publish_bf hq">
+
+    <!-- Robot mechanical and motor parameters -->
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="wheel_width" value="0.146" />
+
+    <!-- BASE FOOTPRINT -->
+    <xacro:if value="${publish_bf}">
+      <link name="${prefix}base_footprint">
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <box size="0.001 0.001 0.001" />
+          </geometry>
+        </visual>
+      </link>
+
+      <joint name="${prefix}base_footprint_joint" type="fixed">
+        <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+        <!-- ${wheel_radius} property must be defined inside wheel description -->
+        <parent link="${prefix}base_footprint"/>
+        <child link="${prefix}base_link" />
+      </joint>
+    </xacro:if>
+
+    <!-- BASE_LINK -->
+    <link name="${prefix}base_link">   x:1.025 y:0.75 z:0.3
+      <inertial>
+        <mass value="25.0" />
+        <origin xyz="0 0 0.35" />
+        <!--inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /-->
+        <solid_cuboid_inertia  w="1.025" h="0.75" d="0.3" m="25"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <xacro:if value="${hq}">
+          <geometry>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_xl_chassis.stl"/>
+          </geometry>
+        </xacro:if>
+        <xacro:unless value="${hq}">
+          <geometry>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_xl_chassis.stl"/>
+          </geometry>
+        </xacro:unless>
+        <material name="darkgrey">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0 " />
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_xl_chassis.stl"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}base_link">
+      <visual>  
+        <material>  
+          <ambient>0.0 0.0 0.0 1.0</ambient>  
+          <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+          <specular>0.508273 0.508273 0.508273 1.0</specular>  
+          <emissive>0.0 0.0 0.0 0.0</emissive>  
+        </material>  
+      </visual>  
+    </gazebo>
+
+  </xacro:macro>
+</robot>

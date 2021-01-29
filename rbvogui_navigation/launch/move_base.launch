@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Robot -->
+  <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
+  <arg name="prefix" default="$(arg robot_id)_"/>
+
+  <!-- Robot configuration -->
+  <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS diff)"/>
+
+  <!-- Topics argumments -->
+  <arg name="cmd_vel_topic" default="move_base/cmd_vel"/>
+  <arg name="odom_topic" default="odom"/>
+  <arg name="scan_topic" default="front_laser/scan"/>
+  <arg name="front_scan_topic" default="$(optenv ROBOT_NAVIGATION_FRONT_2D_SCAN front_laser/scan_filtered)"/>
+  <arg name="rear_scan_topic" default="$(optenv ROBOT_NAVIGATION_REAR_2D_SCAN rear_laser/scan_filtered)"/>
+  <arg name="front_rgbd_to_scan_topic" default="$(optenv ROBOT_NAVIGATION_FRONT_RGBD_TO_SCAN front_rgbd_camera/point_cloud_scan_filtered)"/>
+
+  <!-- Run move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  	<rosparam file="$(find rbvogui_navigation)/config/move_base_params.yaml" command="load" />
+  	<rosparam file="$(find rbvogui_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true"/>
+  	<rosparam file="$(find rbvogui_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>
+	<rosparam file="$(find rbvogui_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
+	<rosparam file="$(find rbvogui_navigation)/config/global_costmap_params_map.yaml" command="load" subst_value="true"/>
+	<rosparam file="$(find rbvogui_navigation)/config/teb_local_planner_params_$(arg kinematics).yaml" command="load" subst_value="true"/>
+
+	<!-- reset frame_id parameters using user input data -->
+	<remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
+	<remap from="odom" to="$(arg odom_topic)" />
+  </node>
+
+</launch>
