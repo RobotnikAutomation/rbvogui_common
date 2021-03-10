@@ -1,6 +1,11 @@
 # rbvogui_common
 
-<a href="url"><img src="https://www.roscomponents.com/1206-big_default_2x/rb-vogui.jpg" height="275" width="275" ></a> 
+<p align="center">
+  <img src="doc/Robotnik-RB-VOGUI-01.jpg" height="275" />
+  <img src="doc/Robotnik-RB-VOGUI-02.jpg" height="275" />
+  <img src="doc/Robotnik-RB-VOGUI-03.jpg" height="275" />
+  <img src="doc/Robotnik-RB-VOGUI-04.jpg" height="275" />
+</p>
 
 Common packages of the RB-Vogui: URDF description of the RB-Vogui, platform messages and other files for simulation.
 
