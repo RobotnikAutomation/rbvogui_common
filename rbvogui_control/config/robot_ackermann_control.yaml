@@ -1,64 +1,66 @@
 front_left_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbvogui_front_left_wheel_traction_joint
+  joint: $(arg prefix)front_left_wheel_joint
 
 front_left_wheel_steer_joint_controller:
   type: position_controllers/JointPositionController
-  joint: rbvogui_front_left_wheel_steer_joint
+  joint: $(arg prefix)front_left_motor_wheel_joint
 
 front_right_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbvogui_front_right_wheel_traction_joint
+  joint: $(arg prefix)front_right_wheel_joint
 
 front_right_wheel_steer_joint_controller:
   type: position_controllers/JointPositionController
-  joint: rbvogui_front_right_wheel_steer_joint
+  joint: $(arg prefix)front_right_motor_wheel_joint
 
 back_left_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbvogui_back_left_wheel_traction_joint
+  joint: $(arg prefix)back_left_wheel_joint
 
 back_right_wheel_traction_joint_controller:
   type: velocity_controllers/JointVelocityController
-  joint: rbvogui_back_right_wheel_traction_joint
+  joint: $(arg prefix)back_right_wheel_joint
 
 
-base_controller:
-  type: rbvogui_hl_ackermann_controller/RbVoguiHlAckermannController
+robotnik_base_control:
+  type: rbsherpa_hl_ackermann_controller/RbSherpaHlAckermannController
+# type: rbvogui_hl_ackermann_controller/RbVoguiHlAckermannController
   traction:
     front_right:
-      joint_name: rbvogui_front_right_wheel_traction_joint
+      joint_name: $(arg prefix)front_right_wheel_joint
       max_speed: 20.0 # rad/s
     front_left:
-      joint_name: rbvogui_front_left_wheel_traction_joint
+      joint_name: $(arg prefix)front_left_wheel_joint
       max_speed: 20.0 # rad/s
     back_right:
-      joint_name: rbvogui_back_right_wheel_traction_joint
+      joint_name: $(arg prefix)back_right_wheel_joint
       max_speed: 20.0 # rad/s
     back_left:
-      joint_name: rbvogui_back_left_wheel_traction_joint
+      joint_name: $(arg prefix)back_left_wheel_joint
       max_speed: 20.0 # rad/s
   steer:
     front_right:
-      joint_name: rbvogui_front_right_wheel_steer_joint
+      joint_name: $(arg prefix)front_right_motor_wheel_joint
       min_angle: -2.6 # rads
       max_angle: 2.6
     front_left:
-      joint_name: rbvogui_front_left_wheel_steer_joint
+      joint_name: $(arg prefix)front_left_motor_wheel_joint
       min_angle: -2.6 # rads
       max_angle: 2.6
   linear_speed_limit: 2.8
   linear_acceleration_limit: 2.0
   angular_speed_limit: 2.0
   angular_acceleration_limit: 2.0
-  odom_frame: rbvogui_odom
-  robot_base_frame: rbvogui_base_footprint
+  odom_frame: $(arg prefix)odom
+  robot_base_frame: $(arg prefix)base_footprint
   odom_broadcast_tf: true
-  odom_topic: /rbvogui_a/odom
+  odom_topic: odom
   wheel_base: 1.244 #from cad
   track_width: 0.734 #from cad
   wheel_diameter: 0.31 #  from cad
   cmd_watchdog_duration: 0.2
+  command_topic: robotnik_base_control/cmd_vel
   odom_publish_frequency: 100
 
 
@@ -73,18 +75,18 @@ joint_read_command_controller:
 base_steer_joint_trajectory_controller:
    type: position_controllers/JointTrajectoryController
    joints:
-     - rbvogui_front_right_wheel_steer_joint
-     - rbvogui_front_left_wheel_steer_joint
+     - $(arg prefix)front_right_motor_wheel_joint
+     - $(arg prefix)front_left_motor_wheel_joint
 
 
 # Settings for ros_control hardware interface
 hardware_interface:
   joints:
-     - rbvogui_front_right_wheel_steer_joint
-     - rbvogui_front_left_wheel_steer_joint
-     - rbvogui_back_right_wheel_steer_joint
-     - rbvogui_back_left_wheel_steer_joint
-     - rbvogui_front_right_wheel_traction_joint
-     - rbvogui_front_left_wheel_traction_joint
-     - rbvogui_back_right_wheel_traction_joint
-     - rbvogui_back_left_wheel_traction_joint
+     - $(arg prefix)front_right_motor_wheel_joint
+     - $(arg prefix)front_left_motor_wheel_joint
+     - $(arg prefix)back_right_motor_wheel_joint
+     - $(arg prefix)back_left_motor_wheel_joint
+     - $(arg prefix)front_right_wheel_joint
+     - $(arg prefix)front_left_wheel_joint
+     - $(arg prefix)back_right_wheel_joint
+     - $(arg prefix)back_left_wheel_joint
