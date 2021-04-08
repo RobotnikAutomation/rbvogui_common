@@ -48,17 +48,17 @@ robotnik_base_control:
       joint_name: $(arg prefix)front_left_motor_wheel_joint
       min_angle: -2.6 # rads
       max_angle: 2.6
-  linear_speed_limit: 2.8
-  linear_acceleration_limit: 2.0
+  linear_speed_limit: 2
+  linear_acceleration_limit: 1.0
   angular_speed_limit: 2.0
-  angular_acceleration_limit: 2.0
+  angular_acceleration_limit: 1.0
   odom_frame: $(arg prefix)odom
   robot_base_frame: $(arg prefix)base_footprint
   odom_broadcast_tf: true
   odom_topic: odom
-  wheel_base: 1.244 #from cad
-  track_width: 0.734 #from cad
-  wheel_diameter: 0.31 #  from cad
+  wheel_base: $(arg wheel_base) #from cad
+  track_width: $(arg track_width) #from cad
+  wheel_diameter: $(arg wheel_diameter) #  from cad
   cmd_watchdog_duration: 0.2
   command_topic: robotnik_base_control/cmd_vel
   odom_publish_frequency: 100
