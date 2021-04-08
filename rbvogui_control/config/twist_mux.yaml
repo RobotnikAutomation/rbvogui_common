@@ -14,6 +14,16 @@ topics:
   timeout : 0.5
   priority: 1
 
+- name    : docker
+  topic   : docker/cmd_vel
+  timeout : 0.5
+  priority: 60
+
+- name    : move
+  topic   : move/cmd_vel
+  timeout : 0.5
+  priority: 70
+
 locks:
 - name    : e_stop
   topic   : robotnik_base_hw/emergency_stop

@@ -6,13 +6,13 @@ maximum_linear_velocity_x:  0.4
 maximum_linear_velocity_y:  0.2
 maximum_angular_velocity_z:  0.7
 
-minimum_relative_linear_velocity_between_robot_and_goal:  0.01
+minimum_relative_linear_velocity_between_robot_and_goal:  0.05
 minimum_relative_angular_velocity_between_robot_and_goal:  0.0017
 
-check_initial_limits:  false
-initial_maximum_distance_x:  1.0
-initial_maximum_distance_y:  0.0
-initial_minimum_distance_x:  0.5
+check_initial_limits:  true
+initial_maximum_distance_x:  4.0
+initial_maximum_distance_y:  0.4
+initial_minimum_distance_x:  1.0
 initial_minimum_distance_y:  0.0
 
 initial_maximum_arc:  0.52
