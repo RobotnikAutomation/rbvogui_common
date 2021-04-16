@@ -2,7 +2,6 @@ global_costmap:
   global_frame: $(arg global_frame)
   robot_base_frame: $(arg base_frame)
   update_frequency: 0.5
-  static_map: true
   
   plugins:
     - name: static_map
