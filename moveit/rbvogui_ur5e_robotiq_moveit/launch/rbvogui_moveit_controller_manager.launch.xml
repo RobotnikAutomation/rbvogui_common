@@ -4,5 +4,5 @@
 <param name="moveit_controller_manager" value="$(arg moveit_controller_manager)" />
 
 <!-- load controller_list -->
-<rosparam file="$(find rbvogui_ur5_robotiq_moveit)/config/ros_controllers.yaml"/>
+<rosparam file="$(find rbvogui_ur5e_robotiq_moveit)/config/ros_controllers.yaml"/>
 </launch>

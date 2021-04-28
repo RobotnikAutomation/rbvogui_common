@@ -1,6 +1,6 @@
 <package>
 
-  <name>rbvogui_ur5_robotiq_moveit</name>
+  <name>rbvogui_ur5e_robotiq_moveit</name>
   <version>0.3.0</version>
   <description>
      An automatically generated package with all the configuration and launch files for using the rbvogui with the MoveIt! Motion Planning Framework
