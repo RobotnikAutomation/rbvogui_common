@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot name="rigid_cover" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="rigid_cover" params="prefix parent *origin">
+	 <joint name="${prefix}_base_joint" type="fixed">
+           <xacro:insert_block name="origin" />
+           <parent link="${parent}"/>
+           <child link="${prefix}_base_link" />
+         </joint>
+	  <link name="${prefix}_base_link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <material name="gps_color">
+                <color rgba="1 1 1 1"/>
+	      </material>
+	      <geometry>
+	        <mesh filename="package://rbvogui_description/meshes/structures/rigid_cover.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+	        <mesh filename="package://rbvogui_description/meshes/structures/rigid_cover.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </collision>
+	  </link>
+  </xacro:macro>
+
+</robot>

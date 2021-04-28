@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+
+<!-- RBVogui v3.0 -->
+<robot name="rbvogui" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <!-- ***************** -->
+    <!-- Imported elements -->
+    <!-- ***************** -->
+
+    <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+    <!-- Import rbvogui base elements-->
+    <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base_v3.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/rigid_cover.urdf.xacro"/>
+
+    <!-- Import rbvogui wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/wheel_v3.urdf.xacro" />
+
+    <!-- Import all available sensors -->
+    <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+    <!-- Extra imports -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/m1_mount.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/zed_support.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps.urdf.xacro" />
+
+    <!-- Import ur arm -->
+    <xacro:include filename="$(find ur_e_description)/urdf/ur5e.urdf.xacro" />
+    <!-- Import robotiq gripper -->
+    <xacro:include filename="$(find robotiq_2f_85_gripper_visualization)/urdf/robotiq_arg2f_85_model_macro.xacro" />
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="deg2rad" value="0.01745329251"/>
+
+    <!-- Wheel parameters -->
+    <xacro:property name="wheel_offset_x" value="0.380" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+    <xacro:property name="wheel_offset_y" value="0.23975" />
+    <xacro:property name="wheel_offset_z" value="0.0" />
+
+    <!-- Flag to select the high or low quality model -->
+    <xacro:property name="hq" value="true" />
+    <xacro:property name="publish_bf" value="true" />
+
+    <xacro:arg name="prefix" default="robot_" />
+    <xacro:arg name="kinematics_config" default="$(find ur_e_description)/config/ur5e_default.yaml"/>
+
+
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq">
+
+        <!-- *************** -->
+        <!-- Robots Elements -->
+        <!-- *************** -->
+
+        <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+    
+    <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
+    <!-- Ur5 Arm -->
+    <xacro:ur5e_robot prefix="$(arg prefix)arm_" joint_limited="false"
+        shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
+        wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+        kinematics_file="${load_yaml('$(arg kinematics_config)')}">
+    </xacro:ur5e_robot>
+
+    <joint name="$(arg prefix)arm_base_joint" type="fixed">
+        <origin xyz="0.1815 0.0 0.4405" rpy="0 0 -1.57"/>
+        <parent link="$(arg prefix)base_link" />
+        <child link="$(arg prefix)arm_base_link" />
+    </joint>
+    <!-- gripper -->
+    <joint name="${prefix}gripper_arm" type="fixed">
+      <origin xyz="0 0.0 -0.0" rpy="0 0 ${pi/2}"/>
+      <parent link="${prefix}arm_tool0" />
+      <child link="${prefix}gripper_robotiq_arg2f_base_link" />
+      <axis xyz="1 0 0" />
+    </joint>
+    <xacro:robotiq_arg2f_85 prefix="${prefix}gripper_">
+    </xacro:robotiq_arg2f_85>
+
+    <xacro:motor_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="false" hq="true">
+        <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:motor_wheel>
+
+    <xacro:motor_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="true">
+        <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 ${180.0*deg2rad}"/>
+    </xacro:motor_wheel>
+
+    <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="true">
+        <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 ${180.0*deg2rad}"/>
+    </xacro:motor_wheel>
+
+    <xacro:motor_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+        <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+    </xacro:motor_wheel>
+    <!-- Cover -->
+    <xacro:rigid_cover prefix="${prefix}cover" parent="${prefix}base_link">
+        <origin xyz="0 0 0.4125" rpy="0 0 0"/>
+    </xacro:rigid_cover>
+    
+    <!-- SENSORS see robotnik_sensors for the specific configuration -->
+
+    <!-- IMU -->
+    <xacro:sensor_imu_hector prefix="${prefix}imu" parent="${prefix}base_link">
+        <origin xyz="0.3 0.3 0.250" rpy="0 0 0"/>
+    </xacro:sensor_imu_hector>
+    <!-- GPS -->
+    <xacro:sensor_gps_mast prefix="${prefix}gps" parent="${prefix}base_link">
+        <origin xyz="-0.3995 0.3465 0.609" rpy="0 0 0"/>
+    </xacro:sensor_gps_mast>
+    <!-- Zed camera -->
+    <xacro:stereolabs_zed prefix="${prefix}zed" parent="${prefix}base_link">
+        <origin xyz="0.438 0 0.373" rpy="0 0 0"/>
+    </xacro:stereolabs_zed>
+    <xacro:zed_support prefix="${prefix}zed_support" parent="${prefix}base_link">
+        <origin xyz="0.3935 0 0.3935" rpy="0 0 0"/>
+    </xacro:zed_support>
+    
+    <!-- 3d laser -->
+    <xacro:sensor_rslidar_mems prefix="$(arg prefix)top_3d_laser" parent="$(arg prefix)base_link">
+    <origin xyz="0.4395 0 0.1575" rpy="${PI} 0 0"/>
+    </xacro:sensor_rslidar_mems>
+    <xacro:m1_mount prefix="${prefix}m1_mount" parent="${prefix}base_link">
+        <origin xyz="0.440 0 0.1625" rpy="0 0 0"/>
+    </xacro:m1_mount>
+    
+
+    </xacro:macro>
+
+
+    <!-- Gazebo ros control pluggins -->
+    <xacro:ros_control/>
+
+    <xacro:rbvogui prefix="$(arg prefix)" publish_bf="${publish_bf}" hq="${hq}"/>
+
+</robot>
