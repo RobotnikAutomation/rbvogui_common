@@ -20,6 +20,11 @@ arm_controller:
   state_publish_rate:  25
   action_monitor_rate: 10
 
+lift_controller:
+  type: position_controllers/JointPositionController
+  joint: $(arg prefix)ewellix_lift_top_joint
+  pid: {p: 1.0, i: 0.0, d: 0.0}
+
 left_arm:
   pos_traj_controller:
     type: position_controllers/JointTrajectoryController
