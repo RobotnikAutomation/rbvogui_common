@@ -16,8 +16,11 @@
     <!-- Import rbvogui wheels -->
     <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel_xl.urdf.xacro" />
 
-    <!-- Import arm with lift support -->
-    <xacro:include filename="$(find rbvogui_description)/urdf/bases/lift_arm_support.urdf.xacro" />
+    <!-- Import ur arm -->
+    <xacro:include filename="$(find ur_e_description)/urdf/ur10e.urdf.xacro" />
+    
+    <!-- Import ewellix lift -->
+    <xacro:include filename="$(find ewellix_description)/urdf/ewellix_lift_900mm.urdf.xacro" />
 
     <!-- Import sick support -->
     <xacro:include filename="$(find rbvogui_description)/urdf/bases/sick_support.urdf.xacro" />
@@ -46,12 +49,11 @@
     <xacro:property name="publish_bf" value="true" />
 
     <xacro:arg name="prefix" default="robot_" />
-    <xacro:arg name="launch_arm" default="false" />
-    <xacro:arg name="load_kinematics_file" default="false" />
+    <xacro:arg name="kinematics_config" default="$(find rbvogui_control)/config/calibration/ur10e_default.yaml"/>
     <xacro:arg name="gpu" default="false" />
 
 
-    <xacro:macro name="rbvogui" params="prefix launch_arm load_kinematics_file publish_bf hq gpu">
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq gpu">
 
         <!-- *************** -->
         <!-- Robots Elements -->
@@ -77,12 +79,22 @@
             <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
         </xacro:motor_wheel>
 
-        <!-- Single arm with lift  -->
-        <xacro:if value="$(arg launch_arm)">
-          <xacro:lift_arm prefix="${prefix}" parent="${prefix}base_link" hq="true" load_kinematics_file="${load_kinematics_file}">
-              <origin xyz="${lift_arm_offset_x} ${lift_arm_offset_y} ${lift_arm_offset_z}" rpy="0 0 0"/>
-          </xacro:lift_arm>
-        </xacro:if>
+        <!-- Ewellix lift -->
+        <xacro:ewellix_lift_900mm prefix="${prefix}" parent ="${prefix}base_link" >
+            <origin xyz="${lift_arm_offset_x} ${lift_arm_offset_y} ${lift_arm_offset_z}" rpy="0 0 0"/>
+        </xacro:ewellix_lift_900mm>
+
+        <!-- UR-10e ARM -->
+        <xacro:ur10e_robot prefix="${prefix}arm_" joint_limited="true" shoulder_pan_lower_limit="${-pi}"
+                        shoulder_pan_upper_limit="${pi}" wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
+                        kinematics_file="${load_yaml('$(arg kinematics_config)')}">>
+        </xacro:ur10e_robot>
+
+        <joint name="${prefix}arm_base_joint" type="fixed">
+            <origin xyz="0 0 0.015" rpy="0 0 0"/>
+            <parent link="${prefix}ewellix_lift_top_link" />
+            <child link="${prefix}arm_base_link" />
+        </joint>
 
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
@@ -135,6 +147,6 @@
     <!-- Gazebo ros control pluggins -->
     <xacro:ros_control/>
 
-    <xacro:rbvogui prefix="$(arg prefix)" publish_bf="${publish_bf}" hq="${hq}" launch_arm="$(arg launch_arm)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)"/>
+    <xacro:rbvogui prefix="$(arg prefix)" publish_bf="${publish_bf}" hq="${hq}" gpu="$(arg gpu)"/>
 
 </robot>
