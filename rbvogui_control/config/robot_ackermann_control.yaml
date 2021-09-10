@@ -24,7 +24,7 @@ back_right_wheel_traction_joint_controller:
 
 
 robotnik_base_control:
-  type: rbsherpa_hl_ackermann_controller/RbSherpaHlAckermannController
+  type: rbvogui_hl_ackermann_controller/RbVoguiHlAckermannController
 # type: rbvogui_hl_ackermann_controller/RbVoguiHlAckermannController
   traction:
     front_right:
