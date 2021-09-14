@@ -49,21 +49,21 @@ robotnik_base_control:
   steer:
     front_right:
       joint_name: $(arg prefix)front_right_motor_wheel_joint
-      min_angle: -2.9 # rads
-      max_angle: 2.9
+      min_angle: -2.6 # rads
+      max_angle: 2.6
     front_left:
       joint_name: $(arg prefix)front_left_motor_wheel_joint
-      min_angle: -2.9 # rads
-      max_angle: 2.9
+      min_angle: -2.6 # rads
+      max_angle: 2.6
     back_right:
       joint_name: $(arg prefix)back_right_motor_wheel_joint
-      min_angle: -2.9 # rads
-      max_angle: 2.9
+      min_angle: -2.6 # rads
+      max_angle: 2.6
     back_left:
       joint_name: $(arg prefix)back_left_motor_wheel_joint
-      min_angle: -2.9 # rads
-      max_angle: 2.9
-  linear_speed_limit: 2.8
+      min_angle: -2.6 # rads
+      max_angle: 2.6
+  linear_speed_limit: 1
   linear_acceleration_limit: 2.0
   angular_speed_limit: 2.0
   angular_acceleration_limit: 2.0
@@ -71,10 +71,10 @@ robotnik_base_control:
   robot_base_frame: $(arg prefix)base_footprint
   odom_broadcast_tf: true
   odom_topic: robotnik_base_control/odom
-  command_topic: robotnik_base_control/cmd_vel
-  wheel_base: $(arg wheel_base) #from cad # 1.244 or 1.42
-  track_width: $(arg track_width) #from cad # 0.734 or 0.72
+  wheel_base: $(arg wheel_base) #from cad
+  track_width: $(arg track_width) #from cad
   wheel_diameter: $(arg wheel_diameter) #  from cad
+  command_topic: robotnik_base_control/cmd_vel
   cmd_watchdog_duration: 0.2
   odom_publish_frequency: 100
   motion_odometry: true
