@@ -1,16 +1,18 @@
 <?xml version="1.0"?>
 <launch>
 
-  <arg name="robot_id"        default="$(optenv ROBOT_ID robot)"/>
-  <arg name="prefix"          default="$(arg robot_id)_"/>
-  <arg name="sim"             default="false"/>
+  <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
+  <arg name="prefix" default="$(arg robot_id)_"/>
+  <arg name="sim" default="false"/>
+  <arg name="cmd_vel" default="robotnik_base_control/cmd_vel"/>
+  <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS omni)" />  
+  <arg name="wheel_diameter" default="$(optenv ROBOT_WHEEL_DIAMETER 0.22)"/>
+  <arg name="track_width" default="$(optenv ROBOT_TRACK_WIDTH 0.439)"/> 
+  <arg name="wheel_base" default="$(optenv ROBOT_WHEEL_BASE 0.439)"/>  
   <arg name="sim_arm_control" default="false"/>
-  <arg name="cmd_vel"         default="robotnik_base_control/cmd_vel"/>
-  <arg name="kinematics"      default="$(optenv ROBOT_KINEMATICS omni)" />    <!-- ackermann, omni -->
-  <arg name="arm_controllers" default="left_arm/pos_traj_controller right_arm/pos_traj_controller"/> <!-- controllers can be listed seprated by a blank space -->
-  <arg name="wheel_diameter"  default="$(optenv ROBOT_WHEEL_DIAMETER 0.22)"/> <!-- Rb-Vogui XL wheel diameter = 0.325 -->
-  <arg name="track_width"     default="$(optenv ROBOT_TRACK_WIDTH 0.439)"/>   <!-- Rb-Vogui XL track width = 0.587 -->
-  <arg name="wheel_base"      default="$(optenv ROBOT_WHEEL_BASE 0.439)"/>    <!-- Rb-Vogui XL wheel base = 0.959 -->
+  <arg name="arm_manufacturer" default="$(optenv ROBOT_ARM_MANUFACTURER ur)"/>
+  <arg name="arm_model" default="$(optenv ROBOT_ARM_MODEL ur5)"/>
+
 
   <!-- Robot - Load joint controller configurations from YAML file to parameter server -->
   <group unless="$(arg sim)">
@@ -38,11 +40,14 @@
                 ">
     </node>
 
-    <group if="$(arg sim_arm_control)">
-      <rosparam file="$(find rbvogui_control)/config/arm_config/arm_control.yaml" command="load" subst_value="true"/>
-      <node name="controller_spawner_arms" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="
-        $(arg arm_controllers)"/>
-    </group>
+    <group if="$(arg sim_arm_control)"> 
+      <include file="$(find rbvogui_control)/launch/$(arg arm_manufacturer)_control.launch">
+        <arg name="prefix" value="$(arg prefix)"/>
+        <arg name="arm_model" value="$(arg arm_model)"/>
+        <arg name="use_trajectory_controller" value="true"/>
+      </include> 
+    </group> 
+
   </group>
 
   <node pkg="twist_mux" type="twist_mux" name="twist_mux">
