@@ -1,22 +1,35 @@
 <?xml version="1.0"?>
 <launch>
 
+ <arg name="joy_dev" default="/dev/input/js_base"/>
+ <arg name="autorepeat_rate" default="0.0"/>
+ <arg name="cmd_topic_vel" default="rbvogui/pad_teleop/cmd_vel"/>
+ <arg name="unsafe_cmd_topic_vel" default="pad_teleop/unsafe/cmd_vel"/>
+ <arg name="cmd_service_set_mode" default="rbvogui_controller/set_mode"/>
+ <arg name="cmd_topic_ptz" default="front_ptz_camera/front_ptz_camera/ptz_command"/>
+ <arg name="cmd_service_io" default="modbus_io/write_digital_output"/>
  <arg name="kinematics" default="ackermann" />
 
  <node pkg="joy" type="joy_node" name="ps4_joy" output="screen" respawn="true">
-   <param name="dev" type="string" value="/dev/input/js_base" />
+   <param name="dev" type="string" value="$(arg joy_dev)" />
+   <param name="deadzone" value="0.12" />
+   <param name="autorepeat_rate" value="10.0" type="double" />
  </node>
-  
+
  <node name="base_pad" pkg="rbvogui_pad" type="rbvogui_pad" output="screen">
    <!-- Parameters -->
-   <param name="cmd_topic_vel" value="cmd_vel" type="string"/>
+   <param name="cmd_topic_vel" value="$(arg cmd_topic_vel)" type="string"/>
+   <param name="unsafe_cmd_topic_vel" value="$(arg unsafe_cmd_topic_vel)" type="string"/>
+   <param name="cmd_service_io" value="$(arg cmd_service_io)" type="string"/>
+   <param name="cmd_topic_ptz" value="$(arg cmd_topic_ptz)" type="string"/>
+   <param name="cmd_service_set_mode" value="$(arg cmd_service_set_mode)" type="string"/>
+   <param name="cmd_service_home" value="home" type="string"/>
    <rosparam command="load" file="$(find rbvogui_pad)/config/base_ps4_$(arg kinematics).yaml" />
- </node> 
- 
+ </node>
+
  <node name="base_twist_mux" pkg="twist_mux" type="twist_mux" required="true" >
-   <rosparam command="load" file="$(find rbvogui_pad)/config/twist_mux.yaml" />
+   <rosparam command="load" file="$(find rbvogui_common)/config/twist_mux.yaml" />
    <remap from="cmd_vel_out" to="robotnik_base_control/cmd_vel"/>
  </node>
 
 </launch>
-

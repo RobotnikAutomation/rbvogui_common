@@ -86,18 +86,22 @@ private:
   double l_scale_, a_scale_, l_scale_z_;
   //! It will publish into command velocity (for the robot) and the ptz_state
   //! (for the pantilt)
-  ros::Publisher vel_pub_;
+  ros::Publisher vel_pub_, vel_limit_pub_, unsafe_vel_pub_;
   //! It will be suscribed to the joystick
   ros::Subscriber pad_sub_;
   //! Name of the topic where it will be publishing the velocity
   std::string cmd_topic_vel_;
+  //! Name of the topic where it will be publishing the velocity limit
+  std::string vel_limit_topic_;
+  //! Name of the topic where it will be publishing the velocity under unsafe condition
+  std::string unsafe_cmd_topic_vel_;
   //! Name of the service where it will be modifying the digital outputs
   std::string cmd_service_io_;
   double current_vel;
   //! Pad type
   std::string pad_type_;
   //! Number of the DEADMAN button
-  int dead_man_button_;
+  int dead_man_button_, pad_unsafe_button_;
   //! Number of the button for increase or decrease the speed max of the
   //! joystick
   int speed_up_button_, speed_down_button_;
@@ -143,9 +147,11 @@ private:
   //! Diagnostics max freq
   double max_freq_command, max_freq_joy; //
   //! Flag to enable/disable the communication with the publishers topics
-  bool bEnable;
+  bool bEnable, bUnsafeEnable;
   //! Flag to track the first reading without the deadman's button pressed.
   bool last_command_;
+  //! Flag to track the first reading without the unsafe's button pressed.
+  bool last_command_unsafe_;
   //! Client of the sound play service
   //  sound_play::SoundClient sc;
   //! Pan & tilt increment (degrees)
@@ -179,7 +185,10 @@ RBVoguiPad::RBVoguiPad()
   pnh_.param("scale_linear", l_scale_, DEFAULT_SCALE_LINEAR);
   pnh_.param("scale_linear_z", l_scale_z_, DEFAULT_SCALE_LINEAR_Z);
   pnh_.param("cmd_topic_vel", cmd_topic_vel_, cmd_topic_vel_);
+  pnh_.param<std::string>("vel_limit_topic", vel_limit_topic_, "pad_teleop/velocity_limit");
+  pnh_.param("unsafe_cmd_topic_vel", unsafe_cmd_topic_vel_, unsafe_cmd_topic_vel_);
   pnh_.param("button_dead_man", dead_man_button_, dead_man_button_);
+  pnh_.param("button_pad_unsafe", pad_unsafe_button_, pad_unsafe_button_);
   pnh_.param("button_speed_up", speed_up_button_,
              speed_up_button_); // 4 Thrustmaster
   pnh_.param("button_speed_down", speed_down_button_,
@@ -231,6 +240,8 @@ RBVoguiPad::RBVoguiPad()
   // Publish through the node handle Twist type messages to the
   // guardian_controller/command topic
   vel_pub_ = pnh_.advertise<geometry_msgs::Twist>(cmd_topic_vel_, 1);
+  vel_limit_pub_ = nh_.advertise<geometry_msgs::Twist>(vel_limit_topic_, 1);
+	unsafe_vel_pub_ = nh_.advertise<geometry_msgs::Twist>(unsafe_cmd_topic_vel_, 1);
   // Listen through the node handle sensor_msgs::Joy messages from joystick
   // (these are the references that we will sent to rbvogui_controller/command)
   pad_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10,
@@ -263,7 +274,9 @@ RBVoguiPad::RBVoguiPad()
                                                &max_freq_command, 0.1, 10));
 
   bEnable = false; // Communication flag disabled by default
+  bUnsafeEnable = false;	// Communication flag disabled by default
   last_command_ = true;
+  last_command_unsafe_ = true;
 }
 
 /*
@@ -274,6 +287,7 @@ void RBVoguiPad::Update() { updater_pad.update(); }
 
 void RBVoguiPad::padCallback(const sensor_msgs::Joy::ConstPtr &joy) {
   geometry_msgs::Twist vel;
+  geometry_msgs::Twist vel_limit;
 
   vel.angular.x = 0.0;
   vel.angular.y = 0.0;
@@ -283,6 +297,7 @@ void RBVoguiPad::padCallback(const sensor_msgs::Joy::ConstPtr &joy) {
   vel.linear.z = 0.0;
 
   bEnable = (joy->buttons[dead_man_button_] == 1);
+  bUnsafeEnable = (joy->buttons[pad_unsafe_button_] == 1);
 
   // Actions dependant on dead-man button
   if (joy->buttons[dead_man_button_] == 1) {
@@ -385,9 +400,17 @@ void RBVoguiPad::padCallback(const sensor_msgs::Joy::ConstPtr &joy) {
   // Publish
   // Only publishes if it's enabled
   if (bEnable) {
+    vel_limit.linear.x = l_scale_*current_vel;
+		vel_limit.angular.z = a_scale_*current_vel;
+		vel_limit_pub_.publish(vel_limit);
     vel_pub_.publish(vel);
     pub_command_freq->tick();
     last_command_ = true;
+    if(bUnsafeEnable)
+		{
+			unsafe_vel_pub_.publish(vel);
+			last_command_unsafe_ = true;
+		}
   }
 
   if (!bEnable && last_command_) {
@@ -398,9 +421,18 @@ void RBVoguiPad::padCallback(const sensor_msgs::Joy::ConstPtr &joy) {
     vel.linear.y = 0.0;
     vel.linear.z = 0.0;
     vel_pub_.publish(vel);
+    unsafe_vel_pub_.publish(vel);
 
     pub_command_freq->tick();
     last_command_ = false;
+  }
+  
+  if(!bUnsafeEnable && last_command_unsafe_)
+  {
+    vel.angular.x = 0.0;  vel.angular.y = 0.0; vel.angular.z = 0.0;
+    vel.linear.x = 0.0;   vel.linear.y = 0.0; vel.linear.z = 0.0;
+    unsafe_vel_pub_.publish(vel);
+    last_command_unsafe_ = false;
   }
 }
 

@@ -1,17 +1,18 @@
-num_of_buttons: 15 
+num_of_buttons: 15
 axis_linear_x: 1
 axis_linear_y: 0
 axis_angular: 2
 axis_linear_z: 3
 scale_linear: 1
 scale_angular: 1.0 # in ackermann, angular is steering angle, so scale must be half pi
-scale_linear_z: 20.0 
+scale_linear_z: 20.0
 button_speed_up: 3
 button_speed_down: 1
 button_dead_man: 5
+button_pad_unsafe: 4
 button_output_1: 15
 button_output_2: 13
-output_1: 1 
+output_1: 1
 output_2: 2
 button_ptz_tilt_up: 4
 button_ptz_tilt_down: 6
@@ -28,6 +29,5 @@ cmd_service_set_mode: set_mode
 cmd_service_home:  home
 kinematic_mode: 1 # 1 holonomic, 2 differential
 robot_model: ackermann
-joystick_dead_zone: "true" 
+joystick_dead_zone: "true"
 delta_angle: 0.15
-

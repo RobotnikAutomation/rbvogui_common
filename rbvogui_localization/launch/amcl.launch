@@ -8,7 +8,7 @@
   <arg name="y_init_pose" default="0"/>
   <arg name="z_init_pose" default="0"/>
 
-  <arg name="scan_topic" default="front_laser/scan"/>
+  <arg name="scan_topic" default="top_3d_laser/scan_2d"/>
   <arg name="map_topic" default="map"/>
 
   <arg name="global_frame" default="$(arg prefix)map"/>
