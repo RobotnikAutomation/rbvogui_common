@@ -27,7 +27,6 @@
   </xacro:macro>
 
   <xacro:macro name="motor_wheel" params="prefix parent *origin reflect hq">
-    <!-- TODO: check reflect parameter -->
     <!--MOTOR WHEEL -->
     <joint name="${prefix}motor_wheel_joint" type="revolute">
       <parent link="${parent}"/>
