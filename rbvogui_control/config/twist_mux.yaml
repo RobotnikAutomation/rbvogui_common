@@ -1,13 +1,13 @@
 topics:
-  - name    : pad_unsafe
-    topic   : pad_teleop/unsafe/cmd_vel # UNSAFE
-    timeout : 0.5
-    priority: 100
+- name    : pad_unsafe
+  topic   : pad_teleop/unsafe/cmd_vel # UNSAFE
+  timeout : 0.5
+  priority: 100
 
-  - name    : safe_command
-    topic   : rough_terrain_navigation/cmd_vel # SAFE
-    timeout : 0.5
-    priority: 75
+- name    : safe_command
+  topic   : rough_terrain_navigation/cmd_vel # SAFE
+  timeout : 0.5
+  priority: 75
 
 # - name    : pad
 #   topic   : pad_teleop/cmd_vel
