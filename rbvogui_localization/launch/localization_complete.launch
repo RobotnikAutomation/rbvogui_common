@@ -4,6 +4,7 @@
   <!-- Robot -->
   <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
   <arg name="prefix" default="$(arg robot_id)_"/>
+  <arg name="run_mapping" default="false"/>
   <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS diff)"/>
   <!-- What localization config package to use -->
   <arg name="localization_package" default="$(optenv LOCALIZATION_PACKAGE rbvogui_localization)"/>
@@ -15,14 +16,24 @@
   <arg name="localization_system_file" default="$(eval find(localization_package) + '/launch/amcl.launch')"/>
   <arg name="map_server_file" default="$(eval find(localization_package) + '/launch/map_server.launch')"/>
 
+
   <group ns="$(arg robot_id)">
 
-    <include file="$(arg localization_system_file)"/>
+    <group if="$(arg run_mapping)">
+      <include file="$(find rbvogui_localization)/launch/gmapping.launch"/>
+    </group>
 
-    <include file="$(arg map_server_file)">
-      <arg name="map_file" value="$(arg map_file)"/>
-      <arg name="robot_id" value="$(arg robot_id)"/>
-    </include>  
+    <group unless="$(arg run_mapping)">
+
+      <include file="$(arg localization_system_file)"/>
+
+      <include file="$(arg map_server_file)">
+        <arg name="map_file" value="$(arg map_file)"/>
+        <arg name="robot_id" value="$(arg robot_id)"/>
+      </include>  
+
+    </group>
 
   </group>
+
 </launch>
