@@ -55,10 +55,10 @@
         <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
 		  <xacro:if value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
+			<origin xyz="0 0 0.27952" rpy="0 0 0" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 0.0" />
+			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
 		  </xacro:unless>
           <geometry>            
             <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.stl" />
@@ -68,10 +68,10 @@
         <!-- LOW RESOLUTION WHEELS -->
         <xacro:unless value="${hq}">
           <xacro:if value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
+			<origin xyz="0 0 0.27952" rpy="0 0 0" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 0.0" />
+			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
 		  </xacro:unless>
           <geometry>
               <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.dae" />
@@ -84,10 +84,10 @@
 
       <collision>
 		<xacro:if value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
+			<origin xyz="0 0 0.27952" rpy="0 0 0" />
 		</xacro:if>
 		<xacro:unless value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 0.0" />
+			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
 		</xacro:unless>
         <geometry>
             <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.dae" />
@@ -111,13 +111,14 @@
     <joint name="${prefix}wheel_joint" type="continuous">
       <parent link="${prefix}motor_wheel"/>
       <child link="${prefix}wheel"/>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
       <xacro:if value="${reflect}">
-		<axis xyz="0 -1 0" rpy="0 0 0" />
-	  </xacro:if>
+		     <origin xyz="0 0 0" rpy="0 0 0" />
+         <axis xyz="0 1 0" rpy="0 0 0" />
+	    </xacro:if>
       <xacro:unless value="${reflect}">
-		<axis xyz="0 1 0" rpy="0 0 0" />
-	  </xacro:unless>
+         <origin xyz="0 0 0" rpy="0 0 0" />
+		     <axis xyz="0 1 0" rpy="0 0 0" />
+	    </xacro:unless>
       <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
       <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
     </joint>
@@ -138,7 +139,7 @@
         <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
 		  <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="${M_PI} 0 0" />
+			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="0 0 0" />
@@ -151,7 +152,7 @@
         <!-- LOW RESOLUTION WHEELS -->
         <xacro:unless value="${hq}">
           <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="${M_PI} 0 0" />
+			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="0 0 0" />
