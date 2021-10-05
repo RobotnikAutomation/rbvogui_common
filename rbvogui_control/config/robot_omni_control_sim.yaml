@@ -31,7 +31,7 @@ back_right_wheel_steer_joint_controller:
   joint: $(arg prefix)back_right_motor_wheel_joint
 
 robotnik_base_control:
-  type: omni_drive_controller/OmniDriveController
+  type: rbvogui_hl_omni_controller/RbVoguiHlOmniController
   traction:
     front_right:
       joint_name: $(arg prefix)front_right_wheel_joint
@@ -77,7 +77,9 @@ robotnik_base_control:
   wheel_diameter: $(arg wheel_diameter) #0.325
   cmd_watchdog_duration: 0.2
   odom_publish_frequency: 100
-
+  direction_wheels_init_range: 3.14
+  direction_wheels_moving_range: 3.14
+  steering_wheels_in_same_orientation: true
 
 joint_read_state_controller:
     type: joint_state_controller/JointStateController 
