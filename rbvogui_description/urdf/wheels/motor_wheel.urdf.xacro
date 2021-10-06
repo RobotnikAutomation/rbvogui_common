@@ -61,7 +61,7 @@
 			<origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
 		  </xacro:unless>
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.dae" />
+            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
           </geometry>
         </xacro:if>
         <!-- LOW RESOLUTION WHEELS -->
@@ -73,9 +73,12 @@
 			<origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
 		  </xacro:unless>
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
+            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.dae" />
           </geometry>
         </xacro:unless>
+        <material name="red2">
+          <color rgba="0.9 0.1 0.1 1"/>     
+        </material>
       </visual>
 
       <collision>
@@ -141,7 +144,7 @@
 			<origin xyz="0 0 0" rpy="0 0 0" />
 		  </xacro:unless>  
           <geometry>  
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.dae" />        
+              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />        
           </geometry>
         </xacro:if>
         <!-- LOW RESOLUTION WHEELS -->
@@ -156,6 +159,9 @@
             <cylinder length="${wheel_width}" radius="${wheel_radius}" />
           </geometry>
         </xacro:unless>
+        <material name="dark-gray">
+          <color rgba="0.25 0.25 0.25 1.0"/>
+        </material>
       </visual>
       <collision>
         <xacro:if value="${reflect}">

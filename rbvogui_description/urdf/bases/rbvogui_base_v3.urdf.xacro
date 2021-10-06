@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
 
 
   <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base.gazebo.xacro" />
@@ -40,12 +40,12 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.dae"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis_v3.stl"/>
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.dae"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis_v3.dae"/>
           </geometry>
         </xacro:unless>
         <material name="darkgrey">
@@ -55,7 +55,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0 " />
         <geometry>
-          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.dae"/>
+          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis_v3.stl"/>
         </geometry>
       </collision>
     </link>
@@ -81,8 +81,8 @@
             <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos_v3.dae" scale="1.001 1.07 1.001"/>
           </geometry>
         </xacro:unless>
-        <material name="lightgrey">
-          <color rgba="0.9 0.9 0.9 1"/>
+        <material name="lightred">
+          <color rgba="0.9 0.2 0.2 1"/>
         </material>
       </visual>
     </link>
