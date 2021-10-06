@@ -33,10 +33,11 @@
     <xacro:property name="publish_bf" value="true" />
 
     <xacro:arg name="prefix" default="robot_" />
+    <xacro:arg name="gpu" default="true" />
     <xacro:arg name="load_kinematics_file" default="false"/>
 
 
-    <xacro:macro name="rbvogui" params="prefix publish_bf hq load_kinematics_file">
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq load_kinematics_file gpu">
 
         <!-- *************** -->
         <!-- Robots Elements -->
@@ -70,12 +71,16 @@
         </xacro:sensor_imu_hector>
         <!-- GPS -->
         <xacro:sensor_gps prefix="${prefix}gps" parent="${prefix}base_link">
-            <origin xyz="-0.04625 0.0 1.115" rpy="0 0 0"/>
+            <origin xyz="-0.04625 0.0 0.4" rpy="0 0 0"/>
         </xacro:sensor_gps>
         <!-- 2d laser -->
-        <xacro:sensor_sick_outdoorscan3 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
-            <origin xyz="0.5307 0.0 0.15389" rpy="${180*deg2rad} 0 0"/>
-        </xacro:sensor_sick_outdoorscan3>
+        <xacro:sensor_sick_tim551 prefix="$(arg prefix)front_laser" parent="${prefix}base_link" gpu="${gpu}" min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
+            <origin xyz="0.53 0.0 0.153" rpy="${PI} 0 0"/>
+        </xacro:sensor_sick_tim551>
+        <!-- Front 3d laser -->
+        <xacro:sensor_benewake_ce30c prefix="$(arg prefix)front_3d_laser" parent="${prefix}base_link"  gpu="${gpu}" prefix_topic="front_3d_laser">
+            <origin xyz="0.59 0 0.189" rpy="0 0 0"/>
+        </xacro:sensor_benewake_ce30c>
 
     </xacro:macro>
 
@@ -83,6 +88,6 @@
     <!-- Gazebo ros control pluggins -->
     <xacro:ros_control/>
 
-    <xacro:rbvogui prefix="$(arg prefix)" load_kinematics_file="$(arg load_kinematics_file)" publish_bf="${publish_bf}" hq="${hq}"/>
+    <xacro:rbvogui prefix="$(arg prefix)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"/>
 
 </robot>
