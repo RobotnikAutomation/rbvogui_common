@@ -3,17 +3,29 @@
 
   <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
   <arg name="prefix" default="$(arg robot_id)_"/>
-  <arg name="robot_xacro" default="$(optenv ROBOT_XACRO rbvogui_xl_std.urdf.xacro)" />
-  <arg name="robot_xacro_package" default="$(optenv ROBOT_XACRO_PACKAGE rbvogui_description)"/>
-  <arg name="robot_xacro_relative_path" default="$(optenv ROBOT_XACRO_RELATIVE_PATH /robots/)" />
-  <arg name="robot_xacro_path" default="$(eval find(robot_xacro_package) + robot_xacro_relative_path + robot_xacro)"/>
+  <arg name="robot_model" default="rbvogui" />
+
+
+  <arg name="robot_xacro" default="$(optenv ROBOT_XACRO rbvogui_std.urdf.xacro)" />
+
+  <arg name="robot_xacro_path" default="$(find rbvogui_description)/robots/"/>
+  <arg name="robot_use_custom_xacro_path" default="$(optenv ROBOT_USE_CUSTOM_XACRO_PATH false)"/>
+  <arg name="robot_custom_xacro_path" default="$(optenv ROBOT_CUSTOM_XACRO_PATH /home/robot/)"/>
+
   <arg name="launch_arm_control" default="false"/>
   <arg name="launch_arm" default="$(arg launch_arm_control)"/>
   <arg name="load_kinematics_file" default="false"/>
   <arg name="gpu" default="false"/>
 
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg robot_xacro_path)' 
-               prefix:=$(arg prefix) launch_arm:=$(arg launch_arm) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)"/>
+  <group unless="$(arg robot_use_custom_xacro_path)" >
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg robot_xacro_path)$(arg robot_xacro)' 
+                prefix:=$(arg prefix) launch_arm:=$(arg launch_arm) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)"/>
+  </group>
+
+  <group if="$(arg robot_use_custom_xacro_path)" >
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg robot_custom_xacro_path)$(arg robot_xacro)' 
+                prefix:=$(arg prefix) launch_arm:=$(arg launch_arm) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)"/>
+  </group>
 
   <!-- publish tfs through the robot_state_publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
