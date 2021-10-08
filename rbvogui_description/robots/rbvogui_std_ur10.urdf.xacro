@@ -91,7 +91,7 @@
             <origin xyz="0.5657 0.0 0.1622" rpy="0 0 0"/>
         </xacro:sensor_benewake_ce30c>
         <!-- 2d laser -->
-        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}base_link" prefix_topic="front_laser">
+        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}base_link"  min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
             <origin xyz="0.5307 0.0 0.15389" rpy="${180*deg2rad} 0 0"/>
         </xacro:sensor_sick_tim551>
 
