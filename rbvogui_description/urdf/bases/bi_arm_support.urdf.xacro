@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
 
 
-	<xacro:include filename="$(find ur_e_description)/urdf/ur10e.urdf.xacro" />
+	<xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro" />
   <xacro:include filename="$(find rbvogui_description)/urdf/inertia.urdf.xacro" />
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
@@ -61,10 +61,9 @@
         <child link="${prefix}left_arm_base_link" />
       </joint>
 
-      <xacro:ur10e_robot prefix="${prefix}left_arm_" joint_limited="true"
-        shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
-        wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
-        kinematics_file="${load_yaml('$(find rbvogui_control)/config/calibration/ur10e_default.yaml')}">
+      <xacro:ur10e_robot prefix="${prefix}left_arm_"                     
+                kinematics_parameters_file="$(find rbvogui_control)/config/calibration/ur10_calibration.yaml"
+                joint_limits_parameters_file="$(find rbvogui_control)/config/calibration/ur10_joint_limits.yaml">
       </xacro:ur10e_robot>
     </xacro:if>
 
@@ -72,12 +71,10 @@
       <joint name="${prefix}left_arm_base_joint" type="fixed">
         <origin xyz="0 -0.0915 0.15044" rpy="0.9 0 3.1416"/>
         <parent link="${prefix}G2_link" />
-        <child link="${prefix}right_arm_base_link" />
+        <child link="${prefix}left_arm_base_link" />
       </joint>
 
-      <xacro:ur10e_robot prefix="${prefix}left_arm_" joint_limited="true"
-        shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
-        wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}">
+      <xacro:ur10e_robot prefix="${prefix}left_arm_" >
       </xacro:ur10e_robot>
     </xacro:unless>
 
@@ -90,10 +87,9 @@
         <child link="${prefix}right_arm_base_link" />
       </joint>
 
-      <xacro:ur10e_robot prefix="${prefix}right_arm_" joint_limited="true"
-        shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
-        wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}"
-        kinematics_file="${load_yaml('$(find rbvogui_control)/config/calibration/ur10e_default.yaml')}">
+      <xacro:ur10e_robot prefix="${prefix}right_arm_"                 
+                kinematics_parameters_file="$(find rbvogui_control)/config/calibration/ur10_calibration.yaml"
+                joint_limits_parameters_file="$(find rbvogui_control)/config/calibration/ur10_joint_limits.yaml">
       </xacro:ur10e_robot>
     </xacro:if>
 
@@ -104,12 +100,10 @@
         <child link="${prefix}right_arm_base_link" />
       </joint>
 
-      <xacro:ur10e_robot prefix="${prefix}right_arm_" joint_limited="true"
-        shoulder_pan_lower_limit="${-pi}" shoulder_pan_upper_limit="${pi}"
-        wrist_3_lower_limit="${-pi}" wrist_3_upper_limit="${pi}">
+      <xacro:ur10e_robot prefix="${prefix}right_arm_">
       </xacro:ur10e_robot>
     </xacro:unless>
-
+  
   </xacro:macro>
 
 </robot>
