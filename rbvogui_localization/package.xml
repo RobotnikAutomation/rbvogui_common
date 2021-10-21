@@ -38,6 +38,9 @@
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>gmapping</run_depend>
+  <run_depend>amcl</run_depend>
+  <run_depend>map_server</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
