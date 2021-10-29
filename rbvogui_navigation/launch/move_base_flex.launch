@@ -30,11 +30,15 @@
   <arg name="costmap_folder" default="costmaps"/>
   <arg name="global_planner_folder" default="global_planners"/>
   <arg name="local_planner_folder" default="local_planners"/>
-
   <!-- Maps configuration -->
   <arg name="costmap_common_params" default="costmap_common_params.yaml" />
   <arg name="global_costmap_params" default="global_costmap_params_nomap.yaml" />
   <arg name="local_costmap_params" default="local_costmap_params.yaml" />
+
+  <arg name="planners_config" default="$(find rbvogui_navigation)/config/global_planners/planners.yaml"/>
+  <arg name="controllers_config" default="$(find rbvogui_navigation)/config/local_planners/controllers.yaml"/>
+  <arg name="recovery_behaviors_config" default="$(find rbvogui_navigation)/config/move_base/recovery_behaviors.yaml"/>
+  <arg name="move_base_flex_config" default="$(find rbvogui_navigation)/config/move_base/move_base_flex.yaml"/>
 
   <!-- Maps path -->
   <arg name="costmap_common_params_file" default="$(eval config_folder + '/' + costmap_folder + '/' + costmap_common_params)" />
@@ -65,14 +69,18 @@
   <!-- Run move_base -->
   <node pkg="mbf_costmap_nav" type="mbf_costmap_nav" respawn="false" name="move_base_flex" output="screen">
 
-    <!-- Topics -->
-    <remap unless="$(arg has_safety_controller)" from="cmd_vel" to="$(arg cmd_vel_topic)" />
-    <remap if="$(arg has_safety_controller)" from="cmd_vel" to="$(arg cmd_vel_topic)_unsafe" />
-
+    <param name="tf_timeout" value="1.5"/>
+    <param name="planner_max_retries" value="3"/>
+    <remap from="cmd_vel" to="/robot/move_base/cmd_vel"/>
     <remap from="odom" to="$(arg odom_topic)" />
 
+    <rosparam file="$(arg planners_config)" command="load" />
+    <rosparam file="$(arg controllers_config)" command="load" />
+    <rosparam file="$(arg move_base_flex_config)" command="load" subst_value="true"/>
+    <rosparam file="$(arg recovery_behaviors_config)" command="load" />
+
     <!-- Move base params -->
-    <rosparam file="$(arg move_base_params_file)" command="load" subst_value="true"/>
+    <!-- <rosparam file="$(arg move_base_params_file)" command="load" subst_value="true"/> -->
 
     <!-- Global costmap params-->
     <rosparam file="$(arg costmap_common_params_file)" command="load" ns="global_costmap" subst_value="true"/>
