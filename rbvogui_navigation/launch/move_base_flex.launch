@@ -71,13 +71,13 @@
 
     <param name="tf_timeout" value="1.5"/>
     <param name="planner_max_retries" value="3"/>
-    <remap from="cmd_vel" to="/robot/move_base/cmd_vel"/>
+    <remap from="cmd_vel" to="move_base_flex/cmd_vel"/>
     <remap from="odom" to="$(arg odom_topic)" />
 
-    <rosparam file="$(arg planners_config)" command="load" />
-    <rosparam file="$(arg controllers_config)" command="load" />
+    <rosparam file="$(arg planners_config)" command="load" subst_value="true"/>
+    <rosparam file="$(arg controllers_config)" command="load" subst_value="true"/>
     <rosparam file="$(arg move_base_flex_config)" command="load" subst_value="true"/>
-    <rosparam file="$(arg recovery_behaviors_config)" command="load" />
+    <rosparam file="$(arg recovery_behaviors_config)" command="load" subst_value="true"/>
 
     <!-- Move base params -->
     <!-- <rosparam file="$(arg move_base_params_file)" command="load" subst_value="true"/> -->
