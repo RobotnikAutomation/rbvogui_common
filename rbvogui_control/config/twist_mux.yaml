@@ -15,7 +15,12 @@ topics:
 #   priority: 100
 
 # - name    : move_base
-#   topic   : move_base/cmd_vel
+#   topic   : /move_base/cmd_vel
+#   timeout : 0.5
+#   priority: 50
+
+# - name    : move_base_flex
+#   topic   : /move_base_flex/cmd_vel
 #   timeout : 0.5
 #   priority: 50
 
