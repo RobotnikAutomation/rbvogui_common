@@ -4,20 +4,15 @@ topics:
   timeout : 0.5
   priority: 100
 
-- name    : safe_command
-  topic   : rough_terrain_navigation/cmd_vel # SAFE
+- name    : pad_safe_command
+  topic   : rough_terrain_navigation/pad_teleop/cmd_vel # SAFE
   timeout : 0.5
   priority: 75
 
-# - name    : pad
-#   topic   : pad_teleop/cmd_vel
-#   timeout : 0.5
-#   priority: 100
-
-# - name    : move_base
-#   topic   : /move_base/cmd_vel
-#   timeout : 0.5
-#   priority: 50
+- name    : move_base
+  topic   : rough_terrain_navigation/move_base/cmd_vel
+  timeout : 0.5
+  priority: 50
 
 # - name    : move_base_flex
 #   topic   : /move_base_flex/cmd_vel
