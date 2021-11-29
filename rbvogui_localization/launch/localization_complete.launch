@@ -4,7 +4,6 @@
   <!-- Robot -->
   <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
   <arg name="prefix" default="$(arg robot_id)_"/>
-  <arg name="run_mapping" default="false"/>
   <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS diff)"/>
   <arg name="scan_topic" default="front_laser/scan"/>
 
@@ -21,22 +20,14 @@
 
   <group ns="$(arg robot_id)">
 
-    <group if="$(arg run_mapping)">
-      <include file="$(find rbvogui_localization)/launch/gmapping.launch"/>
-    </group>
+    <include file="$(arg localization_system_file)">
+      <arg name="scan_topic" value="$(arg scan_topic)"/>
+    </include>
 
-    <group unless="$(arg run_mapping)">
-
-      <include file="$(arg localization_system_file)">
-        <arg name="scan_topic" value="$(arg scan_topic)"/>
-      </include>
-
-      <include file="$(arg map_server_file)">
-        <arg name="map_file" value="$(arg map_file)"/>
-        <arg name="robot_id" value="$(arg robot_id)"/>
-      </include>  
-
-    </group>
+    <include file="$(arg map_server_file)">
+      <arg name="map_file" value="$(arg map_file)"/>
+      <arg name="robot_id" value="$(arg robot_id)"/>
+    </include>  
 
   </group>
 
