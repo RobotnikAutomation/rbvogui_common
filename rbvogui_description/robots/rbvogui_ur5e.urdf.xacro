@@ -26,7 +26,7 @@
     <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps.urdf.xacro" />
 
     <!-- Import ur arm -->
-    <xacro:include filename="$(find ur_description)/urdf/inc/ur10_macro.xacro" />
+    <xacro:include filename="$(find ur_description)/urdf/inc/ur5e_macro.xacro" />
     <!-- Import robotiq gripper -->
     <xacro:include filename="$(find robotiq_2f_85_gripper_visualization)/urdf/robotiq_arg2f_85_model_macro.xacro" />
 
@@ -54,17 +54,8 @@
         <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
     
     <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
-    <xacro:if value="${load_kinematics_file}">
-		<!-- Ur5 Arm -->
-        <xacro:ur5e_robot prefix="${prefix}arm_" kinematics_parameters_file="$(find rbvogui_control)/config/calibration/ur10_calibration.yaml">
-		</xacro:ur5e_robot>
-	</xacro:if>
-    <xacro:unless value="${load_kinematics_file}">
-		<!-- Ur5 Arm -->
-		<xacro:ur5e_robot prefix="$(arg prefix)arm_">
-		</xacro:ur5e_robot>
-	</xacro:unless>
-	
+    <!-- Ur5 Arm -->
+    <xacro:ur5e_robot prefix="$(arg prefix)arm_"/>
 
     <joint name="$(arg prefix)arm_base_joint" type="fixed">
         <origin xyz="0.1815 0.0 0.4405" rpy="0 0 -1.57"/>
@@ -109,22 +100,22 @@
     </xacro:sensor_imu_hector>
     <!-- GPS -->
     <xacro:sensor_gps_mast prefix="${prefix}gps" parent="${prefix}base_link">
-        <origin xyz="-0.3995 0.3465 0.609" rpy="0 0 0"/>
+        <origin xyz="-0.3995 0.3465 0.574" rpy="0 0 0"/>
     </xacro:sensor_gps_mast>
     <!-- Zed camera -->
-    <xacro:stereolabs_zed prefix="${prefix}zed" parent="${prefix}base_link">
+    <!--xacro:stereolabs_zed prefix="${prefix}zed" parent="${prefix}base_link">
         <origin xyz="0.438 0 0.373" rpy="0 0 0"/>
-    </xacro:stereolabs_zed>
+    </xacro:stereolabs_zed-->
     <xacro:zed_support prefix="${prefix}zed_support" parent="${prefix}base_link">
         <origin xyz="0.3935 0 0.3935" rpy="0 0 0"/>
     </xacro:zed_support>
     
     <!-- 3d laser -->
     <xacro:sensor_rslidar_mems prefix="$(arg prefix)top_3d_laser" parent="$(arg prefix)base_link">
-    <origin xyz="0.4395 0 0.1575" rpy="${PI} 0 0"/>
+    <origin xyz="0.4875  0  0.1755" rpy="${PI} 0 0"/>
     </xacro:sensor_rslidar_mems>
     <xacro:m1_mount prefix="${prefix}m1_mount" parent="${prefix}base_link">
-        <origin xyz="0.440 0 0.1625" rpy="0 0 0"/>
+        <origin xyz="0.440 0 0.1625" rpy="180 0 0"/>
     </xacro:m1_mount>
     
 
