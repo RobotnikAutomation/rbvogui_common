@@ -4,6 +4,7 @@
   <!-- Robot -->
   <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
   <arg name="prefix" default="$(arg robot_id)_"/>
+  <arg name="robot_model" default="$(optenv ROBOT_MODEL rbvogui)"/>
 
   <!-- Robot configuration -->
   <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS diff)"/>
@@ -30,16 +31,19 @@
   <arg name="costmap_folder" default="costmaps"/>
   <arg name="global_planner_folder" default="global_planners"/>
   <arg name="local_planner_folder" default="local_planners"/>
+  <arg name="footprint_folder" default="move_base/planner_footprints"/>
 
   <!-- Maps configuration -->
   <arg name="costmap_common_params" default="costmap_common_params.yaml" />
   <arg name="global_costmap_params" default="global_costmap_params_map.yaml" />
   <arg name="local_costmap_params" default="local_costmap_params.yaml" />
+  <arg name="footprint_params" default="$(arg robot_model).yaml" />
 
   <!-- Maps path -->
   <arg name="costmap_common_params_file" default="$(eval config_folder + '/' + costmap_folder + '/' + costmap_common_params)" />
   <arg name="global_costmap_params_file" default="$(eval config_folder + '/' + costmap_folder + '/' + global_costmap_params)" />
   <arg name="local_costmap_params_file" default="$(eval config_folder + '/' + costmap_folder + '/' + local_costmap_params)" />
+  <arg name="footprint_params_file" default="$(eval config_folder + '/' + footprint_folder + '/' + footprint_params)" />
 
   <!-- Planners configuration -->
   <arg name="global_planner" default="$(optenv ROBOT_MOVE_BASE_GLOBAL_PLANNER global)" />
@@ -87,6 +91,9 @@
 
     <!-- Local planner params-->
     <rosparam file="$(arg local_planner_params_file)" command="load" subst_value="true"/>
+
+    <!-- Overwrites previous footprint values -->
+    <rosparam file="$(arg footprint_params_file)" command="load"/>
 
     <!-- Overwrite frames, should not be used unless reasonable reason -->
     <!--param if="$(arg overwrite_frames)" name="$(arg odom_frame_param_name)" value="$(arg odom_frame)" />
