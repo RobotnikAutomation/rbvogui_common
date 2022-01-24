@@ -51,15 +51,18 @@
 
     <link name="${prefix}wheel">
       <visual>
+        <material name="dark-gray">
+          <color rgba="0.25 0.25 0.25 1.0"/>
+        </material>
         <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry>
             <xacro:if value="${reflect}">
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.dae" />
+              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />
             </xacro:if>
             <xacro:unless value="${reflect}">
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.dae" />
+              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />
             </xacro:unless>
           </geometry>
         </xacro:if>
@@ -74,7 +77,6 @@
       <collision>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         <geometry>
-
           <sphere radius="${wheel_radius}" />
         </geometry>
       </collision>
