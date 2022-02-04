@@ -12,7 +12,8 @@
 
   <!-- What navigation config package to use -->
   <arg name="navigation_package" default="$(optenv NAVIGATION_PACKAGE rbvogui_navigation)"/>
-  <arg name="config_folder" default="$(eval find(navigation_package) + '/config')" />
+  <arg name="config_folder" default="$(eval find(navigation_package) + '/config/move_base')" />
+  <arg name="costmap_mode" default="map" /> <!-- map or gps-->
 
   <!-- Topics argumments -->
   <arg name="cmd_vel_topic" default="move_base/cmd_vel"/>
@@ -22,21 +23,21 @@
   <arg name="front_rgbd_to_scan_topic" default="$(optenv ROBOT_NAVIGATION_FRONT_RGBD_TO_SCAN front_rgbd_camera/point_cloud_scan_filtered)"/>
 
   <!-- Folders tree -->
-  <!-- Config_folder / costmap_folder                 / costmap_config_file                                            -->
-  <!--       ""      / local or global planner_folder / planner_config_file depending of type                          -->
-  <!--       ""      / local planner folder           /(teb, eband, ..)_local_planner_(diff, omni, ..)_params.yaml     -->
-  <!--       ""      / global planner folder          / (global,sbpl, ..)_global_planner_params.yaml                   -->
+  <!-- Config_folder / costmap_folder                 / costmap_config_file                                     -->
+  <!--       ""      / local or global planner_folder / planner_config_file depending of type                   -->
+  <!--       ""      / local planner folder           /(teb, eband, ..)_local_planner_(diff, omni, ..).yaml     -->
+  <!--       ""      / global planner folder          / (global,sbpl, ..)_global_planner.yaml                   -->
 
   <!-- Configuration folder, to store different configurations -->
   <arg name="costmap_folder" default="costmaps"/>
   <arg name="global_planner_folder" default="global_planners"/>
   <arg name="local_planner_folder" default="local_planners"/>
-  <arg name="footprint_folder" default="move_base/planner_footprints"/>
+  <arg name="footprint_folder" default="planner_footprints"/>
 
   <!-- Maps configuration -->
-  <arg name="costmap_common_params" default="costmap_common_params.yaml" />
-  <arg name="global_costmap_params" default="global_costmap_params_map.yaml" />
-  <arg name="local_costmap_params" default="local_costmap_params.yaml" />
+  <arg name="costmap_common_params" default="$(arg costmap_mode)_common_costmap.yaml" />
+  <arg name="global_costmap_params" default="$(arg costmap_mode)_global_costmap.yaml" />
+  <arg name="local_costmap_params" default="$(arg costmap_mode)_local_costmap.yaml" />
   <arg name="footprint_params" default="$(arg robot_model).yaml" />
 
   <!-- Maps path -->
@@ -47,12 +48,12 @@
 
   <!-- Planners configuration -->
   <arg name="global_planner" default="$(optenv ROBOT_MOVE_BASE_GLOBAL_PLANNER global)" />
-  <arg name="global_planner_params" default="$(arg global_planner)_planner_params.yaml" />
+  <arg name="global_planner_params" default="$(arg global_planner)_planner.yaml" />
   <arg name="local_planner" default="$(optenv ROBOT_MOVE_BASE_LOCAL_PLANNER teb)" />
-  <arg name="local_planner_params" default="$(arg local_planner)_local_planner_$(arg kinematics)_params.yaml" />
+  <arg name="local_planner_params" default="$(arg local_planner)_local_planner_$(arg kinematics).yaml" />
 
   <!-- Move_base path -->
-  <arg name="move_base_params_file" default="$(arg config_folder)/move_base/move_base_params.yaml"/>
+  <arg name="move_base_params_file" default="$(arg config_folder)/move_base.yaml"/>
 
   <!-- Planners path -->
   <arg name="global_planner_params_file" default="$(eval config_folder + '/' + global_planner_folder + '/' + global_planner_params)" />

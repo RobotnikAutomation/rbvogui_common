@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="config_package" default="$(optenv ROBOT_NAVIGATION_CONFIG_PACKAGE rbvogui_navigation)"/>
-  <arg name="config_folder" default="config/docking"/>
+  <arg name="config_folder" default="config/dockers"/>
   <arg name="config_path" default="$(eval find(config_package) + '/' + config_folder)"/>
 
   <arg name="id_robot" default="robot"/>
