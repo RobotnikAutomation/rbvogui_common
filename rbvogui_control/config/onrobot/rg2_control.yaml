@@ -3,4 +3,4 @@
 gripper:
   type: position_controllers/JointTrajectoryController
   joints: 
-    - robot_rg2_gripper_finger_left_joint
+    - $(arg prefix)rg2_gripper_finger_left_joint

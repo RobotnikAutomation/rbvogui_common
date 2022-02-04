@@ -67,6 +67,8 @@
     </include>
 
     <include if="$(arg run_move_base)" file="$(arg move_base_file)">
+      <arg name="robot_id" default="$(arg robot_id)"/>
+      <arg name="prefix" default="$(arg prefix)"/>
       <arg name="robot_model" value="$(arg robot_model)"/>
       <arg name="kinematics" value="$(arg kinematics)"/>
       <arg name="has_safety_controller" value="$(arg has_safety_controller)"/>

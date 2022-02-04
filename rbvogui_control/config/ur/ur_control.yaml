@@ -2,12 +2,12 @@ arm:
   scaled_pos_traj_controller:
     type: position_controllers/JointTrajectoryController
     joints:
-        - robot_arm_shoulder_pan_joint
-        - robot_arm_shoulder_lift_joint
-        - robot_arm_elbow_joint
-        - robot_arm_wrist_1_joint
-        - robot_arm_wrist_2_joint
-        - robot_arm_wrist_3_joint
+        - $(arg prefix)arm_shoulder_pan_joint
+        - $(arg prefix)arm_shoulder_lift_joint
+        - $(arg prefix)arm_elbow_joint
+        - $(arg prefix)arm_wrist_1_joint
+        - $(arg prefix)arm_wrist_2_joint
+        - $(arg prefix)arm_wrist_3_joint
     constraints:
         goal_time: 0.6
         stopped_velocity_tolerance: 0.05

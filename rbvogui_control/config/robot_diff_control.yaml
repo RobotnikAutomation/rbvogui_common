@@ -1,49 +1,49 @@
 joint_blw_velocity_controller:
   type: velocity_controllers/JointVelocityController
-  joint: robot_back_left_wheel_joint
+  joint: $(arg prefix)back_left_wheel_joint
 joint_brw_velocity_controller:
   type: velocity_controllers/JointVelocityController
-  joint: robot_back_right_wheel_joint
+  joint: $(arg prefix)back_right_wheel_joint
 joint_mlw_velocity_controller:
   type: velocity_controllers/JointVelocityController
-  joint: robot_middle_left_wheel_joint
+  joint: $(arg prefix)middle_left_wheel_joint
 joint_mrw_velocity_controller:
   type: velocity_controllers/JointVelocityController
-  joint: robot_middle_right_wheel_joint
+  joint: $(arg prefix)middle_right_wheel_joint
 joint_frw_velocity_controller:
   type: velocity_controllers/JointVelocityController
-  joint: robot_front_right_wheel_joint
+  joint: $(arg prefix)front_right_wheel_joint
 joint_flw_velocity_controller:
   type: velocity_controllers/JointVelocityController
-  joint: robot_front_left_wheel_joint
+  joint: $(arg prefix)front_left_wheel_joint
 
 robotnik_base_control:
   type: robotnik_differential_controller/SixWheelController
   joint:
     front_right_wheel_joint:
-      name: robot_front_right_wheel_joint
+      name: $(arg prefix)front_right_wheel_joint
       max_speed: 27.27 # rad/s
     front_left_wheel_joint:
-      name: robot_front_left_wheel_joint
+      name: $(arg prefix)front_left_wheel_joint
       max_speed: 27.27 # rad/s
     middle_right_wheel_joint:
-      name: robot_middle_right_wheel_joint
+      name: $(arg prefix)middle_right_wheel_joint
       max_speed: 27.27 # rad/s
     middle_left_wheel_joint:
-      name: robot_middle_left_wheel_joint
+      name: $(arg prefix)middle_left_wheel_joint
       max_speed: 27.27 # rad/s
     back_right_wheel_joint:
-      name: robot_back_right_wheel_joint
+      name: $(arg prefix)back_right_wheel_joint
       max_speed: 27.27 # rad/s
     back_left_wheel_joint:
-      name: robot_back_left_wheel_joint
+      name: $(arg prefix)back_left_wheel_joint
       max_speed: 27.27 # rad/s
   linear_speed_limit: 1.5 # m/s
   linear_acceleration_limit: 0.6 # m/s^2
   angular_speed_limit: 3 # rad/s
   angular_acceleration_limit: 1.5 # rad/s^2
-  odom_frame: robot_odom
-  robot_base_frame: robot_base_footprint
+  odom_frame: $(arg prefix)odom
+  robot_base_frame: $(arg prefix)base_footprint
   odom_broadcast_tf: true
   odom_topic: 'robotnik_base_control/odom'
   wheel_base: 0.445
