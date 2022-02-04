@@ -6,6 +6,10 @@
   <arg name="prefix" default="$(arg robot_id)_"/>
   <arg name="kinematics" default="$(optenv ROBOT_KINEMATICS diff)"/>
   <arg name="scan_topic" default="front_laser/scan"/>
+  <arg name="x_init_pose" default="0"/>
+  <arg name="y_init_pose" default="0"/>
+  <arg name="z_init_pose" default="0"/>
+  <arg name="a_init_pose" default="0"/>
 
   <!-- What localization config package to use -->
   <arg name="localization_package" default="$(optenv LOCALIZATION_PACKAGE rbvogui_localization)"/>
@@ -21,7 +25,12 @@
   <group ns="$(arg robot_id)">
 
     <include file="$(arg localization_system_file)">
+      <arg name="robot_id" value="$(arg robot_id)" />
       <arg name="scan_topic" value="$(arg scan_topic)"/>
+      <arg name="x_init_pose" value="$(arg x_init_pose)" />
+      <arg name="y_init_pose" value="$(arg y_init_pose)" />
+      <arg name="z_init_pose" value="$(arg z_init_pose)" />
+      <arg name="a_init_pose" value="$(arg a_init_pose)" />
     </include>
 
     <include file="$(arg map_server_file)">

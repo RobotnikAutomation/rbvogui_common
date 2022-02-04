@@ -28,10 +28,9 @@ odom_frame_id: $(arg odom_frame)
 base_frame_id: $(arg base_frame)
 global_frame_id: $(arg global_frame)
 resample_interval: 1
-transform_tolerance: 0.1
 recovery_alpha_slow: 0.0
 recovery_alpha_fast: 0.0
 initial_pose_x: $(arg x_init_pose)
 initial_pose_y: $(arg y_init_pose)
 initial_pose_z: $(arg z_init_pose)
-initial_pose_a: 0.0
+initial_pose_a: $(arg a_init_pose)
