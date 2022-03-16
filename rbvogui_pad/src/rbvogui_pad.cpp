@@ -42,6 +42,7 @@
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <diagnostic_updater/publisher.h>
 #include <robotnik_msgs/home.h>
+#include <std_srvs/Empty.h>
 #include <robotnik_msgs/ptz.h>
 #include <robotnik_msgs/set_digital_output.h>
 #include <robotnik_msgs/set_mode.h>
@@ -105,6 +106,7 @@ private:
   //! Number of the button for increase or decrease the speed max of the
   //! joystick
   int speed_up_button_, speed_down_button_;
+  int reset_traversability_button_;
   int button_output_1_, button_output_2_;
   int output_1_, output_2_;
   bool bOutput1, bOutput2;
@@ -166,6 +168,8 @@ private:
   sensor_msgs::JointState joint_state_;
   // bool bReadState_;
   bool bPtuOK_;
+
+ 	ros::ServiceClient  clear_traversability_map_client_;
 };
 
 RBVoguiPad::RBVoguiPad()
@@ -193,6 +197,7 @@ RBVoguiPad::RBVoguiPad()
              speed_up_button_); // 4 Thrustmaster
   pnh_.param("button_speed_down", speed_down_button_,
              speed_down_button_); // 5 Thrustmaster
+	pnh_.param("button_reset_traversability", reset_traversability_button_, reset_traversability_button_);
   pnh_.param<std::string>("joystick_dead_zone", joystick_dead_zone_, "true");
 
   // DIGITAL OUTPUTS CONF
@@ -251,7 +256,7 @@ RBVoguiPad::RBVoguiPad()
   set_digital_outputs_client_ =
       nh_.serviceClient<robotnik_msgs::set_digital_output>(cmd_service_io_);
   bOutput1 = bOutput2 = false;
-
+ 	clear_traversability_map_client_ = nh_.serviceClient<std_srvs::Empty>("elevation_mapping/clear_map");
   // Request service to set kinematic mode
   setKinematicMode = nh_.serviceClient<robotnik_msgs::set_mode>(cmd_set_mode_);
 
@@ -332,6 +337,18 @@ void RBVoguiPad::padCallback(const sensor_msgs::Joy::ConstPtr &joy) {
     } else {
       bRegisteredButtonEvent[speed_up_button_] = false;
     }
+
+    if (joy->buttons[reset_traversability_button_] == 1){
+			if(!bRegisteredButtonEvent[reset_traversability_button_])
+      {
+        std_srvs::Empty reset_traversability_srv;
+        bool response = clear_traversability_map_client_.call(reset_traversability_srv);
+        bRegisteredButtonEvent[reset_traversability_button_] = true;
+        ROS_INFO("CLearing traversability map");
+      }
+		}else{
+			bRegisteredButtonEvent[reset_traversability_button_] = false;
+		}
 
     vel.linear.x = current_vel * l_scale_ * joy->axes[linear_x_];
 
@@ -426,7 +443,7 @@ void RBVoguiPad::padCallback(const sensor_msgs::Joy::ConstPtr &joy) {
     pub_command_freq->tick();
     last_command_ = false;
   }
-  
+
   if(!bUnsafeEnable && last_command_unsafe_)
   {
     vel.angular.x = 0.0;  vel.angular.y = 0.0; vel.angular.z = 0.0;
