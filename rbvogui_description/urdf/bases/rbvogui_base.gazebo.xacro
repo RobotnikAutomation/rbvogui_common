@@ -47,7 +47,8 @@
             </plugin>
         </gazebo>
     </xacro:macro>
-      
+
+   <!-- not used in 6w -->   
     <xacro:macro name="gazebo_color_base_link" params="prefix">
       <gazebo reference="${prefix}base_link">
         <visual>  
@@ -61,6 +62,20 @@
       </gazebo>
     </xacro:macro>
     
+
+    <xacro:macro name="gazebo_color_chassis_link" params="prefix">
+      <gazebo reference="${prefix}chassis_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
     <xacro:macro name="gazebo_color_logo_link" params="prefix">
       <gazebo reference="${prefix}base_logos_link">
         <visual>  
@@ -68,6 +83,45 @@
             <ambient>1.0 0.0 0.0 1.0</ambient>  
             <diffuse>0.50754 0.50754 0.50754 1.0</diffuse>  
             <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="gazebo_color_battery_link" params="prefix">
+      <gazebo reference="${prefix}battery_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="gazebo_color_contactors_link" params="prefix">
+      <gazebo reference="${prefix}contactors_link">
+        <visual>  
+          <material>  
+            <ambient>0.7 0.3 0.0 1.0</ambient>  
+            <diffuse>0.7 0.3 0.0 1.0</diffuse>  
+            <specular>0.7 0.3 0.0 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="gazebo_color_leds_link" params="prefix">
+      <gazebo reference="${prefix}leds_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 1.0 0.0 1.0</ambient>  
+            <diffuse>0.0 1.0 0.0 1.0</diffuse>  
+            <specular>0.0 1.0 0.0 1.0</specular>  
             <emissive>0.0 0.0 0.0 0.0</emissive>  
           </material>  
         </visual>  

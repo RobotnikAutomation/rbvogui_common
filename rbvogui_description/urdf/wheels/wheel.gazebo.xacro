@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
      
+  <!-- Rubber wheel color -->
   <xacro:macro name="gazebo_color_wheel" params="prefix">
     <gazebo reference="${prefix}wheel">
       <mu1 value="1.0"/>
@@ -18,8 +19,37 @@
    </gazebo>
   </xacro:macro>
   
+  <!-- Steer wheel color -->
   <xacro:macro name="gazebo_color_steer_wheel" params="prefix">
     <gazebo reference="${prefix}motor_wheel">
+      <visual>  
+        <material>  
+          <ambient>1.0 0.0 0.0 1.0</ambient>  
+          <diffuse>0.50754 0.50754 0.50754 1.0</diffuse>  
+          <specular>0.508273 0.508273 0.508273 1.0</specular>  
+          <emissive>0.0 0.0 0.0 0.0</emissive>  
+        </material>  
+      </visual>  
+    </gazebo>
+  </xacro:macro>
+
+  <!-- Wheel frame color -->
+  <xacro:macro name="gazebo_color_wheel_frame" params="prefix">
+    <gazebo reference="${prefix}motor_wheel">
+      <visual>  
+        <material>  
+          <ambient>1.0 0.0 0.0 1.0</ambient>  
+          <diffuse>0.50754 0.50754 0.50754 1.0</diffuse>  
+          <specular>0.508273 0.508273 0.508273 1.0</specular>  
+          <emissive>0.0 0.0 0.0 0.0</emissive>  
+        </material>  
+      </visual>  
+    </gazebo>
+  </xacro:macro>
+
+  <!-- Fixed wheel frame color -->
+  <xacro:macro name="gazebo_color_fixed_wheel_frame" params="prefix">
+    <gazebo reference="${prefix}fixed_wheel">
       <visual>  
         <material>  
           <ambient>1.0 0.0 0.0 1.0</ambient>  

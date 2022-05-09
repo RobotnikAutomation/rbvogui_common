@@ -19,10 +19,10 @@
     <!-- Structures -->
     <xacro:include filename="$(find rbvogui_description)/urdf/structures/front_rocker.urdf.xacro" /> 
     <xacro:include filename="$(find rbvogui_description)/urdf/structures/rear_rocker.urdf.xacro" /> 
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/basket.urdf.xacro" />
     
     <!-- Import all available sensors -->
     <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
-    <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps_mast.urdf.xacro" /> 
 
     <xacro:property name="PI" value="3.1415926535897931"/>
     <xacro:property name="deg2rad" value="0.01745329251"/>
@@ -31,7 +31,12 @@
     <xacro:property name="rocker_offset_x" value="0.225" />    
     <xacro:property name="rocker_offset_y" value="0.24295" />    
     <xacro:property name="rocker_offset_z" value="0.110" />    
-
+    
+    <!-- Basket parameters -->
+    <xacro:property name="basket_offset_x" value="0.0" />    
+    <xacro:property name="basket_offset_y" value="0.0" />    
+    <xacro:property name="basket_offset_z" value="0.24483" />     
+    
     <!-- Flag to select the high or low quality model -->
     <xacro:property name="hq" value="true" />
     <xacro:property name="publish_bf" value="true" />
@@ -93,6 +98,11 @@
             <origin xyz="-0.675 -0.11822 -0.13017" rpy="0 0 0"/>
         </xacro:wheel>
 
+
+        <xacro:structure_basket prefix="${prefix}" parent="${prefix}chassis_link">
+            <origin xyz="${basket_offset_x} ${basket_offset_y} ${basket_offset_z}" rpy="0 0 0"/>
+        </xacro:structure_basket>
+
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
         <!-- IMU -->
@@ -106,20 +116,19 @@
         </xacro:sensor_orbbec_astra>
 
         <!-- GPS -->
-        <xacro:sensor_gps_mast prefix="${prefix}gps" parent="${prefix}chassis_link">
-            <origin xyz="-0.3875 0.34553 0.3965" rpy="0 0 0"/>
-        </xacro:sensor_gps_mast>
+        <xacro:sensor_gps prefix="${prefix}gps" parent="${prefix}chassis_link">
+            <origin xyz="0.344 -0.128 0.97083" rpy="0 0 0"/>
+        </xacro:sensor_gps>
 
-        <!-- 2d laser -->
+        <!-- 2D Laser -->
         <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
             <origin xyz="0.53 0.0 -0.0245" rpy="${PI} 0 0"/>
         </xacro:sensor_sick_tim551>
 
-        <!-- 3D Laser
+        <!-- 3D Laser --> 
         <xacro:sensor_rslidar_16 prefix="${prefix}top_3d_laser" parent="${prefix}chassis_link" prefix_topic="top_3d_laser" gpu="${gpu}">
-            <origin xyz="0.1732 0.0 0.3545" rpy="0 0 0"/>
+            <origin xyz="0.343 0.0 1.06083" rpy="0 0 0"/>
         </xacro:sensor_rslidar_16>
-        -->
 
     </xacro:macro>
 

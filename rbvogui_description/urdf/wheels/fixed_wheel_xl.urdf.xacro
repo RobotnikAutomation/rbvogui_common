@@ -5,7 +5,7 @@
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
   <!-- Wheels -->
-  <xacro:property name="wheel_radius" value="0.17" />
+  <xacro:property name="wheel_radius" value="0.1425" />
   <xacro:property name="wheel_width" value="0.14" />
   <xacro:property name="wheel_mass" value="4.0" />
   <!-- in kg-->
@@ -42,10 +42,10 @@
         <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
 		  <xacro:if value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
+			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 0.0" />
+			<origin xyz="0 0 0" rpy="0 0 0.0" />
 		  </xacro:unless>
           <geometry>            
             <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.stl" />
@@ -55,13 +55,13 @@
         <!-- LOW RESOLUTION WHEELS -->
         <xacro:unless value="${hq}">
           <xacro:if value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
+			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 0.0" />
+			<origin xyz="0 0 0" rpy="0 0 0.0" />
 		  </xacro:unless>
           <geometry>
-              <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.dae" />
+              <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.stl" />
           </geometry>
         </xacro:unless>
         <material name="red">
@@ -71,13 +71,13 @@
 
       <collision>
 		<xacro:if value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 ${M_PI}" />
+			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		</xacro:if>
 		<xacro:unless value="${reflect}">
-			<origin xyz="0 0 0.27952" rpy="0 0 0.0" />
+			<origin xyz="0 0 0" rpy="0 0 0.0" />
 		</xacro:unless>
         <geometry>
-            <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.dae" />
+            <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.stl" />
         </geometry>
       </collision>
 
@@ -97,7 +97,7 @@
     <joint name="${prefix}wheel_joint" type="continuous">
       <parent link="${prefix}motor_wheel"/>
       <child link="${prefix}wheel"/>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <xacro:if value="${reflect}">
 		<axis xyz="0 -1 0" rpy="0 0 0" />
 	  </xacro:if>
@@ -124,7 +124,7 @@
         <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
 		  <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="${M_PI} 0 0" />
+			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="0 0 0" />
@@ -137,14 +137,14 @@
         <!-- LOW RESOLUTION WHEELS -->
         <xacro:unless value="${hq}">
           <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="${M_PI} 0 0" />
+			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="0 0 0" />
 		  </xacro:unless>
           
           <geometry>   
-             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.dae" />   
+             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
           </geometry>
         </xacro:unless>
         <material name="black_wheel">
@@ -160,7 +160,7 @@
 			<origin xyz="0 0 0" rpy="0 0 0" />
 		  </xacro:unless>
           <geometry>   
-             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.dae" />   
+             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
           </geometry>
       </collision>
 

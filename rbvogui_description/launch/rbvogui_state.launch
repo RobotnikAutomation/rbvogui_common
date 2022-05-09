@@ -4,7 +4,7 @@
   <arg name="robot_id" default="$(optenv ROBOT_ID robot)"/>
   <arg name="prefix" default="$(arg robot_id)_"/>
   <arg name="robot_model" default="rbvogui" />
-
+  <arg name="kinematics" default="omni"/>
 
   <arg name="robot_xacro" default="$(optenv ROBOT_XACRO rbvogui_std.urdf.xacro)" />
 
@@ -12,19 +12,38 @@
   <arg name="robot_use_custom_xacro_path" default="$(optenv ROBOT_USE_CUSTOM_XACRO_PATH false)"/>
   <arg name="robot_custom_xacro_path" default="$(optenv ROBOT_CUSTOM_XACRO_PATH /home/robot/)"/>
 
-  <arg name="launch_arm_control" default="false"/>
-  <arg name="launch_arm" default="$(arg launch_arm_control)"/>
-  <arg name="load_kinematics_file" default="false"/>
   <arg name="gpu" default="false"/>
+
+  <!-- Arm configuration-->
+  <arg name="launch_arm" default="$(optenv ROBOT_HAS_ARM false)"/>
+  <arg name="arm_manufacturer" default="$(optenv ROBOT_ARM_MANUFACTURER ur)"/>
+  <arg name="arm_model" default="$(optenv ROBOT_ARM_MODEL ur5)"/>
+  <arg name="load_kinematics_file" default="false"/>
+  
+  <!-- Gripper configuration -->
+  <arg name="launch_gripper" default="$(optenv ROBOT_HAS_GRIPPER false)"/>
+  <arg name="gripper_manufacturer" default="$(optenv ROBOT_GRIPPER_MANUFACTURER none)"/>
+  <arg name="gripper_model" default="$(optenv ROBOT_GRIPPER_MODEL none)"/>
+
+  <!-- Lift configuration -->
+  <arg name="launch_lift" default="$(optenv ROBOT_HAS_LIFT false)"/>
+  <arg name="lift_manufacturer" default="$(optenv ROBOT_LIFT_MANUFACTURER none)"/>
+  <arg name="lift_model" default="$(optenv ROBOT_LIFT_MODEL none)"/>
 
   <group unless="$(arg robot_use_custom_xacro_path)" >
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg robot_xacro_path)$(arg robot_xacro)' 
-                prefix:=$(arg prefix) launch_arm:=$(arg launch_arm) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)"/>
+                prefix:=$(arg prefix) kinematics:=$(arg kinematics) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)
+                launch_arm:=$(arg launch_arm) arm_manufacturer:=$(arg arm_manufacturer) arm_model:=$(arg arm_model)
+                launch_gripper:=$(arg launch_gripper) gripper_manufacturer:=$(arg gripper_manufacturer) gripper_model:=$(arg gripper_model) 
+                launch_lift:=$(arg launch_lift) lift_manufacturer:=$(arg lift_manufacturer) lift_model:=$(arg lift_model)"/>
   </group>
 
   <group if="$(arg robot_use_custom_xacro_path)" >
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg robot_custom_xacro_path)$(arg robot_xacro)' 
-                prefix:=$(arg prefix) launch_arm:=$(arg launch_arm) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)"/>
+                prefix:=$(arg prefix) kinematics:=$(arg kinematics) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)
+                launch_arm:=$(arg launch_arm) arm_manufacturer:=$(arg arm_manufacturer) arm_model:=$(arg arm_model)
+                launch_gripper:=$(arg launch_gripper) gripper_manufacturer:=$(arg gripper_manufacturer) gripper_model:=$(arg gripper_model)
+                launch_lift:=$(arg launch_lift) lift_manufacturer:=$(arg lift_manufacturer) lift_model:=$(arg lift_model)"/>
   </group>
 
   <!-- publish tfs through the robot_state_publisher -->

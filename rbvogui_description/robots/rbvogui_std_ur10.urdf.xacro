@@ -12,11 +12,10 @@
     <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
 
     <!-- Import rbvogui base elements-->
-    <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base_v3.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base.urdf.xacro" />
 
     <!-- Import rbvogui wheels -->
     <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel.urdf.xacro" />
-    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/wheel_v3.urdf.xacro" />
 
     <!-- Import all available sensors -->
     <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
@@ -26,7 +25,7 @@
 
     <xacro:property name="arm_position_x" value="0.0"/>
     <xacro:property name="arm_position_y" value="0"/>
-    <xacro:property name="arm_position_z" value="0.437"/>
+    <xacro:property name="arm_position_z" value="0.2595"/>
     <xacro:property name="arm_orientation_r" value="0"/>
     <xacro:property name="arm_orientation_p" value="0"/>
     <xacro:property name="arm_orientation_y" value="0"/>
@@ -79,20 +78,18 @@
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
         <!-- IMU -->
-        <xacro:sensor_imu_hector prefix="${prefix}imu" parent="${prefix}base_link">
-            <origin xyz="0.3 0.3 0.250" rpy="0 0 0"/>
+        <xacro:sensor_imu_hector prefix="${prefix}imu" parent="${prefix}chassis_link">
+            <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
         </xacro:sensor_imu_hector>
-        <!-- GPS -->
-        <!--xacro:sensor_gps prefix="${prefix}gps" parent="${prefix}base_link">
-            <origin xyz="-0.04625 0.0 1.115" rpy="0 0 0"/>
-        </xacro:sensor_gps-->
-        <!-- Solid-State laser -->
-        <xacro:sensor_benewake_ce30c prefix="${prefix}front_ss_laser" parent="${prefix}base_link" gpu="false">
-            <origin xyz="0.5657 0.0 0.1622" rpy="0 0 0"/>
+
+        <!-- Solid state laser -->
+        <xacro:sensor_benewake_ce30c prefix="${prefix}front_ss_laser" parent="${prefix}chassis_link" gpu="false">
+            <origin xyz="0.5657 0.0 -0.0153" rpy="0 0 0"/>
         </xacro:sensor_benewake_ce30c>
+
         <!-- 2d laser -->
-        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}base_link"  min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
-            <origin xyz="0.5307 0.0 0.15389" rpy="${180*deg2rad} 0 0"/>
+        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}chassis_link"  min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
+            <origin xyz="0.53 0.0 -0.0245" rpy="${PI} 0 0"/> <!-- Verificar X -->
         </xacro:sensor_sick_tim551>
 
         <!-- UR-10 ARM -->
@@ -104,7 +101,7 @@
 
             <joint name="${prefix}arm_base_joint" type="fixed">
                 <origin xyz="${arm_position_x} ${arm_position_y} ${arm_position_z}" rpy="${arm_orientation_r} ${arm_orientation_p} ${arm_orientation_y}"/>
-                <parent link="${prefix}base_link" />
+                <parent link="${prefix}chassis_link" />
                 <child link="${prefix}arm_base_link" />
             </joint>
         </xacro:if>
@@ -115,7 +112,7 @@
 
             <joint name="${prefix}arm_base_joint" type="fixed">
                 <origin xyz="${arm_position_x} ${arm_position_y} ${arm_position_z}" rpy="${arm_orientation_r} ${arm_orientation_p} ${arm_orientation_y}"/>
-                <parent link="${prefix}base_link" />
+                <parent link="${prefix}chassis_link" />
                 <child link="${prefix}arm_base_link" />
             </joint>
         </xacro:unless>

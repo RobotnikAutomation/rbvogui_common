@@ -20,7 +20,7 @@
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 ${M_PI/2.0}" />
         <geometry>
-          <mesh filename="package://rbvogui_description/meshes/bases/bi_arm_support.stl" />
+          <mesh filename="package://rbvogui_description/meshes/structures/bi_arm_support.stl" />
         </geometry>
         <material name="lightblack">
           <color rgba="0.1 0.1 0.1 1"/>
@@ -30,7 +30,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 ${M_PI/2.0}" />
         <geometry>
-          <mesh filename="package://rbvogui_description/meshes/bases/bi_arm_support.stl" />
+          <mesh filename="package://rbvogui_description/meshes/structures/bi_arm_support.stl" />
         </geometry>
       </collision>
 

@@ -19,6 +19,9 @@
     <!-- Import ur arm -->
     <xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro" />
     
+    <!-- Import Hand E -->
+    <xacro:include filename="$(find hand_e_gripper_description)/urdf/hand_e_gripper.urdf.xacro" />
+
     <!-- Import ewellix lift -->
     <xacro:include filename="$(find ewellix_description)/urdf/ewellix_lift_900mm.urdf.xacro" />
 
@@ -159,6 +162,11 @@
         <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" prefix_topic="rear_laser" gpu="${gpu}">
             <origin xyz="-0.64555 -0.39985 0.16608" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
+
+        <!-- Robotiq hand_e -->
+        <xacro:hand_e_gripper prefix="$(arg prefix)gripper" parent="$(arg prefix)arm_tool0">
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        </xacro:hand_e_gripper>
 
     </xacro:macro>
 
