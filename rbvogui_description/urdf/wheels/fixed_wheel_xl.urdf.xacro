@@ -29,15 +29,15 @@
   <xacro:macro name="fixed_wheel" params="prefix parent *origin reflect hq">
     <!-- TODO: check reflect parameter -->
     <!--MOTOR WHEEL -->
-    <joint name="${prefix}motor_wheel_joint" type="fixed">
+    <joint name="${prefix}fixed_wheel_joint" type="fixed">
       <parent link="${parent}"/>
-      <child link="${prefix}motor_wheel"/>
+      <child link="${prefix}fixed_wheel"/>
       <xacro:insert_block name="origin" />
       <axis xyz="0 0 1" rpy="0 0 0" />
     </joint>
   
 
-    <link name="${prefix}motor_wheel">
+    <link name="${prefix}fixed_wheel">
       <visual>
         <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
@@ -45,7 +45,7 @@
 			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 0.0" />
+			<origin xyz="0 0 0.0" rpy="0 0 0" />
 		  </xacro:unless>
           <geometry>            
             <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.stl" />
@@ -58,7 +58,7 @@
 			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		  </xacro:if>
 		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 0.0" />
+			<origin xyz="0 0 0" rpy="0 0 0" />
 		  </xacro:unless>
           <geometry>
               <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.stl" />
@@ -74,7 +74,7 @@
 			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
 		</xacro:if>
 		<xacro:unless value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 0.0" />
+			<origin xyz="0 0 0.0" rpy="0 0 0" />
 		</xacro:unless>
         <geometry>
             <mesh filename="package://rbvogui_description/meshes/wheels/hub_rbvogui_xl.stl" />
@@ -89,19 +89,21 @@
 		<xacro:unless value="${reflect}">
 			<origin xyz="0 0 0.12" rpy="0 0 0"/>
 		</xacro:unless>
+     <!--inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" /-->
         <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
       </inertial>
     </link>
 
     <!--WHEEL TIRE -->
     <joint name="${prefix}wheel_joint" type="continuous">
-      <parent link="${prefix}motor_wheel"/>
+      <parent link="${prefix}fixed_wheel"/>
       <child link="${prefix}wheel"/>
-      <origin xyz="0 0 0" rpy="0 0 0" />
       <xacro:if value="${reflect}">
-		<axis xyz="0 -1 0" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+		<axis xyz="0 1 0" rpy="0 0 0" />
 	  </xacro:if>
       <xacro:unless value="${reflect}">
+       <origin xyz="0 0 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" rpy="0 0 0" />
 	  </xacro:unless>
       <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
@@ -129,7 +131,6 @@
 		  <xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="0 0 0" />
 		  </xacro:unless>
-          
           <geometry>   
              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
           </geometry>
@@ -142,7 +143,6 @@
 		  <xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="0 0 0" />
 		  </xacro:unless>
-          
           <geometry>   
              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
           </geometry>
@@ -153,6 +153,7 @@
       </visual>
 
       <collision>
+      <!--
         <xacro:if value="${reflect}">
 			<origin xyz="0 0 0" rpy="${M_PI} 0 0" />
 		  </xacro:if>
@@ -161,6 +162,11 @@
 		  </xacro:unless>
           <geometry>   
              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
+        </geometry>
+        -->
+        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
           </geometry>
       </collision>
 
