@@ -46,10 +46,10 @@ robotnik_base_control:
   robot_base_frame: $(arg prefix)base_footprint
   odom_broadcast_tf: true
   odom_topic: 'robotnik_base_control/odom'
-  wheel_base: 0.445
-  track_width: 0.415
-  wheel_diameter: 0.220
-  cmd_watchdog_duration: 0.5
+  wheel_base: $(arg wheel_base)
+  track_width: $(arg track_width)
+  wheel_diameter: $(arg wheel_diameter)
+  cmd_watchdog_duration: 0.2
   imu_watchdog_duration: 0.1
   imu_topic: imu/data
   odom_publish_frequency: 100
@@ -65,4 +65,3 @@ joint_read_state_controller:
 joint_read_command_controller:
   type: joint_read_command_controller/JointReadCommandController 
   publish_rate: 100.0
-
