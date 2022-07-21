@@ -5,8 +5,8 @@
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
   <!-- Wheels -->
-  <xacro:property name="wheel_radius" value="0.1175" />
-  <xacro:property name="wheel_height" value="0.1175" />
+  <xacro:property name="wheel_radius" value="0.1165" /> <!-- rbvogui uses wheels with 0.233 m of diameter-->
+  <xacro:property name="wheel_height" value="0.1165" />
   <xacro:property name="wheel_mass" value="5.0" />
   <!-- in kg-->
 
