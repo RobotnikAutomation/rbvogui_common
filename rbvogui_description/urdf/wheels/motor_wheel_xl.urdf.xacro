@@ -26,7 +26,7 @@
     <inertia ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0" iyy="${m*(3*r*r+h*h)/12}" iyz = "0" izz="${m*r*r/2}" />
   </xacro:macro>
 
-  <xacro:macro name="motor_wheel" params="prefix parent *origin reflect hq">
+  <xacro:macro name="motor_wheel" params="prefix parent *origin reflect hq offroad:=false">
     <!--MOTOR WHEEL -->
     <joint name="${prefix}motor_wheel_joint" type="revolute">
       <parent link="${parent}"/>
@@ -144,9 +144,19 @@
           <xacro:unless value="${reflect}">
             <origin xyz="0 0 0" rpy="0 0 0" />
           </xacro:unless>
-          <geometry>   
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
-          </geometry>
+
+          <xacro:if value="${offroad}">
+              <geometry>            
+                <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl_offroad.stl" />   
+              </geometry> 
+          </xacro:if> 
+
+          <xacro:unless value="${offroad}">
+              <geometry>            
+                <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />
+              </geometry> 
+          </xacro:unless> 
+
         </xacro:if>
         <!-- LOW RESOLUTION WHEELS -->
         <xacro:unless value="${hq}">
@@ -156,9 +166,19 @@
 		    <xacro:unless value="${reflect}">
 			    <origin xyz="0 0 0" rpy="0 0 0" />
 		    </xacro:unless>
-          <geometry>   
-             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.dae" />   
-          </geometry>
+        
+          <xacro:if value="${offroad}">
+              <geometry>            
+                <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl_offroad.stl" />   
+              </geometry> 
+          </xacro:if> 
+
+          <xacro:unless value="${offroad}">
+              <geometry>            
+                <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />
+              </geometry> 
+          </xacro:unless> 
+        
         </xacro:unless>
         <material name="black_wheel">
           <color rgba="0.1 0.1 0.1 1"/>     

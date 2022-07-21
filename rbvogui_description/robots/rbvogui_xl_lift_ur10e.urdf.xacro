@@ -44,9 +44,9 @@
     <xacro:property name="wheel_offset_z" value="0.0" />
 
     <!-- Arm with lift parameters -->
-    <xacro:property name="lift_arm_offset_x" value="0.207" />
+    <xacro:property name="lift_arm_offset_x" value="0.275" />
     <xacro:property name="lift_arm_offset_y" value="0.0" />
-    <xacro:property name="lift_arm_offset_z" value="0.235" />
+    <xacro:property name="lift_arm_offset_z" value="0.01" />
 
     <!-- Flag to select the high or low quality model -->
     <xacro:property name="hq" value="true" />
@@ -103,7 +103,7 @@
 		</xacro:unless>
 
         <joint name="${prefix}arm_base_joint" type="fixed">
-            <origin xyz="0 0 0.015" rpy="0 0 0"/>
+            <origin xyz="0 0 0.015" rpy="0 0 ${PI/4}"/>
             <parent link="${prefix}ewellix_lift_top_link" />
             <child link="${prefix}arm_base_link" />
         </joint>
@@ -122,7 +122,7 @@
         
         <!-- Orbbec camera -->
         <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
-            <origin xyz="0.63658 0.0 -0.03643" rpy="0 0 0"/>
+            <origin xyz="0.637 0.0 -0.036" rpy="0 0 0"/>
         </xacro:sensor_orbbec_astra>
         
         <!-- Zed camera 
@@ -133,7 +133,7 @@
 
         <!-- 3D lidar -->
         <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}chassis_link" prefix_topic="front_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="${gpu}">
-            <origin xyz="0.57918 0 0.24072" rpy="0 ${90*PI/180} 0"/>
+            <origin xyz="0.579 0 0.241" rpy="0 ${90*PI/180} 0"/>
         </xacro:sensor_rs_bpearl>
 
         <!-- Laser sick support -->
@@ -160,8 +160,12 @@
             <origin xyz="-0.64555 -0.39985 0.16608" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
 
-    </xacro:macro>
+        <!-- GPS -->
+        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link">
+            <origin xyz="-0.472 0.4 0.456" rpy="0 0 0"/>
+        </xacro:sensor_ublox>
 
+    </xacro:macro>
 
     <!-- Gazebo ros control pluggins -->
     <xacro:ros_control/>

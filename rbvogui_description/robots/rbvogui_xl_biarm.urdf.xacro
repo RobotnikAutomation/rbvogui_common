@@ -68,11 +68,11 @@
             <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
         </xacro:motor_wheel>
 
-        <xacro:motor_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="${hq}"> <!-- good -->
+        <xacro:motor_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
             <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
         </xacro:motor_wheel>
 
-        <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}"> <!-- good -->
+        <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
             <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
         </xacro:motor_wheel>
 
@@ -99,7 +99,7 @@
         
         <!-- Orbbec camera -->
         <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
-            <origin xyz="0.63658 0.0 -0.03643" rpy="0 0 0"/>
+            <origin xyz="0.637 0.0 -0.036" rpy="0 0 0"/>
         </xacro:sensor_orbbec_astra>
         
         <!-- Zed camera 
@@ -136,6 +136,11 @@
         <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" prefix_topic="rear_laser" gpu="${gpu}">
             <origin xyz="-0.64555 -0.39985 0.16608" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
+
+        <!-- GPS -->
+        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link">
+            <origin xyz="-0.472 0.4 0.456" rpy="0 0 0"/>
+        </xacro:sensor_ublox>
 
     </xacro:macro>
 
