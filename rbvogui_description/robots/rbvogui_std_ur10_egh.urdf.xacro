@@ -81,9 +81,9 @@
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
         <!-- IMU -->
-        <xacro:sensor_imu_hector prefix="${prefix}imu" parent="${prefix}chassis_link">
+        <xacro:sensor_vectornav prefix="${prefix}imu" parent="${prefix}chassis_link">
             <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
-        </xacro:sensor_imu_hector>
+        </xacro:sensor_vectornav>
 
         <!-- Solid state laser -->
         <xacro:sensor_benewake_ce30c prefix="${prefix}front_ss_laser" parent="${prefix}chassis_link" gpu="false">

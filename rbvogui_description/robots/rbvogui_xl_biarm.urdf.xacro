@@ -93,9 +93,9 @@
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
         <!-- IMU -->
-        <xacro:sensor_imu_hector prefix="${prefix}imu" parent="${prefix}chassis_link">
-            <origin xyz="0.3 0.0 0.06624" rpy="0 0 0"/>
-        </xacro:sensor_imu_hector>
+        <xacro:sensor_vectornav prefix="${prefix}imu" parent="${prefix}chassis_link">
+            <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
+        </xacro:sensor_vectornav>
         
         <!-- Orbbec camera -->
         <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
