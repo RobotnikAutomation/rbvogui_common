@@ -83,9 +83,9 @@
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
         <!-- IMU -->
-        <xacro:sensor_imu_hector prefix="${prefix}imu" parent="${prefix}chassis_link">
+        <xacro:sensor_vectornav prefix="${prefix}imu" parent="${prefix}chassis_link">
             <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
-        </xacro:sensor_imu_hector>
+        </xacro:sensor_vectornav>
 
         <!-- Front Camera -->
         <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
@@ -93,9 +93,9 @@
         </xacro:sensor_orbbec_astra>
 
         <!-- GPS -->
-        <xacro:sensor_gps_mast prefix="${prefix}gps" parent="${prefix}chassis_link">
+        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link">
             <origin xyz="-0.3875 0.34553 0.3965" rpy="0 0 0"/>
-        </xacro:sensor_gps_mast>
+        </xacro:sensor_ublox>
 
         <!-- 2d laser -->
         <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
