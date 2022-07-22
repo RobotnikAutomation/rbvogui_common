@@ -52,7 +52,6 @@
     <xacro:arg name="load_kinematics_file" default="false" />
     <xacro:arg name="gpu" default="false" />
 
-
     <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics launch_arm arm_manufacturer arm_model load_kinematics_file
                                         launch_gripper gripper_manufacturer gripper_model launch_lift lift_manufacturer lift_model gpu">
         
@@ -62,7 +61,7 @@
 
         <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
 
-        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
+        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" base_height="${wheel_radius}" hq="${hq}"/>
 
         <xacro:motor_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
             <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
@@ -83,7 +82,7 @@
         </xacro:if>
 
         <xacro:if value="${kinematics == 'ackermann'}">
-            <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}"> <!-- good -->
+            <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
 

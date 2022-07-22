@@ -4,11 +4,6 @@
   <xacro:include filename="$(find rbvogui_description)/urdf/wheels/wheel.gazebo.xacro" />
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
-  <!-- Wheels -->
-  <xacro:property name="wheel_radius" value="0.1425" />
-  <xacro:property name="wheel_width" value="0.14" />
-  <xacro:property name="wheel_mass" value="4.0" />
-  <!-- in kg-->
 
   <xacro:property name="steer_joint_damping" value="2.0" />
   <xacro:property name="steer_joint_friction" value="1.0" />
@@ -89,102 +84,17 @@
 		<xacro:unless value="${reflect}">
 			<origin xyz="0 0 0.12" rpy="0 0 0"/>
 		</xacro:unless>
-     <!--inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" /-->
-        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
+        <!-- To do: add real intertia-->
+        <cylinder_inertia m="5" r="0.1425" h="0.14"/>
       </inertial>
     </link>
 
-    <!--WHEEL TIRE -->
-    <joint name="${prefix}wheel_joint" type="continuous">
-      <parent link="${prefix}fixed_wheel"/>
-      <child link="${prefix}wheel"/>
-      <xacro:if value="${reflect}">
-      <origin xyz="0 0 0" rpy="0 0 0" />
-		<axis xyz="0 1 0" rpy="0 0 0" />
-	  </xacro:if>
-      <xacro:unless value="${reflect}">
-       <origin xyz="0 0 0" rpy="0 0 0" />
-		<axis xyz="0 1 0" rpy="0 0 0" />
-	  </xacro:unless>
-      <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
-      <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
-    </joint>
+    <xacro:gazebo_color_fixed_wheel_frame prefix="${prefix}"/>
 
-    <transmission name="${prefix}wheel_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}wheel_joint">
-        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${prefix}wheel_motor">
-        <hardwareInterface>hardware_interface/VelocityActuatorInterface</hardwareInterface>
-        <mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
-      </actuator>
-    </transmission>
+    <xacro:wheel_285mm prefix="${prefix}" parent="${prefix}fixed_wheel" reflect="${reflect}" hq="${hq}">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:wheel_285mm>
 
-    <link name="${prefix}wheel">
-      <visual>
-        <!-- HIGH RESOLUTION WHEELS -->
-        <xacro:if value="${hq}">
-		  <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-		  </xacro:if>
-		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 0" />
-		  </xacro:unless>
-          <geometry>   
-             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
-          </geometry>
-        </xacro:if>
-        <!-- LOW RESOLUTION WHEELS -->
-        <xacro:unless value="${hq}">
-          <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-		  </xacro:if>
-		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 0" />
-		  </xacro:unless>
-          <geometry>   
-             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
-          </geometry>
-        </xacro:unless>
-        <material name="black_wheel">
-          <color rgba="0.1 0.1 0.1 1"/>     
-        </material>
-      </visual>
-
-      <collision>
-      <!--
-        <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="${M_PI} 0 0" />
-		  </xacro:if>
-		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0" rpy="0 0 0" />
-		  </xacro:unless>
-          <geometry>   
-             <mesh filename="package://rbvogui_description/meshes/wheels/wheel_rbvogui_xl.stl" />   
-        </geometry>
-        -->
-        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
-        <geometry>
-          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
-          </geometry>
-      </collision>
-
-      <inertial>
-        <mass value="${wheel_mass}" />
-        <xacro:if value="${reflect}">
-			<origin xyz="0 0 0" rpy="${M_PI/2 + M_PI} 0 0" />
-		  </xacro:if>
-		  <xacro:unless value="${reflect}">
-			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
-		  </xacro:unless>
-         
-        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
-      </inertial>
-    </link>
-
-    <xacro:gazebo_color_wheel prefix="${prefix}"/>
-    <xacro:gazebo_color_steer_wheel prefix="${prefix}"/>
 
   </xacro:macro>
 

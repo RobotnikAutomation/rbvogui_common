@@ -14,7 +14,7 @@
     <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_xl_base.urdf.xacro" />
 
     <!-- Import rbvogui wheels -->
-    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel_xl.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel_xl_offroad.urdf.xacro" />
 
     <!-- Import arm structure -->
     <xacro:include filename="$(find rbvogui_description)/urdf/structures/bi_arm_support.urdf.xacro" />
@@ -62,7 +62,7 @@
 
         <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
 
-        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
+        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" base_height="${wheel_radius}" hq="${hq}"/>
 
         <xacro:motor_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
             <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>

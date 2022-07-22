@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:include filename="$(find rbvogui_description)/urdf/wheels/wheel.gazebo.xacro" />
-  <xacro:include filename="$(find rbvogui_description)/urdf/wheels/rubber_wheel_285mm.urdf.xacro" />
+  <xacro:include filename="$(find rbvogui_description)/urdf/wheels/rubber_wheel_350mm.urdf.xacro" />
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
@@ -105,10 +105,9 @@
 
     <xacro:gazebo_color_wheel_frame prefix="${prefix}"/>
 
-    <xacro:wheel_285mm prefix="${prefix}" parent="${prefix}motor_wheel" reflect="${reflect}" hq="${hq}">
+    <xacro:wheel_350mm prefix="${prefix}" parent="${prefix}motor_wheel" reflect="${reflect}" hq="${hq}">
         <origin xyz="0 0 0" rpy="0 0 0"/>
-    </xacro:wheel_285mm>
-
+    </xacro:wheel_350mm>
 
   </xacro:macro>
 
