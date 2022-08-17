@@ -56,7 +56,7 @@
     
     <xacro:if value="${load_kinematics_file}">
       <joint name="${prefix}left_arm_base_joint" type="fixed">
-        <origin xyz="0 0.0915 0.15044" rpy="0.9 0 3.1416"/>
+        <origin xyz="0 0.09549 0.14538" rpy="-0.9 0 0"/>
         <parent link="${prefix}G2_link" />
         <child link="${prefix}left_arm_base_link" />
       </joint>
@@ -69,7 +69,7 @@
 
     <xacro:unless value="${load_kinematics_file}">
       <joint name="${prefix}left_arm_base_joint" type="fixed">
-        <origin xyz="0 -0.0915 0.15044" rpy="0.9 0 3.1416"/>
+        <origin xyz="0 0.09549 0.14538" rpy="-0.9 0 0"/>
         <parent link="${prefix}G2_link" />
         <child link="${prefix}left_arm_base_link" />
       </joint>
@@ -82,7 +82,7 @@
 
     <xacro:if value="${load_kinematics_file}">
       <joint name="${prefix}right_arm_base_joint" type="fixed">
-        <origin xyz="0 -0.0915 0.15044" rpy="0.9 0 0"/>
+        <origin xyz="0 -0.09549 0.14538" rpy="-0.9 0 ${M_PI}"/>
         <parent link="${prefix}G2_link" />
         <child link="${prefix}right_arm_base_link" />
       </joint>
@@ -95,7 +95,7 @@
 
     <xacro:unless value="${load_kinematics_file}">
       <joint name="${prefix}right_arm_base_joint" type="fixed">
-        <origin xyz="0 -0.0915 0.15044" rpy="0.9 0 0"/>
+        <origin xyz="0 -0.09549 0.14538" rpy="-0.9 0 ${M_PI}"/>
         <parent link="${prefix}G2_link" />
         <child link="${prefix}right_arm_base_link" />
       </joint>
