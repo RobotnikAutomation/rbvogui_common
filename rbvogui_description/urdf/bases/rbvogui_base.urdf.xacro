@@ -8,7 +8,7 @@
     </xacro:macro>
 
     <!-- BASE_LINK -->
-    <link name="${prefix}base_link">
+    <link name="${prefix}case_link">
       <inertial>
         <mass value="100.0" />
         <origin xyz="0 0 0.128" />
@@ -39,29 +39,29 @@
       </collision>
     </link>
 
-    <gazebo reference="${prefix}base_link">  
+    <gazebo reference="${prefix}case_link">  
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 
     <!-- Logos -->
     <joint name="${prefix}base_logos_joint" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0 " />
-      <parent link="${prefix}base_link"/>
-      <child link="${prefix}base_logos_link" />
+      <parent link="${prefix}case_link"/>
+      <child link="${prefix}case_logos_link" />
     </joint>
 
     <!-- Logos -->
-    <link name="${prefix}base_logos_link">
+    <link name="${prefix}case_logos_link">
       <visual>
         <origin xyz="0 0 -0.168" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos_v3.stl" scale="1.001 1.07 1.001"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos_v3.stl" scale="1.0001 1.007 1.0001"/>
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos_v3.dae" scale="1.001 1.07 1.001"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos_v3.dae" scale="1.0001 1.007 1.0001"/>
           </geometry>
         </xacro:unless>
         <material name="lightred">
@@ -70,7 +70,7 @@
       </visual>
     </link>
     
-    <gazebo reference="${prefix}base_logos_link">
+    <gazebo reference="${prefix}case_logos_link">
       <material>Gazebo/Red</material>
     </gazebo>
 

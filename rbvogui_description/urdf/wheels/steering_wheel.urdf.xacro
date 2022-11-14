@@ -1,34 +1,34 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="steer_set" params="prefix parent *origin hq">
+  <!-- Height added: 0.132 m -->
+  <xacro:macro name="steering_wheel" params="prefix parent *origin reflect hq">
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/wheel.urdf.xacro"/>
+
     <xacro:macro name="cylinder_inertia" params="m r h">
       <inertia ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0" iyy="${m*(3*r*r+h*h)/12}" iyz = "0" izz="${m*r*r/2}" />
     </xacro:macro>
-    <xacro:property name="M_PI" value="3.1415926535897931" />
-    <xacro:property name="wheel_radius" value="0.110" />
-    <xacro:property name="wheel_width" value="0.110" />
-    <xacro:property name="wheel_mass" value="5.0" />
 
-    <!--MOTOR WHEEL -->
-    <joint name="${prefix}base_set_joint" type="revolute">
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <joint name="${prefix}steer_joint" type="revolute">
       <xacro:insert_block name="origin" />
       <parent link="${parent}" />
-      <child link="${prefix}base_wheel_link" />
+      <child link="${prefix}steer_link" />
       <axis xyz="0 0 1" />
 
       <limit effort="100" velocity="100" lower="-${2*M_PI/3}" upper="${2*M_PI/3}" />
     </joint>
 
-    <link name="${prefix}base_wheel_link" />
+    <link name="${prefix}steer_link" />
 
-    <joint name="${prefix}set_joint" type="fixed">
-      <parent link="${prefix}base_wheel_link"/>
-      <child link="${prefix}set_wheel_link"/>
-      <origin xyz="0 -0.079 0.132" rpy="${-M_PI/2} 0 0" />
+    <joint name="${prefix}base_wheel_joint" type="fixed">
+      <parent link="${prefix}steer_link"/>
+      <child link="${prefix}base_wheel_link"/>
+      <origin xyz="0 0.079 -0.132" rpy="${M_PI/2} 0 0" />
       <axis xyz="0 0 1" rpy="0 0 0" />
     </joint>
 
-    <link name="${prefix}set_wheel_link">
+    <link name="${prefix}base_wheel_link">
       <visual>
         <origin xyz="0 0 0.079" rpy="${-M_PI/2} ${M_PI} 0" />
         <geometry>
@@ -48,13 +48,22 @@
 
       <inertial>
         <mass value="4" />
-        <origin xyz="0 0 0.0" rpy="0 0 0"/>
-        <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
+        <origin xyz="0 0.05 0.05" rpy="0 0 0"/>
+        <xacro:cylinder_inertia m="5.0" r="0.110" h="0.110" />
       </inertial>
     </link>
 
     <gazebo reference="${prefix}set_wheel_link">
       <material>Gazebo/Red</material>
     </gazebo>
+
+    <xacro:wheel prefix="${prefix}" parent="${prefix}base_wheel_link" reflect="${reflect}" hq="${hq}">
+      <xacro:if value="${reflect}">
+        <origin xyz="0 0 0.015" rpy="0 0 0" />
+      </xacro:if>
+      <xacro:unless value="${reflect}">
+        <origin xyz="0 0 0.015" rpy="${M_PI} 0 0" />
+      </xacro:unless>
+    </xacro:wheel>
   </xacro:macro>
 </robot>

@@ -33,26 +33,20 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     declared_arguments = []
     # General arguments
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_package",
-            default_value="rbvogui_description",
-            description="",
-        )
+    declared_arguments.append(DeclareLaunchArgument(
+        "description_package",
+        default_value="rbvogui_description",
+        description="Description package with robot URDF/xacro files",)
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_file",
-            default_value="test.urdf.xacro",
-            description="URDF/XACRO description file with the robot.",
-        )
+    declared_arguments.append(DeclareLaunchArgument(
+        "description_file",
+        default_value="rbvogui_std.urdf.xacro",
+        description="URDF/XACRO description file with the robot.",)
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="",
-        )
+    declared_arguments.append(DeclareLaunchArgument(
+        "prefix",
+        default_value='""',
+        description="",)
     )
 
     # General arguments
@@ -74,7 +68,6 @@ def generate_launch_description():
             prefix,
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
 
 #   rviz_config_file = PathJoinSubstitution(
 #       [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
@@ -83,12 +76,19 @@ def generate_launch_description():
     joint_state_publisher_node = Node(
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
+        parameters=[{
+            "rate": 50.0,
+        }]
     )
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
-        parameters=[robot_description],
+        parameters=[{
+            'use_sim_time': False,
+            'robot_description': robot_description_content,
+            'publish_frequency': 50.0,
+        }],
     )
     rviz_node = Node(
         package="rviz2",
