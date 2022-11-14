@@ -24,10 +24,52 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from ament_index_python import get_package_share_directory
+import os
+import subprocess
+import shutil
+import tempfile
+
 
 def test_urdf_xacro():
-    print('Testing urdf xacro')
-    pass
+    """Test that URDF and XACRO files are valid."""
+    name = 'rbvogui'
+    prefix = 'robot'
+
+    package_name = 'rbvogui_description'
+    package_share_directory = get_package_share_directory(package_name)
+    xacro_file = os.path.join(package_share_directory, 'robot', 'rbvogui_std.urdf.xacro')
+    assert os.path.exists(xacro_file)
+
+    (_, tmp_urdf_output_file) = tempfile.mkstemp(suffix=".urdf")
+
+    xacro_command = (
+        f"{shutil.which('xacro')}"
+        f" {xacro_file}"
+        f" name:={name}"
+        f" prefix:={prefix}"
+        f" > {tmp_urdf_output_file}"
+    )
+    check_urdf_command = f"{shutil.which('check_urdf')} {tmp_urdf_output_file}"
+
+    try:
+        xacro_process = subprocess.run(
+            xacro_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
+        )
+
+        print(tmp_urdf_output_file)
+        pause = input("Press Enter to continue...")
+
+        assert xacro_process.returncode == 0, 'Xacro command failed'
+
+        check_urdf_process = subprocess.run(
+            check_urdf_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
+        )
+
+        pause = input("Press Enter to continue...")
+        assert check_urdf_process.returncode == 0, 'check_urdf command failed'
+
+    finally:
+        os.remove(tmp_urdf_output_file)
 
 
 if __name__ == '__main__':
