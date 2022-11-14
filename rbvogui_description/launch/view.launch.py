@@ -77,7 +77,7 @@ def generate_launch_description():
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
         parameters=[{
-            "rate": 50.0,
+            "rate": 100.0,
         }]
     )
     robot_state_publisher_node = Node(
@@ -87,7 +87,7 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': False,
             'robot_description': robot_description_content,
-            'publish_frequency': 50.0,
+            'publish_frequency': 1000.0,
         }],
     )
     rviz_node = Node(
