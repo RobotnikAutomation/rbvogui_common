@@ -1,8 +1,0 @@
-global_costmap:
-  footprint: [[0.7, -0.45], [0.7, 0.45], [-0.7,0.45], [-0.7, -0.45]]
-local_costmap:
-  footprint: [[0.7, -0.45], [0.7, 0.45], [-0.7,0.45], [-0.7, -0.45]] 
-TebLocalPlannerROS:
-  footprint_model:
-    type: "polygon"
-    vertices: [[0.7, -0.45], [0.7, 0.45], [-0.7,0.45], [-0.7, -0.45]]
