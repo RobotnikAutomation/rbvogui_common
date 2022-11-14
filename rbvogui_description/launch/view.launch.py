@@ -61,17 +61,16 @@ def generate_launch_description():
             PathJoinSubstitution([FindPackageShare(description_package), "robot", description_file]),
             " ",
             "name:=",
-            "ur",
-            " ",
+            "rbvogui",
             " ",
             "prefix:=",
             prefix,
         ]
     )
 
-#   rviz_config_file = PathJoinSubstitution(
-#       [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
-#   )
+    rviz_config_file = PathJoinSubstitution(
+        [FindPackageShare(description_package), "rviz", "view_robot.rviz"]
+    )
 
     joint_state_publisher_node = Node(
         package="joint_state_publisher_gui",
@@ -95,7 +94,7 @@ def generate_launch_description():
         executable="rviz2",
         name="rviz2",
         output="log",
-#        arguments=["-d", rviz_config_file],
+        arguments=["-d", rviz_config_file],
     )
 
     nodes_to_start = [
