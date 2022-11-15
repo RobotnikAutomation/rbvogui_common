@@ -10,9 +10,9 @@
     <!-- BASE_LINK -->
     <link name="${prefix}case_link">
       <inertial>
-        <mass value="100.0" />
-        <origin xyz="0 0 0.128" />
-        <xacro:cuboid_inertia m="100.0" d="0.6" h="0.23" w="1.0" />
+        <mass value="150.0" />
+        <origin xyz="0 0 0.028" />
+        <xacro:cuboid_inertia m="150.0" d="0.6" h="0.23" w="1.0" />
       </inertial>
 
       <visual>

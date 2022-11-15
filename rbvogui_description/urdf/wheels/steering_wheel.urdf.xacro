@@ -15,6 +15,7 @@
       <parent link="${parent}" />
       <child link="${prefix}steer_link" />
       <axis xyz="0 0 1" />
+      <dynamics damping="1.0" friction="2.0"/>
 
       <limit effort="100" velocity="100" lower="-${2*M_PI/3}" upper="${2*M_PI/3}" />
     </joint>
@@ -53,7 +54,7 @@
       </inertial>
     </link>
 
-    <gazebo reference="${prefix}set_wheel_link">
+    <gazebo reference="${prefix}base_wheel_link">
       <material>Gazebo/Red</material>
     </gazebo>
 

@@ -70,10 +70,10 @@
 
     <gazebo reference="${prefix}wheel_link">  
       <material>Gazebo/DarkGrey</material>
-      <mu1>0.98</mu1>
-      <mu2>0.98</mu2>
-      <kp>2.75e5</kp>
-      <kd>5.25e2</kd>
+      <mu1>0.90</mu1>
+      <mu2>0.85</mu2>
+      <kp>4.75e5</kp>
+      <kd>8.25e2</kd>
     </gazebo>
   </xacro:macro>
 </robot>
