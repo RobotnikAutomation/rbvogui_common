@@ -57,7 +57,6 @@ def test_urdf_xacro():
         )
 
         print(tmp_urdf_output_file)
-        pause = input("Press Enter to continue...")
 
         assert xacro_process.returncode == 0, 'Xacro command failed'
 
@@ -65,7 +64,6 @@ def test_urdf_xacro():
             check_urdf_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
         )
 
-        pause = input("Press Enter to continue...")
         assert check_urdf_process.returncode == 0, 'check_urdf command failed'
 
     finally:
