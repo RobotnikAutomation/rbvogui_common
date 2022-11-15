@@ -60,10 +60,10 @@
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
       </hardware>
 
-      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_base_set"/>
-      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_base_set"/>
-      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_left_base_set"/>
-      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_right_base_set"/>
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_steer"/>
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_steer"/>
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_left_steer"/>
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_right_steer"/>
 
       <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_left_wheel"/>
       <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_right_wheel"/>
@@ -83,7 +83,7 @@
   <xacro:rbvogui prefix="$(arg prefix)" publish_bf="${publish_bf}" hq="${hq}" />
   
   <gazebo>
-    <plugin filename="libgazebo_ros2_control.so" name="robotnik2_gazebo_control">
+    <plugin filename="libgazebo_ros2_control.so" name="robotnik_gazebo_control">
       <namespace>$(arg robot_id)</namespace>
       <parameters>$(arg config_controllers)</parameters>
       <!--robot_param>robot_description</robot_param-->
