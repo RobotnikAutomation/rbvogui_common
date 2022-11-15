@@ -10,12 +10,14 @@
     <xacro:property name="wheel_offset_y" value="0.23975"/>
     <xacro:property name="wheel_offset_z" value="-0.012"/>
 
-    <link name="${prefix}base_footprint" />
-    <joint name="${prefix}base_footprint_joint" type="fixed">
-      <origin xyz="0 0 ${0.1125}" rpy="0 0 0" />
-      <parent link="${prefix}base_footprint"/>
-      <child link="${prefix}base_link" />
-    </joint>
+    <xacro:if value="${publish_bf}">
+      <link name="${prefix}base_footprint" />
+      <joint name="${prefix}base_footprint_joint" type="fixed">
+        <origin xyz="0 0 ${0.1125}" rpy="0 0 0" />
+        <parent link="${prefix}base_footprint"/>
+        <child link="${prefix}base_link" />
+      </joint>
+    </xacro:if>
 
     <link name="${prefix}base_link"/>
     <joint name="${prefix}base_joint" type="fixed">
