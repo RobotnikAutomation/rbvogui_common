@@ -18,9 +18,9 @@
       <parent link="${parent}"/>
       <child link="${prefix}wheel_link"/>
       <axis xyz="0 0 1"/>
-      <dynamics damping="0.1" friction="0.1"/>
-      <limit effort="1e9" velocity="1000.0"/>
-      <safety_controller k_velocity="0.1" k_position="0.1" soft_lower_limit="-${M_PI}" soft_upper_limit="${M_PI}"/>
+      <dynamics damping="0.1" friction="2"/>
+      <limit effort="100" velocity="100.0"/>
+      <!--safety_controller k_velocity="0.1" k_position="0.1" soft_lower_limit="-${M_PI}" soft_upper_limit="${M_PI}"/-->
     </joint>
 
     <link name="${prefix}wheel_link">
@@ -72,8 +72,8 @@
       <material>Gazebo/DarkGrey</material>
       <mu1>0.90</mu1>
       <mu2>0.85</mu2>
-      <kp>4.75e5</kp>
-      <kd>8.25e2</kd>
+      <kp>8.75e5</kp>
+      <kd>8.25e1</kd>
     </gazebo>
   </xacro:macro>
 </robot>

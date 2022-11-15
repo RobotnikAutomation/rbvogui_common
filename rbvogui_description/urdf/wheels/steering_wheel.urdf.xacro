@@ -17,7 +17,7 @@
       <axis xyz="0 0 1" />
       <dynamics damping="1.0" friction="2.0"/>
 
-      <limit effort="100" velocity="100" lower="-${2*M_PI/3}" upper="${2*M_PI/3}" />
+      <limit effort="200" velocity="10" lower="-${2*M_PI/3}" upper="${2*M_PI/3}" />
     </joint>
 
     <link name="${prefix}steer_link" />
