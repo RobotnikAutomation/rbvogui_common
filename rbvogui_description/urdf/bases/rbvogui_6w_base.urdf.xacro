@@ -36,10 +36,11 @@
 
     <!-- Chassis -->
     <joint name="${prefix}chassis_joint" type="fixed">
-      <origin xyz="-0.012 0 0.1775" rpy="0 0 0" /> <!-- Modificar para cada vogui -->
+      <origin xyz="0 0 0.24117" rpy="0 0 0 " /> <!-- Modificar para cada vogui -->
       <parent link="${prefix}base_link"/>
       <child link="${prefix}chassis_link" />
     </joint>
+
 
     <!-- Chassis -->
     <link name="${prefix}chassis_link">
@@ -52,12 +53,12 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.stl"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_6w_chassis.stl"/>
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.stl"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_6w_chassis.stl"/>
           </geometry>
         </xacro:unless>
         <material name="darkgrey">
@@ -67,14 +68,15 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0 " />
         <geometry>
-          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.stl"/>
+          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_6w_chassis.stl"/>
         </geometry>
       </collision>
     </link>
 
+
     <!-- Battery -->
     <joint name="${prefix}battery_joint" type="fixed">
-      <origin xyz="0.02952 0 0" rpy="0 0 0 " />
+      <origin xyz="0.02952 0 0" rpy="0 0 0 " /> <!-- To do: check and set new battery stl from origin -->
       <parent link="${prefix}chassis_link"/>
       <child link="${prefix}battery_link" />
     </joint>
@@ -112,9 +114,10 @@
       </collision>
     </link>
 
+
     <!-- Contactors -->
     <joint name="${prefix}contactors_joint" type="fixed">
-      <origin xyz="0.5235 0 0.09265" rpy="0 0 0 " />
+      <origin xyz="0.5235 0 0.09265" rpy="0 0 0 " /> <!-- To do: check -->
       <parent link="${prefix}chassis_link"/>
       <child link="${prefix}contactors_link" />
     </joint>
@@ -142,7 +145,7 @@
 
     <!-- Logos -->
     <joint name="${prefix}base_logos_joint" type="fixed">
-      <origin xyz="0 0 -0.1775" rpy="0 0 0" />
+      <origin xyz="0 0 -0.1775" rpy="0 0 0 " />
       <parent link="${prefix}chassis_link"/>
       <child link="${prefix}base_logos_link" />
     </joint>
@@ -150,27 +153,33 @@
     <!-- Logos -->
     <link name="${prefix}base_logos_link">
       <visual>
-        <origin xyz="-0.015 0 0" rpy="0 0 0 " />
+        <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos.stl" scale="1.001 1.076 1.001"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos.stl" scale="1.001 1.001 1.001"/>
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos.dae" scale="1.001 1.076 1.001"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos.dae" scale="1.001 1.001 1.001"/>
           </geometry>
         </xacro:unless>
-        <material name="lightred">
-          <color rgba="0.9 0.2 0.2 1"/>
+        <material name="lightgrey">
+          <color rgba="0.9 0.9 0.9 1"/>
         </material>
       </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0 " />
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_logos.stl" scale="1.001 1.001 1.001"/>
+        </geometry>
+      </collision>
     </link>
 
 
     <!-- Leds -->
     <joint name="${prefix}leds_joint" type="fixed">
-      <origin xyz="0 0 0.1025" rpy="0 0 0 " />
+      <origin xyz="0 0 0.1025" rpy="0 0 0 " /> <!-- To do: check -->
       <parent link="${prefix}chassis_link"/>
       <child link="${prefix}leds_link" />
     </joint>
@@ -188,8 +197,8 @@
     </link>
 
     <xacro:gazebo_color_base_link prefix="${prefix}"/>
-    <xacro:gazebo_color_chassis_link prefix="${prefix}"/>
     <xacro:gazebo_color_battery_link prefix="${prefix}"/>
+    <xacro:gazebo_color_chassis_link prefix="${prefix}"/>
     <xacro:gazebo_color_contactors_link prefix="${prefix}"/>
     <xacro:gazebo_color_logo_link prefix="${prefix}"/>
     <xacro:gazebo_color_leds_link prefix="${prefix}"/>

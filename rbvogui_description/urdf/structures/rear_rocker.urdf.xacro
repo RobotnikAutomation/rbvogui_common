@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot name="structure" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:macro name="structure_rear_rocker" params="prefix parent *origin">
+
+        <!-- This joint should be flexible +-24deg in y -->
+        <joint name="${prefix}joint" type="fixed">
+            <axis xyz="0 1 0"/>
+            <xacro:insert_block name="origin"/>
+            <parent link="${parent}"/>
+            <child link="${prefix}link"/>
+        </joint>
+
+        <link name="${prefix}link">
+            <!-- TODO: check inertia -->
+            <inertial>
+                <mass value="0.001"/>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+            </inertial>
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <material name="red_rocker">
+                    <color rgba="1.0 0.0 0.0 1"/>
+                </material>
+                <geometry>
+                    <mesh filename="package://rbvogui_description/meshes/structures/rear_rocker_structure.stl"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://rbvogui_description/meshes/structures/rear_rocker_structure.stl"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <gazebo reference="${prefix}link">
+            <material>Gazebo/Red</material>
+            <gravity>true</gravity>
+        </gazebo>
+
+    </xacro:macro>
+
+</robot>

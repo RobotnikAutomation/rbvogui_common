@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot name="top_cover" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="structure_top_cover" params="prefix parent *origin">
+	 <joint name="${prefix}_base_joint" type="fixed">
+           <xacro:insert_block name="origin" />
+           <parent link="${parent}"/>
+           <child link="${prefix}_top_cover_link" />
+         </joint>
+	  <link name="${prefix}_top_cover_link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <material name="covercolor">
+                <color rgba="0.1 0.1 0.1 1"/>
+	      </material>
+	      <geometry>
+	        <mesh filename="package://rbvogui_description/meshes/structures/top_cover.stl"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+	        <mesh filename="package://rbvogui_description/meshes/structures/top_cover.stl"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+    <gazebo reference="${prefix}_top_cover_link">
+		<visual>  
+		  <material>  
+			<ambient>0.0 0.0 0.0 1.0</ambient>  
+			<diffuse>0.2 0.2 0.2 1.0</diffuse>  
+			<specular>0.508273 0.508273 0.508273 1.0</specular>  
+			<emissive>0.0 0.0 0.0 0.0</emissive>  
+		  </material>  
+		</visual>   
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

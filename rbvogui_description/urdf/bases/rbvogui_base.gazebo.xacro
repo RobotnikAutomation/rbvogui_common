@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <!-- ros control plugin -->
+    <xacro:macro name="ros_control">
+        <gazebo>
+            <plugin name="ros_control" filename="libgazebo_ros_control.so">
+                <!--<robotNamespace>/summit_xl</robotNamespace>-->
+                <robotParam>robot_description</robotParam>
+                <controlPeriod>0.001</controlPeriod>
+                <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+                <legacyModeNS>true</legacyModeNS>
+            </plugin>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="omni_steering">
+        <gazebo>
+            <plugin name="omni_steering" filename="libgazebo_ros_planar_move.so">
+                <robotNamespace>/robot</robotNamespace>
+                <commandTopic>robotnik_base_control/cmd_vel</commandTopic>  
+                <odometryTopic>robotnik_base_control/odom</odometryTopic>
+                <odometryFrame>odom</odometryFrame>
+                <odometryRate>20.0</odometryRate>
+                <robotBaseFrame>base_footprint</robotBaseFrame>
+            </plugin>
+          </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="omni_drive_ackermann">
+        <gazebo>
+            <plugin name="omni_drive_ackermann" filename="libomnidrive_ackermann_plugin.so">
+                <!--<robotNamespace>/rbvogui</robotNamespace>-->
+                <!--<robotParam>robot_description</robotParam>-->
+                <broadcastTF>1</broadcastTF>
+                <wheelDiameter>0.220</wheelDiameter>
+                <wheelBase>0.858</wheelBase>
+                <trackWidth>0.454</trackWidth>
+                <wheelTorque>44.2</wheelTorque>
+                <motorWheelTorque>15.0</motorWheelTorque>            
+                <commandTopic>cmd_vel</commandTopic>  <!-- TODO: review topics -->
+                <odometryTopic>odom</odometryTopic>
+                <odometryFrame>odom</odometryFrame>
+                <odometrySource>encoder</odometrySource>
+                <robotBaseFrame>base_footprint</robotBaseFrame>
+                <updateRate>100.0</updateRate>
+            </plugin>
+        </gazebo>
+    </xacro:macro>
+
+   <!-- not used in 6w -->   
+    <xacro:macro name="gazebo_color_base_link" params="prefix">
+      <gazebo reference="${prefix}base_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+    
+
+    <xacro:macro name="gazebo_color_chassis_link" params="prefix">
+      <gazebo reference="${prefix}chassis_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="gazebo_color_logo_link" params="prefix">
+      <gazebo reference="${prefix}base_logos_link">
+        <visual>  
+          <material>  
+            <ambient>1.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.50754 0.50754 0.50754 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="gazebo_color_battery_link" params="prefix">
+      <gazebo reference="${prefix}battery_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 0.0 0.0 1.0</ambient>  
+            <diffuse>0.2 0.2 0.2 1.0</diffuse>  
+            <specular>0.508273 0.508273 0.508273 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="gazebo_color_contactors_link" params="prefix">
+      <gazebo reference="${prefix}contactors_link">
+        <visual>  
+          <material>  
+            <ambient>0.7 0.3 0.0 1.0</ambient>  
+            <diffuse>0.7 0.3 0.0 1.0</diffuse>  
+            <specular>0.7 0.3 0.0 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="gazebo_color_leds_link" params="prefix">
+      <gazebo reference="${prefix}leds_link">
+        <visual>  
+          <material>  
+            <ambient>0.0 1.0 0.0 1.0</ambient>  
+            <diffuse>0.0 1.0 0.0 1.0</diffuse>  
+            <specular>0.0 1.0 0.0 1.0</specular>  
+            <emissive>0.0 0.0 0.0 0.0</emissive>  
+          </material>  
+        </visual>  
+      </gazebo>
+    </xacro:macro>
+
+</robot>

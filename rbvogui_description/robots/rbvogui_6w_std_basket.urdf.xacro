@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+
+<!-- rbvogui v3.0 -->
+<robot name="rbvogui" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <!-- ***************** -->
+    <!-- Imported elements -->
+    <!-- ***************** -->
+
+    <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+    <!-- Import rbvogui base elements-->
+    <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_6w_base.urdf.xacro" />
+
+    <!-- Import rbvogui wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
+    
+    <!-- Structures -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/front_rocker.urdf.xacro" /> 
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/rear_rocker.urdf.xacro" /> 
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/basket.urdf.xacro" />
+    
+    <!-- Import all available sensors -->
+    <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="deg2rad" value="0.01745329251"/>
+
+    <!-- Rocker parameters -->
+    <xacro:property name="rocker_offset_x" value="0.225" />    
+    <xacro:property name="rocker_offset_y" value="0.24295" />    
+    <xacro:property name="rocker_offset_z" value="0.110" />    
+    
+    <!-- Basket parameters -->
+    <xacro:property name="basket_offset_x" value="0.0" />    
+    <xacro:property name="basket_offset_y" value="0.0" />    
+    <xacro:property name="basket_offset_z" value="0.24483" />     
+    
+    <!-- Flag to select the high or low quality model -->
+    <xacro:property name="hq" value="true" />
+    <xacro:property name="publish_bf" value="true" />
+
+    <xacro:arg name="prefix" default="robot_" />
+    <xacro:property name="gpu" default="false" />
+
+
+
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq gpu">
+
+        <!-- *************** -->
+        <!-- Robots Elements -->
+        <!-- *************** -->
+
+        <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+
+        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
+
+        <!-- Suspension -->
+        <xacro:structure_front_rocker prefix="${prefix}upper_left_rocker_" parent="${prefix}base_link">
+            <origin xyz="${rocker_offset_x} ${rocker_offset_y} ${rocker_offset_z}" rpy="0 0 0"/>
+        </xacro:structure_front_rocker>
+
+        <xacro:structure_front_rocker prefix="${prefix}upper_right_rocker_" parent="${prefix}base_link">
+            <origin xyz="${rocker_offset_x} -${rocker_offset_y} ${rocker_offset_z}" rpy="0 0 0"/>
+        </xacro:structure_front_rocker>
+
+        <xacro:structure_rear_rocker prefix="${prefix}lower_left_rocker_" parent="${prefix}upper_left_rocker_link">
+            <origin xyz="0 -0.01945 0" rpy="0 0 0"/>
+        </xacro:structure_rear_rocker>
+
+        <xacro:structure_rear_rocker prefix="${prefix}lower_right_rocker_" parent="${prefix}upper_right_rocker_link">
+            <origin xyz="0 0.01945 0" rpy="0 0 0"/>
+        </xacro:structure_rear_rocker>
+
+        <!-- Wheels -->
+        <xacro:wheel prefix="${prefix}front_right_" parent="${prefix}upper_right_rocker_link" reflect="false" hq="true">
+            <origin xyz="0.22484 -0.09877 -0.13017" rpy="0 0 0"/>
+        </xacro:wheel>
+
+        <xacro:wheel prefix="${prefix}front_left_" parent="${prefix}upper_left_rocker_link" reflect="false" hq="true">
+            <origin xyz="0.22484 0.09877 -0.13017" rpy="0 0 0"/>
+        </xacro:wheel>
+
+        <xacro:wheel prefix="${prefix}middle_right_" parent="${prefix}upper_right_rocker_link" reflect="false" hq="true">
+            <origin xyz="-0.22484 -0.09877 -0.13017" rpy="0 0 0"/>
+        </xacro:wheel>
+
+        <xacro:wheel prefix="${prefix}middle_left_" parent="${prefix}upper_left_rocker_link" reflect="false" hq="true">
+            <origin xyz="-0.22484 0.09877 -0.13017" rpy="0 0 0"/>
+        </xacro:wheel>
+
+        <xacro:wheel prefix="${prefix}back_left_" parent="${prefix}lower_left_rocker_link" reflect="false" hq="true">
+            <origin xyz="-0.675 0.11822 -0.13017" rpy="0 0 0"/>
+        </xacro:wheel>
+
+        <xacro:wheel prefix="${prefix}back_right_" parent="${prefix}lower_right_rocker_link" reflect="false" hq="true">
+            <origin xyz="-0.675 -0.11822 -0.13017" rpy="0 0 0"/>
+        </xacro:wheel>
+
+
+        <xacro:structure_basket prefix="${prefix}" parent="${prefix}chassis_link">
+            <origin xyz="${basket_offset_x} ${basket_offset_y} ${basket_offset_z}" rpy="0 0 0"/>
+        </xacro:structure_basket>
+
+        <!-- SENSORS see robotnik_sensors for the specific configuration -->
+
+        <!-- IMU -->
+        <xacro:sensor_vectornav prefix="${prefix}imu" parent="${prefix}chassis_link">
+            <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
+        </xacro:sensor_vectornav>
+
+        <!-- Front Camera -->
+        <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
+            <origin xyz="0.46462 0.0 0.18258" rpy="0 0 0"/>
+        </xacro:sensor_orbbec_astra>
+
+        <!-- GPS -->
+        <xacro:sensor_gps prefix="${prefix}gps" parent="${prefix}chassis_link">
+            <origin xyz="0.344 -0.128 0.97083" rpy="0 0 0"/>
+        </xacro:sensor_gps>
+
+        <!-- 2D Laser -->
+        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
+            <origin xyz="0.53 0.0 -0.0245" rpy="${PI} 0 0"/>
+        </xacro:sensor_sick_tim551>
+
+        <!-- 3D Laser --> 
+        <xacro:sensor_rslidar_16 prefix="${prefix}top_3d_laser" parent="${prefix}chassis_link" prefix_topic="top_3d_laser" gpu="${gpu}">
+            <origin xyz="0.343 0.0 1.06083" rpy="0 0 0"/>
+        </xacro:sensor_rslidar_16>
+
+    </xacro:macro>
+
+
+    <!-- Gazebo ros control pluggins -->
+    <xacro:ros_control/>
+
+    <xacro:rbvogui prefix="$(arg prefix)" publish_bf="${publish_bf}" hq="${hq}" gpu="${gpu}"/>
+
+</robot>

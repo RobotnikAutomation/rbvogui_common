@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+
+<!-- RBVogui XL -->
+<robot name="rbvogui" xmlns:xacro="http://wiki.ros.org/xacro">
+
+
+    <!-- ***************** -->
+    <!-- Imported elements -->
+    <!-- ***************** -->
+
+    <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+    <!-- Import rbvogui base elements-->
+    <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_xl_base.urdf.xacro" />
+
+    <!-- Import rbvogui wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel_xl.urdf.xacro" />
+
+    <!-- Import rbvogui fix wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/fixed_wheel_xl.urdf.xacro" />
+
+    <!-- Import arm structure -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/bi_arm_support.urdf.xacro" />
+    
+    <!-- Structures -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/top_cover.urdf.xacro" /> 
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps_mast.urdf.xacro" /> 
+
+    <!-- Import sick support -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/sick_support.urdf.xacro" />
+
+    <!-- Import sick protector -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/sick_protector.urdf.xacro" />
+
+    <!-- Import all available sensors -->
+    <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="deg2rad" value="0.01745329251"/>
+
+    <!-- Wheel parameters -->
+    <xacro:property name="wheel_offset_x" value="0.4795" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+    <xacro:property name="wheel_offset_y" value="0.2925" />
+    <xacro:property name="wheel_offset_z" value="0.0" />
+
+    <!-- Flag to select the high or low quality model -->
+    <xacro:property name="hq" value="true" />
+    <xacro:property name="publish_bf" value="true" />
+
+    <xacro:arg name="prefix" default="robot_" />
+    <xacro:arg name="kinematics" default="omni" />
+    <xacro:arg name="load_kinematics_file" default="false" />
+    <xacro:arg name="gpu" default="false" />
+
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics launch_arm arm_manufacturer arm_model load_kinematics_file
+                                        launch_gripper gripper_manufacturer gripper_model launch_lift lift_manufacturer lift_model gpu">
+        
+        <!-- *************** -->
+        <!-- Robots Elements -->
+        <!-- *************** -->
+
+        <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+
+        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" base_height="${wheel_radius}" hq="${hq}"/>
+
+        <xacro:motor_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
+            <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+        </xacro:motor_wheel>
+
+        <xacro:motor_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="${hq}"> 
+            <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+        </xacro:motor_wheel>
+
+        <xacro:if value="${kinematics == 'omni'}">
+            <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:motor_wheel>
+
+            <xacro:motor_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:motor_wheel>
+        </xacro:if>
+
+        <xacro:if value="${kinematics == 'ackermann'}">
+            <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:fixed_wheel>
+
+            <xacro:fixed_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:fixed_wheel>
+        </xacro:if>
+
+        <!-- SENSORS see robotnik_sensors for the specific configuration -->
+
+        <!-- IMU -->
+        <xacro:sensor_vectornav prefix="${prefix}imu" parent="${prefix}chassis_link">
+            <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
+        </xacro:sensor_vectornav>
+
+        <!-- GPS -->
+        <xacro:sensor_gps_mast prefix="${prefix}gps" parent="${prefix}chassis_link">
+            <origin xyz="-0.472 0.40028 0.44044" rpy="0 0 0"/>
+        </xacro:sensor_gps_mast>
+
+        <!-- Orbbec camera -->
+        <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
+            <origin xyz="0.637 0.0 -0.036" rpy="0 0 0"/>
+        </xacro:sensor_orbbec_astra>
+
+        <!-- Zed camera 
+        <xacro:sensor_zed prefix="${prefix}zed" parent="${prefix}chassis_link" model="zed2">
+            <origin xyz="0.63658 0.0 -0.03643" rpy="0 0 0"/>
+        </xacro:sensor_zed>  
+        -->
+        
+        <!-- Laser sick support -->
+        <xacro:sick_support prefix="${prefix}sick_front_support" parent="${prefix}chassis_link">
+            <origin xyz="0.472 0.3795 0.09788" rpy="0 ${90*PI/180} ${90*PI/180}"/>
+        </xacro:sick_support>
+        <xacro:sick_support prefix="${prefix}sick_rear_support" parent="${prefix}chassis_link">
+            <origin xyz="-0.472 -0.3795 0.09788" rpy="0 ${90*PI/180} -${90*PI/180}"/>
+        </xacro:sick_support>
+        
+        <!-- Laser sick protector -->
+        <xacro:sick_protector prefix="${prefix}sick_front_protector" parent="${prefix}chassis_link">
+            <origin xyz="0.64542 0.39594 0.11073" rpy="0 0 -${45*PI/180}"/>
+        </xacro:sick_protector>
+        <xacro:sick_protector prefix="${prefix}sick_rear_protector" parent="${prefix}chassis_link">
+            <origin xyz="-0.64542 -0.39594 0.11073" rpy="0 0 ${135*PI/180}"/>
+        </xacro:sick_protector>
+        
+        <!-- 2d laser -->
+        <xacro:sensor_sick_microscan3 prefix="${prefix}front_laser" parent="${prefix}chassis_link" prefix_topic="front_laser" gpu="${gpu}">
+            <origin xyz="0.64555 0.39595 0.16608" rpy="${PI} 0 ${45*PI/180}"/>
+        </xacro:sensor_sick_microscan3>
+        <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" prefix_topic="rear_laser" gpu="${gpu}">
+            <origin xyz="-0.64555 -0.39985 0.16608" rpy="${PI} 0 -${135*PI/180}"/>
+        </xacro:sensor_sick_microscan3>
+        
+    </xacro:macro>
+
+    <!-- Gazebo ros control pluggins -->
+    <xacro:ros_control/>
+
+    <xacro:rbvogui prefix="$(arg prefix)" kinematics="$(arg kinematics)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
+                   launch_arm="$(arg launch_arm)" arm_manufacturer="$(arg arm_manufacturer)" arm_model="$(arg arm_model)"
+                   launch_gripper="$(arg launch_gripper)" gripper_manufacturer="$(arg gripper_manufacturer)" gripper_model="$(arg gripper_model)"
+                   launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" />
+
+</robot>
