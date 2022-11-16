@@ -4,10 +4,11 @@
   <!-- Rubber wheel color -->
   <xacro:macro name="gazebo_color_wheel" params="prefix">
     <gazebo reference="${prefix}wheel">
-      <mu1 value="1.0"/>
-      <mu2 value="1.0"/>
+      <mu1 value="0.85"/>
+      <mu2 value="0.68"/>
       <kp value="10000000.0" />
       <kd value="1.0" />
+      <fdir1>1 0 0</fdir1>
       <visual>  
         <material>  
           <ambient>0.1 0.1 0.1 1.0</ambient>  

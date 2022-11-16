@@ -3,7 +3,7 @@ project(rbvogui_description)
 
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY meshes robot test urdf 
+install(DIRECTORY meshes robots test urdf 
   DESTINATION share/${PROJECT_NAME}
 )
 

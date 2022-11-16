@@ -35,19 +35,8 @@
       <xacro:insert_block name="origin" />
       <axis xyz="0 1 0" rpy="0 0 0" />
       <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
-      <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
+      <dynamics damping="${wheel_joint_damping}" friction="${wheel_joint_friction}"/>
     </joint>
-
-    <transmission name="${prefix}wheel_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}wheel_joint">
-        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${prefix}wheel_motor">
-        <hardwareInterface>hardware_interface/VelocityActuatorInterface</hardwareInterface>
-        <mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
-      </actuator>
-    </transmission>
 
     <link name="${prefix}wheel">
       <visual>
@@ -77,13 +66,13 @@
       <collision>
         <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
         <geometry>
-          <sphere radius="${wheel_radius}" />
+          <cylinder length="${wheel_radius}" radius="${wheel_radius}" />
         </geometry>
       </collision>
       <inertial>
         <mass value="${wheel_mass}" />
         <origin xyz="0 0 0" />
-        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_height}" />
+        <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_height}" />
       </inertial>
     </link>
 
