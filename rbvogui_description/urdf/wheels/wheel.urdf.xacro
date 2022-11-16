@@ -63,7 +63,7 @@
           <origin xyz="0 0 -${tire_width/2}" rpy="0 0 0" />
         </xacro:unless>
         <geometry>
-          <cylinder length="${tire_width}" radius="${tire_radius}" />
+          <cylinder length="${tire_width/2}" radius="${tire_radius}" />
         </geometry>
       </collision>
     </link>
@@ -74,6 +74,8 @@
       <mu2>0.85</mu2>
       <kp>8.75e5</kp>
       <kd>8.25e1</kd>
+      <fdir1>0 0 1</fdir1>
+      <maxContacts>4</maxContacts>
     </gazebo>
   </xacro:macro>
 </robot>
