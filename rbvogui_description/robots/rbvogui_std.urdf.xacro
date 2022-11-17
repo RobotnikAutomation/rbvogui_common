@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
-
 <!-- RBVogui v3.0 -->
 <robot name="rbvogui" xmlns:xacro="http://www.ros.org/wiki/xacro">
-
-
     <!-- ***************** -->
     <!-- Imported elements -->
     <!-- ***************** -->
@@ -108,41 +105,14 @@
             <origin xyz="0.1732 0.0 0.3545" rpy="0 0 0"/>
         </xacro:sensor_rslidar_16>
         -->
-        <xacro:macro name="ros2_joint" params="interface jmin jmax prefix name">
-          <joint name="${prefix}${name}">
-            <command_interface name="${interface}">
-              <param name="min">${jmin}</param>
-              <param name="max">${jmax}</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-            <state_interface name="effort"/>
-          </joint>
-        </xacro:macro>
-        <ros2_control name="GazeboSystem" type="system">
-          <hardware>
-              <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-          </hardware>
-
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_steering_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_steering_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_left_steering_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_right_steering_joint"/>
-
-          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_left_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_right_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_left_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_right_wheel_joint"/>
-        </ros2_control>
-
     </xacro:macro>
-
-    <!-- Gazebo ros control pluggins -->
-    <xacro:ros_control/>
 
     <xacro:rbvogui prefix="$(arg prefix)" kinematics="$(arg kinematics)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
                    launch_arm="$(arg launch_arm)" arm_manufacturer="$(arg arm_manufacturer)" arm_model="$(arg arm_model)"
                    launch_gripper="$(arg launch_gripper)" gripper_manufacturer="$(arg gripper_manufacturer)" gripper_model="$(arg gripper_model)"
                    launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" />
 
+    <!-- Gazebo ros control pluggins -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control.urdf.xacro"/>
+    <xacro:ros2_control prefix="$(arg prefix)"/>
 </robot>
