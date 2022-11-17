@@ -85,11 +85,11 @@
             <origin xyz="-0.22484 0.09877 -0.13017" rpy="0 0 0"/>
         </xacro:wheel>
 
-        <xacro:wheel prefix="${prefix}back_left_" parent="${prefix}lower_left_rocker_link" reflect="false" hq="true">
+        <xacro:wheel prefix="${prefix}rear_left_" parent="${prefix}lower_left_rocker_link" reflect="false" hq="true">
             <origin xyz="-0.675 0.11822 -0.13017" rpy="0 0 0"/>
         </xacro:wheel>
 
-        <xacro:wheel prefix="${prefix}back_right_" parent="${prefix}lower_right_rocker_link" reflect="false" hq="true">
+        <xacro:wheel prefix="${prefix}rear_right_" parent="${prefix}lower_right_rocker_link" reflect="false" hq="true">
             <origin xyz="-0.675 -0.11822 -0.13017" rpy="0 0 0"/>
         </xacro:wheel>
 

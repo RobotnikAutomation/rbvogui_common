@@ -61,21 +61,21 @@
         </xacro:motor_wheel>
 
         <xacro:if value="${kinematics == 'omni'}">
-            <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+            <xacro:motor_wheel prefix="${prefix}rear_left_" parent="${prefix}base_link" reflect="true" hq="true">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:motor_wheel>
 
-            <xacro:motor_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+            <xacro:motor_wheel prefix="${prefix}rear_right_" parent="${prefix}base_link" reflect="false" hq="true">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:motor_wheel>
         </xacro:if>
 
         <xacro:if value="${kinematics == 'ackermann'}">
-            <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+            <xacro:fixed_wheel prefix="${prefix}rear_left_" parent="${prefix}base_link" reflect="true" hq="true">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
 
-            <xacro:fixed_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+            <xacro:fixed_wheel prefix="${prefix}rear_right_" parent="${prefix}base_link" reflect="false" hq="true">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
         </xacro:if>
@@ -125,13 +125,13 @@
 
           <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_motor_wheel_joint"/>
           <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_motor_wheel_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_left_motor_wheel_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_right_motor_wheel_joint"/>
+          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_left_motor_wheel_joint"/>
+          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_right_motor_wheel_joint"/>
 
           <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_left_wheel_joint"/>
           <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_right_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_left_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_right_wheel_joint"/>
+          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="rear_left_wheel_joint"/>
+          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="rear_right_wheel_joint"/>
         </ros2_control>
 
     </xacro:macro>
