@@ -2,13 +2,61 @@
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
      
   <!-- Rubber wheel color -->
+  <xacro:macro name="gazebo_rubber_tire_physics" params="name">
+    <gazebo reference="${name}">
+      <mu1>0.90</mu1>
+      <mu2>0.85</mu2>
+      <kp>8.75e5</kp>
+      <kd>8.25e1</kd>
+      <fdir1>0 0 0</fdir1>
+      <maxContacts>4</maxContacts>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="gazebo_rubber_tire_material" params="name">
+    <gazebo reference="${name}">
+      <visual>  
+        <material>  
+          <ambient>0.1 0.1 0.1 1.0</ambient>  
+          <diffuse>0.250754 0.250754 0.250754 1.0</diffuse>  
+          <specular>0.2508273 0.2508273 0.2508273 1.0</specular>  
+          <emissive>0.0 0.0 0.0 0.0</emissive>  
+        </material>  
+      </visual>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="gazebo_steering_frame_physics" params="name">
+    <gazebo reference="${name}">
+      <mu1>0.40</mu1>
+      <mu2>0.35</mu2>
+      <kp>8.75e9</kp>
+      <kd>8.25e0</kd>
+      <fdir1>0 0 0</fdir1>
+    </gazebo>
+  </xacro:macro>
+  <xacro:macro name="gazebo_steering_frame_material" params="name">
+    <gazebo reference="${name}">
+      <visual>  
+        <material>  
+          <ambient>1.0 0.0 0.0 1.0</ambient>  
+          <diffuse>0.50754 0.50754 0.50754 1.0</diffuse>  
+          <specular>0.508273 0.508273 0.508273 1.0</specular>  
+          <emissive>0.0 0.0 0.0 0.0</emissive>  
+        </material>  
+      </visual>  
+    </gazebo>
+  </xacro:macro>
+
+
   <xacro:macro name="gazebo_color_wheel" params="prefix">
     <gazebo reference="${prefix}wheel">
-      <mu1 value="0.85"/>
-      <mu2 value="0.68"/>
-      <kp value="10000000.0" />
-      <kd value="1.0" />
-      <fdir1>1 0 0</fdir1>
+      <mu1>0.90</mu1>
+      <mu2>0.85</mu2>
+      <kp>8.75e5</kp>
+      <kd>8.25e1</kd>
+      <fdir1>0 1 0</fdir1>
+      <maxContacts>4</maxContacts>
       <visual>  
         <material>  
           <ambient>0.1 0.1 0.1 1.0</ambient>  
@@ -22,7 +70,7 @@
   
   <!-- Steer wheel color -->
   <xacro:macro name="gazebo_color_steer_wheel" params="prefix">
-    <gazebo reference="${prefix}motor_wheel">
+    <gazebo reference="${prefix}base_wheel">
       <visual>  
         <material>  
           <ambient>1.0 0.0 0.0 1.0</ambient>  

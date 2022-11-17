@@ -8,19 +8,10 @@
 
     <!-- Robot mechanical and motor parameters -->
     <xacro:property name="PI" value="3.1415926535897931"/>
-    <xacro:property name="wheel_width" value="0.146" />
-
 
     <!-- BASE FOOTPRINT -->
     <xacro:if value="${publish_bf}">
-      <link name="${prefix}base_footprint">
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <box size="0.001 0.001 0.001" />
-          </geometry>
-        </visual>
-      </link>
+      <link name="${prefix}base_footprint" />
 
       <joint name="${prefix}base_footprint_joint" type="fixed">
         <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
@@ -29,7 +20,6 @@
         <child link="${prefix}base_link" />
       </joint>
     </xacro:if>
-
 
     <!-- BASE_LINK -->
     <link name="${prefix}base_link"/>
@@ -45,8 +35,8 @@
     <link name="${prefix}chassis_link">
       <inertial>
         <mass value="25.0" />
-        <origin xyz="0 0 0" />
-        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        <origin xyz="0 0 0.10" />
+        <xacro:solid_cuboid_inertia w="1.265" h="0.812" d="0.22" m="25.0"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -82,9 +72,9 @@
     <!-- Battery -->
     <link name="${prefix}battery_link">
       <inertial>
-        <mass value="20.0" />
-        <origin xyz="0 0 0" />
-        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        <mass value="45.0" />
+        <origin xyz="0 0 -0.05" />
+        <xacro:solid_cuboid_inertia w="0.265" h="0.112" d="0.06" m="45.0"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
