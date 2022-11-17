@@ -2,9 +2,14 @@
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
 
   <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base.gazebo.xacro" />
-  <xacro:include filename="$(find rbvogui_description)/urdf/inertia.urdf.xacro" />
 
   <xacro:macro name="rbvogui_base" params="prefix publish_bf base_height:=0.1425 hq">
+    <xacro:macro name="solid_cuboid_inertia" params="w h d m">
+      <inertia  ixx="${(m*(h*h+d*d))/12}" ixy = "0" ixz = "0"
+                iyy="${(m*(w*w+d*d))/12}" iyz = "0"
+                izz="${(m*(w*w+h*h))/12}"
+      /> 
+    </xacro:macro>
 
     <!-- Robot mechanical and motor parameters -->
     <xacro:property name="PI" value="3.1415926535897931"/>
@@ -41,10 +46,10 @@
    <!-- Chassis -->
     <link name="${prefix}chassis_link">
       <inertial>
-        <mass value="25.0" />
-        <origin xyz="0 0 0.376" />
+        <mass value="65.0" />
+        <origin xyz="0 0 -0.12" />
         <!--inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" /-->
-        <xacro:solid_cuboid_inertia w="1.265" h="0.812" d="0.465" m="25"/>
+        <xacro:solid_cuboid_inertia w="1.265" h="0.812" d="0.465" m="65.0"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -80,22 +85,20 @@
     <!-- Battery -->
     <link name="${prefix}battery_link">
       <inertial>
-        <mass value="20.0" />
-        <origin xyz="0 0 0" />
-        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        <mass value="40.0" />
+        <origin xyz="0 0 -0.25" />
+        <xacro:solid_cuboid_inertia w="0.265" h="0.212" d="0.165" m="40.0"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
              <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_xl_battery.stl"/>
-
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
              <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_xl_battery.stl"/> 
-
           </geometry>
         </xacro:unless>
         <material name="darkgrey">

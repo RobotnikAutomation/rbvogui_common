@@ -14,7 +14,7 @@
     <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_xl_base.urdf.xacro" />
 
     <!-- Import rbvogui wheels -->
-    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel_xl.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/steering_wheel_xl.urdf.xacro" />
 
     <!-- Import rbvogui fix wheels -->
     <xacro:include filename="$(find rbvogui_description)/urdf/wheels/fixed_wheel_xl.urdf.xacro" />
@@ -63,30 +63,30 @@
 
         <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" base_height="${wheel_radius}" hq="${hq}"/>
 
-        <xacro:motor_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
+        <xacro:steering_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
             <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-        </xacro:motor_wheel>
+        </xacro:steering_wheel>
 
-        <xacro:motor_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="${hq}"> 
+        <xacro:steering_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="false" hq="${hq}"> 
             <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-        </xacro:motor_wheel>
+        </xacro:steering_wheel>
 
         <xacro:if value="${kinematics == 'omni'}">
-            <xacro:motor_wheel prefix="${prefix}rear_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
+            <xacro:steering_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-            </xacro:motor_wheel>
+            </xacro:steering_wheel>
 
-            <xacro:motor_wheel prefix="${prefix}rear_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
+            <xacro:steering_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-            </xacro:motor_wheel>
+            </xacro:steering_wheel>
         </xacro:if>
 
         <xacro:if value="${kinematics == 'ackermann'}">
-            <xacro:fixed_wheel prefix="${prefix}rear_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
+            <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
 
-            <xacro:fixed_wheel prefix="${prefix}rear_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
+            <xacro:fixed_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="true" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
         </xacro:if>
@@ -137,42 +137,15 @@
         <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" prefix_topic="rear_laser" gpu="${gpu}">
             <origin xyz="-0.64555 -0.39985 0.16608" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
-
-        <xacro:macro name="ros2_joint" params="interface jmin jmax prefix name">
-          <joint name="${prefix}${name}">
-            <command_interface name="${interface}">
-              <param name="min">${jmin}</param>
-              <param name="max">${jmax}</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-            <state_interface name="effort"/>
-          </joint>
-        </xacro:macro>
-        <ros2_control name="GazeboSystem" type="system">
-          <hardware>
-              <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-          </hardware>
-
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_motor_wheel_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_motor_wheel_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_left_motor_wheel_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_right_motor_wheel_joint"/>
-
-          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_left_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_right_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="rear_left_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="rear_right_wheel_joint"/>
-        </ros2_control>
         
     </xacro:macro>
-
-    <!-- Gazebo ros control pluggins -->
-    <xacro:ros_control/>
 
     <xacro:rbvogui prefix="$(arg prefix)" kinematics="$(arg kinematics)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
                    launch_arm="$(arg launch_arm)" arm_manufacturer="$(arg arm_manufacturer)" arm_model="$(arg arm_model)"
                    launch_gripper="$(arg launch_gripper)" gripper_manufacturer="$(arg gripper_manufacturer)" gripper_model="$(arg gripper_model)"
                    launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" />
 
+    <!-- Gazebo ros control pluggins -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control.urdf.xacro"/>
+    <xacro:ros2_control prefix="$(arg prefix)"/>
 </robot>
