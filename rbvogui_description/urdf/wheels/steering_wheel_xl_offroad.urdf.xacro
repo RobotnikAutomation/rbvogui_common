@@ -99,7 +99,7 @@
 			<origin xyz="0 0 0.12" rpy="0 0 0"/>
 		</xacro:unless>
         <!-- To do: add real intertia-->
-        <cylinder_inertia m="5" r="0.1425" h="0.14"/>
+        <xacro:cylinder_inertia m="5" r="0.1425" h="0.14"/>
       </inertial>
     </link>
 

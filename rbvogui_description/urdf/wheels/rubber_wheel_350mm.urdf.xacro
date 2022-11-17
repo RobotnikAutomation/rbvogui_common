@@ -6,6 +6,7 @@
   <xacro:property name="M_PI" value="3.1415926535897931" />
   <!-- Wheels -->
   <xacro:property name="wheel_radius" value="0.1745" />
+  <xacro:property name="wheel_width" value="0.1275" />
   <xacro:property name="wheel_height" value="0.1165" /> <!--Check -->
   <xacro:property name="wheel_mass" value="5.0" />
   <!-- in kg-->
@@ -87,7 +88,7 @@
       <inertial>
         <mass value="${wheel_mass}" />
         <origin xyz="0 0 0" />
-        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_height}" />
+        <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_height}" />
       </inertial>
     </link>
 

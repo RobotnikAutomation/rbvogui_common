@@ -20,7 +20,7 @@
     <xacro:include filename="$(find rbvogui_description)/urdf/wheels/fixed_wheel_xl.urdf.xacro" />
 
     <!-- Import arm structure -->
-    <xacro:include filename="$(find rbvogui_description)/urdf/structures/bi_arm_support.urdf.xacro" />
+    <!--xacro:include filename="$(find rbvogui_description)/urdf/structures/bi_arm_support.urdf.xacro" /-->
     
     <!-- Structures -->
     <xacro:include filename="$(find rbvogui_description)/urdf/structures/top_cover.urdf.xacro" /> 
@@ -82,7 +82,7 @@
         </xacro:if>
 
         <xacro:if value="${kinematics == 'ackermann'}">
-            <xacro:fixed_wheel prefix="${prefix}rear_left_" parent="${prefix}base_link4" reflect="false" hq="${hq}">
+            <xacro:fixed_wheel prefix="${prefix}rear_left_" parent="${prefix}base_link" reflect="false" hq="${hq}">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
 
@@ -137,6 +137,33 @@
         <xacro:sensor_sick_microscan3 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" prefix_topic="rear_laser" gpu="${gpu}">
             <origin xyz="-0.64555 -0.39985 0.16608" rpy="${PI} 0 -${135*PI/180}"/>
         </xacro:sensor_sick_microscan3>
+
+        <xacro:macro name="ros2_joint" params="interface jmin jmax prefix name">
+          <joint name="${prefix}${name}">
+            <command_interface name="${interface}">
+              <param name="min">${jmin}</param>
+              <param name="max">${jmax}</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <state_interface name="effort"/>
+          </joint>
+        </xacro:macro>
+        <ros2_control name="GazeboSystem" type="system">
+          <hardware>
+              <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+          </hardware>
+
+          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_motor_wheel_joint"/>
+          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_motor_wheel_joint"/>
+          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_left_motor_wheel_joint"/>
+          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="rear_right_motor_wheel_joint"/>
+
+          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_left_wheel_joint"/>
+          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_right_wheel_joint"/>
+          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="rear_left_wheel_joint"/>
+          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="rear_right_wheel_joint"/>
+        </ros2_control>
         
     </xacro:macro>
 
