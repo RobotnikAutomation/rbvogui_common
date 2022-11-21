@@ -34,18 +34,15 @@
 
     <link name="${prefix}wheel">
       <visual>
-        <material name="dark-gray">
-          <color rgba="0.25 0.25 0.25 1.0"/>
-        </material>
         <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
-          <origin xyz="0 0 0" rpy="0 0 0" />
+          <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
           <geometry>
             <xacro:if value="${reflect}">
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />
+              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl_color.dae" />
             </xacro:if>
             <xacro:unless value="${reflect}">
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />
+              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl_color.dae" />
             </xacro:unless>
           </geometry>
         </xacro:if>
@@ -72,6 +69,6 @@
     
     <!-- GAZEBO PARAMETERS -->
     <xacro:gazebo_rubber_tire_physics name="${prefix}wheel" />
-    <xacro:gazebo_rubber_tire_material name="${prefix}wheel" />
+    <!--xacro:gazebo_rubber_tire_material name="${prefix}wheel" /-->
   </xacro:macro>
 </robot>
