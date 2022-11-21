@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model
+   href="http://download.ros.org/schema/package_format3.xsd"
+   schematypens="http://www.w3.org/2001/XMLSchema"?>
+
+<package format="3">
+  <name>rbvogui_navigation</name>
+  <version>0.9.0</version>
+  <description>Navigation for Robotnik RB Vogui Robot</description>
+  <maintainer email="rmartin@robotnik.es">Rafael Martin</maintainer>
+
+  <license>BSD-2-Clause</license>
+
+  <url type="website">https://robotnik.eu/products/mobile-robots/rb-vogui-en</url>
+  <url type="bugtracker">https://github.com/RobotnikAutomation/rbvogui_common/issues</url>
+  <url type="repository">https://github.com/RobotnikAutomation/rbvogui_common</url>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>nav2_common</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
