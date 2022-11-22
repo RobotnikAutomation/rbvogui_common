@@ -96,9 +96,13 @@
         </xacro:sensor_ublox>
         -->
         <!-- 2d laser -->
-        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="/$(arg robot_id)/front_laser">
-            <origin xyz="0.53 0.0 -0.0245" rpy="${PI} 0 0"/> <!-- Verificar X -->
-        </xacro:sensor_sick_tim551>
+        <xacro:sensor_sick_s300 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/$(arg robot_id)/front_laser">
+          <origin xyz="0.53 0.33 0.1245" rpy="${PI} 0 ${PI/4}"/>
+        </xacro:sensor_sick_s300>
+
+        <xacro:sensor_sick_s300 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/$(arg robot_id)/rear_laser">
+          <origin xyz="-0.53 -0.33 0.1245" rpy="${PI} 0 ${-PI*3/4}"/>
+        </xacro:sensor_sick_s300>
 
         <!-- 3D Laser
         <xacro:sensor_rslidar_16 prefix="${prefix}top_3d_laser" parent="${prefix}chassis_link" prefix_topic="top_3d_laser" gpu="${gpu}">
