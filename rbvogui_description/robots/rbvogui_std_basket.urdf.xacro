@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+
+<!-- RBVogui v3.0 -->
+<robot name="rbvogui" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <!-- ***************** -->
+    <!-- Imported elements -->
+    <!-- ***************** -->
+
+    <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+    <!-- Import rbvogui base elements-->
+    <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base.urdf.xacro" />
+
+    <!-- Import rbvogui wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/motor_wheel.urdf.xacro" />
+
+    <!-- Import rbvogui fix wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/fixed_wheel.urdf.xacro" />
+
+    <!-- Import all available sensors -->
+    <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps_mast.urdf.xacro" /> 
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/basket.urdf.xacro" />
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <xacro:property name="deg2rad" value="0.01745329251"/>
+
+    <!-- Wheel parameters -->
+    <xacro:property name="wheel_offset_x" value="0.368" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+    <xacro:property name="wheel_offset_y" value="0.235" />
+    <xacro:property name="wheel_offset_z" value="0.0" />
+
+    <!-- Flag to select the high or low quality model -->
+    <xacro:property name="hq" value="true" />
+    <xacro:property name="publish_bf" value="true" />
+
+    <xacro:arg name="prefix" default="robot_" />
+    <xacro:arg name="gpu" default="true" />
+    <xacro:arg name="kinematics" default="omni" />
+
+
+
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics launch_arm arm_manufacturer arm_model load_kinematics_file
+                                        launch_gripper gripper_manufacturer gripper_model launch_lift lift_manufacturer lift_model gpu">
+
+        <!-- ***************   -->
+        <!-- Robots Elements -->
+        <!-- *************** -->
+
+        <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+
+        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
+
+        <xacro:motor_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="false" hq="true">
+            <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+        </xacro:motor_wheel>
+
+        <xacro:motor_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="true" hq="true">
+            <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+        </xacro:motor_wheel>
+
+        <xacro:if value="${kinematics == 'omni'}">
+            <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:motor_wheel>
+
+            <xacro:motor_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:motor_wheel>
+        </xacro:if>
+
+        <xacro:if value="${kinematics == 'ackermann'}">
+            <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:fixed_wheel>
+
+            <xacro:fixed_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:fixed_wheel>
+        </xacro:if>
+
+        <xacro:structure_basket prefix="${prefix}" parent="${prefix}chassis_link">
+            <origin xyz="0.068 0 0.257" rpy="0 0 0"/>
+        </xacro:structure_basket>
+
+        <!-- SENSORS see robotnik_sensors for the specific configuration -->
+
+        <!-- IMU -->
+        <xacro:sensor_vectornav prefix="${prefix}imu" parent="${prefix}chassis_link">
+            <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
+        </xacro:sensor_vectornav>
+
+        <!-- Front Camera -->
+        <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
+            <origin xyz="0.46462 0.0 0.18258" rpy="0 0 0"/>
+        </xacro:sensor_orbbec_astra>
+
+        <!-- GPS -->
+        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link" use_mast="false">
+            <origin xyz="0.325 -0.121 0.9225" rpy="0 0 0"/>
+        </xacro:sensor_ublox>
+
+        <!-- 2d laser -->
+        <xacro:sensor_sick_tim551 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" min_angle="${-PI/2}" max_angle="${PI/2}" prefix_topic="front_laser">
+            <origin xyz="0.53 0.0 -0.0245" rpy="${PI} 0 0"/>
+        </xacro:sensor_sick_tim551>
+
+        <!-- 3D Laser -->
+        <xacro:sensor_rs_bpearl prefix="${prefix}front_3d_laser" parent="${prefix}chassis_link" prefix_topic="top_3d_laser" range_min="0.1" range_max="90" hfov="360" samples="1200" vfov="90.0" lasers="32" fps="15" gpu="${gpu}">
+            <origin xyz="0.375 0 0.890" rpy="0 ${PI} 0"/>
+        </xacro:sensor_rs_bpearl>
+
+
+    </xacro:macro>
+
+    <!-- Gazebo ros control pluggins -->
+    <xacro:ros_control/>
+
+    <xacro:rbvogui prefix="$(arg prefix)" kinematics="$(arg kinematics)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
+                   launch_arm="$(arg launch_arm)" arm_manufacturer="$(arg arm_manufacturer)" arm_model="$(arg arm_model)"
+                   launch_gripper="$(arg launch_gripper)" gripper_manufacturer="$(arg gripper_manufacturer)" gripper_model="$(arg gripper_model)"
+                   launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" />
+
+</robot>
