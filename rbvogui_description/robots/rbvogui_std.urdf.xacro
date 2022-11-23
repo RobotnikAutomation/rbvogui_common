@@ -93,7 +93,7 @@
         </xacro:sensor_orbbec_astra>
 
         <!-- GPS -->
-        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link">
+        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link" use_mast="true">
             <origin xyz="-0.3875 0.34553 0.3965" rpy="0 0 0"/>
         </xacro:sensor_ublox>
 

@@ -161,7 +161,7 @@
         </xacro:sensor_sick_microscan3>
 
         <!-- GPS -->
-        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link">
+        <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link" use_mast="true">
             <origin xyz="-0.472 0.4 0.456" rpy="0 0 0"/>
         </xacro:sensor_ublox>
 
