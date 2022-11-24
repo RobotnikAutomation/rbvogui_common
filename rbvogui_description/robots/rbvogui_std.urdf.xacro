@@ -85,11 +85,11 @@
             <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
         </xacro:sensor_vectornav>
         
-        <!-- Front Camera 
-        <xacro:sensor_orbbec_astra prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link">
+        <!-- Front Camera -->
+        <xacro:sensor_intel_d435 prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link" prefix_topic="/$(arg robot_id)/front_rgbd_camera" use_nominal_extrinsics="true">
             <origin xyz="0.46462 0.0 0.18258" rpy="0 0 0"/>
-        </xacro:sensor_orbbec_astra>
-        -->
+        </xacro:sensor_intel_d435>
+        
         <!-- GPS 
         <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link">
             <origin xyz="-0.3875 0.34553 0.3965" rpy="0 0 0"/>
@@ -97,11 +97,11 @@
         -->
         <!-- 2d laser -->
         <xacro:sensor_sick_s300 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/$(arg robot_id)/front_laser">
-          <origin xyz="0.53 0.33 0.1245" rpy="${PI} 0 ${PI/4}"/>
+          <origin xyz="0.53 0.33 0.1145" rpy="${PI} 0 ${PI/4}"/>
         </xacro:sensor_sick_s300>
 
         <xacro:sensor_sick_s300 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/$(arg robot_id)/rear_laser">
-          <origin xyz="-0.53 -0.33 0.1245" rpy="${PI} 0 ${-PI*3/4}"/>
+          <origin xyz="-0.53 -0.33 0.1145" rpy="${PI} 0 ${-PI*3/4}"/>
         </xacro:sensor_sick_s300>
 
         <!-- 3D Laser

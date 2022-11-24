@@ -42,22 +42,19 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.stl"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis_color.dae"/>
           </geometry>
         </xacro:if>
         <xacro:unless value="${hq}">
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.stl"/>
+            <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis_color.dae"/>
           </geometry>
         </xacro:unless>
-        <material name="darkgrey">
-          <color rgba="0.1 0.1 0.1 1"/>
-        </material>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0 " />
         <geometry>
-          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis.stl"/>
+          <mesh filename="package://rbvogui_description/meshes/bases/rbvogui_chassis_color.dae"/>
         </geometry>
       </collision>
     </link>
@@ -178,7 +175,7 @@
     </link>
 
     <xacro:gazebo_color_base_link prefix="${prefix}"/>
-    <xacro:gazebo_color_chassis_link prefix="${prefix}"/>
+    <!--xacro:gazebo_color_chassis_link prefix="${prefix}"/-->
     <xacro:gazebo_color_battery_link prefix="${prefix}"/>
     <xacro:gazebo_color_contactors_link prefix="${prefix}"/>
     <xacro:gazebo_color_logo_link prefix="${prefix}"/>

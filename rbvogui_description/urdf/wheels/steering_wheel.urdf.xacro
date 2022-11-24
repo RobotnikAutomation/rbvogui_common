@@ -42,7 +42,7 @@
             <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
           </xacro:unless>
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
+            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame_stl_color.dae" />
           </geometry>
         </xacro:if>
 
@@ -55,7 +55,7 @@
             <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
           </xacro:unless>
           <geometry>
-            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
+            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame_stl_color.dae" />
           </geometry>
         </xacro:unless>
 
@@ -72,7 +72,7 @@
           <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
         </xacro:unless>
         <geometry>
-          <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
+          <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame_stl_color.dae" />
         </geometry>        
       </collision>
 
@@ -89,7 +89,7 @@
     </link>
 
     <xacro:gazebo_steering_frame_physics name="${prefix}base_wheel"/>
-    <xacro:gazebo_steering_frame_material name="${prefix}base_wheel"/>
+    <!--xacro:gazebo_steering_frame_material name="${prefix}base_wheel"/-->
 
     <xacro:wheel prefix="${prefix}" parent="${prefix}base_wheel" reflect="${reflect}" hq="${hq}">
         <origin xyz="0 0 0" rpy="0 0 0"/>
