@@ -30,12 +30,31 @@ from ament_index_python.packages import get_package_share_directory
 
 from robotnik_common.launch import RewrittenYaml
 
+# Environment variables
+#  USE_SIM_TIME: Use simulation (Gazebo) clock if true
+#  NAMESPACE: Namespace of the node stack.
+#  ROBOT_ID: Frame id of the robot. (e.g. vectornav_link).
+#  CONTROLLERS_FILE: Path to the controllers.yaml file.
+#  ROBOT_DESCRIPTION: Name of the robot description file.
+#  ROBOT_DESCRIPTION_PATH: Path to the robot description file.
+
 def read_params(ld : launch.LaunchDescription):
+    environment = launch.substitutions.LaunchConfiguration('environment')
     use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time')
-    controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
+    namespace = launch.substitutions.LaunchConfiguration('namespace')
     robot_id = launch.substitutions.LaunchConfiguration('robot_id')
+    robot_description = launch.substitutions.LaunchConfiguration('robot_description')
+    robot_description_path = launch.substitutions.LaunchConfiguration('robot_description_path')
+    controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
 
     # Declare the launch options
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='environment',
+        description='Read params from environment variables.',
+        choices=['true', 'false'],
+        default_value='true')
+    )
+
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='use_sim_time',
         description='Use simulation (Gazebo) clock if true',
@@ -44,35 +63,85 @@ def read_params(ld : launch.LaunchDescription):
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='controllers_file',
-        description='ROS 2 controller file.',
-        default_value=[get_package_share_directory('rbvogui_gazebo'), '/config/base_controller.yaml'])
+        name='robot_id',
+        description='Frame id of the sensor. (e.g. robot).',
+        default_value='robot')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='robot_id',
-        description='Frame id of the sensor. (e.g. vectornav_link).',
-        default_value='vectornav_link')
+        name='namespace',
+        description='Namespace of the nodes.',
+        default_value=robot_id)
     )
 
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='robot_description',
+        description='Robot description.',
+        default_value='rbvogui_std.urdf.xacro')
+    )
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='robot_description_path',
+        description='Path to the robot description file.',
+        default_value=[get_package_share_directory('rbvogui_description'), '/robots/', robot_description])
+    )
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='controllers_file',
+        description='ROS 2 controller file.',
+        default_value=[get_package_share_directory('rbvogui_description'), '/test/empty.yaml'])
+    )
+    
     # Parse the launch options
-    return {
+    ret = {}
+
+    if environment == 'false':
+        ret = {
         'use_sim_time': use_sim_time,
-        'robot_description_path': os.path.join(get_package_share_directory('rbvogui_description'), 'robots', 'rbvogui_std.urdf.xacro'),
+        'namespace': namespace,
         'robot_id': robot_id,
         'controllers_file': controllers_file,
-    }
+        'robot_description_path': robot_description_path,
+        }
+    
+    else:
+        if 'USE_SIM_TIME' in os.environ:
+            ret['use_sim_time'] = os.environ['USE_SIM_TIME']
+        else: ret['use_sim_time'] = use_sim_time
+
+        if 'ROBOT_ID' in os.environ:
+            ret['robot_id'] = os.environ['ROBOT_ID']
+        else: ret['robot_id'] = robot_id
+
+        if 'NAMESPACE' in os.environ:
+            ret['namespace'] = os.environ['NAMESPACE']
+        elif 'ROBOT_ID' in os.environ:
+            ret['namespace'] = os.environ['ROBOT_ID']
+        else:  ret['namespace'] = namespace
+
+        if 'CONTROLLERS_FILE' in os.environ:
+            ret['controllers_file'] = os.environ['CONTROLLERS_FILE']
+        else: ret['controllers_file'] = controllers_file
+
+        if 'ROBOT_DESCRIPTION_PATH' in os.environ:
+            ret['robot_description_path'] = os.environ['ROBOT_DESCRIPTION_PATH']
+        elif 'ROBOT_DESCRIPTION' in os.environ:
+            ret['robot_description_path'] = [get_package_share_directory('rbvogui_description'), '/robots/', os.environ['ROBOT_DESCRIPTION']]
+        else: ret['robot_description_path'] = robot_description_path
+
+    return ret
+
 
 def generate_launch_description():
 
     ld = launch.LaunchDescription()
 
     params = read_params(ld)
-
+    
     config_file_rewritten = RewrittenYaml(
         source_file=params['controllers_file'],
         param_rewrites={},
-        root_key=[params['robot_id'],],
+        root_key=[params['namespace'],],
         convert_types=True,
     )
 
@@ -118,6 +187,7 @@ def generate_launch_description():
         }],
     )
 
+    ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
     ld.add_action(robot_state_publisher)
 
     return ld
