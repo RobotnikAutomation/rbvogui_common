@@ -3,7 +3,7 @@ project(rbvogui_navigation)
 
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY config launch rviz
+install(DIRECTORY maps config launch rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
