@@ -8,6 +8,9 @@ amcl:
     robot_model_type: "nav2_amcl::OmniMotionModel"
     scan_topic: /robot/front_laser/scan
 
+    set_initial_pose: true
+    initial_pose: {x: 0.0, y: 0.0, z: 0.0, yaw: 0.0}
+
     alpha1: 0.2
     alpha2: 0.2
     alpha3: 0.2
