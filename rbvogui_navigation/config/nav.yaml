@@ -3,7 +3,7 @@ bt_navigator:
     use_sim_time: True
     global_frame: robot_map
     robot_base_frame: robot_base_link
-    odom_topic: /robot/base_controller/odom
+    odom_topic: /robot/robotnik_base_controller/odom
     bt_loop_duration: 10
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
@@ -82,11 +82,6 @@ controller_server:
       required_movement_radius: 0.5
       movement_time_allowance: 10.0
     # Goal checker parameters
-    #precise_goal_checker:
-    #  plugin: "nav2_controller::SimpleGoalChecker"
-    #  xy_goal_tolerance: 0.25
-    #  yaw_goal_tolerance: 0.25
-    #  stateful: True
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
@@ -99,19 +94,19 @@ controller_server:
       min_vel_x: 0.0
       min_vel_y: 0.0
       max_vel_x: 1.5
-      max_vel_y: 1.5
+      max_vel_y: 0.0
       max_vel_theta: 1.3
       min_speed_xy: 0.0
       max_speed_xy: 1.5
-      min_speed_theta: 0.0
+      min_speed_theta: -1.3
       # Add high threshold velocity for turtlebot 3 issue.
       # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
-      acc_lim_x: 2.5
-      acc_lim_y: 2.5
-      acc_lim_theta: 1.2
-      decel_lim_x: -2.5
-      decel_lim_y: -2.5
-      decel_lim_theta: -3.2
+      acc_lim_x: 0.5
+      acc_lim_y: 0.0
+      acc_lim_theta: 0.9
+      decel_lim_x: -0.5
+      decel_lim_y: 0.0
+      decel_lim_theta: -0.9
       vx_samples: 20
       vy_samples: 5
       vtheta_samples: 20
@@ -147,12 +142,13 @@ local_costmap:
       width: 8
       height: 8
       resolution: 0.05
-      robot_radius: 0.60
+      footprint: "[[0.65, 0.42], [0.65, -0.42], [-0.65, -0.42], [-0.65, 0.42]]"
+      robot_radius: 0.45
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 1.75
+        inflation_radius: 1.25
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -164,8 +160,7 @@ local_costmap:
         mark_threshold: 0
         observation_sources: front_right_scan rear_left_scan
         front_right_scan:
-          topic: /robot/front_laser/scan
-          sensor_frame: robot_front_laser_link
+          topic: /front_laser/scan
           observation_persistence: 2.0
           expected_update_rate: 20.0
           data_type: "LaserScan"
@@ -179,8 +174,7 @@ local_costmap:
           raytrace_max_range: 11.0
           raytrace_min_range: 0.0
         rear_left_scan:
-          topic: /robot/rear_laser/scan
-          sensor_frame: robot_rear_laser_link
+          topic: /rear_laser/scan
           observation_persistence: 2.0
           expected_update_rate: 20.0
           data_type: "LaserScan"
@@ -206,7 +200,8 @@ global_costmap:
       global_frame: robot_map
       robot_base_frame: robot_base_link
       use_sim_time: True
-      robot_radius: 0.60
+      footprint: "[[0.65, 0.42], [0.65, -0.42], [-0.65, -0.42], [-0.65, 0.42]]"
+      robot_radius: 0.50
       resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
@@ -218,8 +213,7 @@ global_costmap:
         combination_method: 1
         observation_sources: front_right_scan rear_left_scan
         front_right_scan:
-          topic: /robot/front_laser/scan
-          sensor_frame: robot_front_laser_link
+          topic: /front_laser/scan
           observation_persistence: 2.0
           expected_update_rate: 20.0
           data_type: "LaserScan"
@@ -233,8 +227,7 @@ global_costmap:
           raytrace_max_range: 11.0
           raytrace_min_range: 0.0
         rear_left_scan:
-          topic: /robot/rear_laser/scan
-          sensor_frame: robot_rear_laser_link
+          topic: /rear_laser/scan
           observation_persistence: 2.0
           expected_update_rate: 20.0
           data_type: "LaserScan"
@@ -253,7 +246,7 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 2.0
+        inflation_radius: 1.0
       always_send_full_costmap: True
 
 planner_server:
@@ -314,14 +307,14 @@ waypoint_follower:
 velocity_smoother:
   ros__parameters:
     use_sim_time: True
-    smoothing_frequency: 20.0
+    smoothing_frequency: 50.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
     max_velocity: [1.0, 1.0, 1.0]
     min_velocity: [-1.0, -1.0, -1.0]
-    max_accel: [1.5, 1.5, 3.2]
-    max_decel: [-1.5, -1.5, -3.2]
-    odom_topic: /robot/base_controller/odom
+    max_accel: [0.9, 0.9, 1.2]
+    max_decel: [-0.9, -0.9, -1.2]
+    odom_topic: /robot/robotnik_base_controller/odom
     odom_duration: 0.1
-    deadband_velocity: [0.0, 0.0, 0.0]
+    deadband_velocity: [0.01, 0.01, 0.05]
     velocity_timeout: 1.0

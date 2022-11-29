@@ -124,7 +124,11 @@ def generate_launch_description():
                        'waypoint_follower',
                        'velocity_smoother']
 
-    remappings = [('/odom', '/robot/robotnik_base_controller/odom'),]
+    remappings = [
+        ('/odom', '/robot/robotnik_base_controller/odom'),
+        ('/front_laser/scan', ['/', params['namespace'], '/front_laser/scan']),
+        ('/rear_laser/scan',  ['/', params['namespace'], '/rear_laser/scan'])
+    ]
 
     configured_params = RewrittenYaml(
             source_file=params['nav_config_file'],
@@ -209,7 +213,7 @@ def generate_launch_description():
                     {'use_sim_time': params['use_sim_time']},
                     configured_params],
                 remappings=remappings +
-                        [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', '/robot/robotnik_base_controller/cmd_vel')]),
+                        [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', ['/',params['namespace'], '/robotnik_base_controller/cmd_vel'])]),
             launch_ros.actions.Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
