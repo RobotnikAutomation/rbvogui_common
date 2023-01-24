@@ -2,11 +2,10 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:include filename="$(find rbvogui_description)/urdf/wheels/wheel.gazebo.xacro" />
-  <xacro:include filename="$(find rbvogui_description)/urdf/wheels/rubber_wheel.urdf.xacro" />
 
   <xacro:property name="M_PI" value="3.1415926535897931" />
   <!-- Wheels -->
-  <xacro:property name="wheel_radius" value="0.1175" /> <!-- teorically D: 0.235-->
+  <xacro:property name="wheel_radius" value="0.110" />
   <xacro:property name="wheel_width" value="0.110" />
   <xacro:property name="wheel_mass" value="5.0" />
   <!-- in kg-->
@@ -28,7 +27,6 @@
   </xacro:macro>
 
   <xacro:macro name="motor_wheel" params="prefix parent *origin reflect hq">
-
     <!-- TODO: check reflect parameter -->
     <!--MOTOR WHEEL -->
     <joint name="${prefix}motor_wheel_joint" type="revolute">
@@ -41,6 +39,7 @@
       <joint_properties damping="${steer_joint_damping}" friction="${steer_joint_friction}"/>
     </joint>
 
+
     <transmission name="${prefix}motor_wheel_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}motor_wheel_joint">
@@ -51,74 +50,62 @@
         <mechanicalReduction>${motor_wheel_mechanical_reduction}</mechanicalReduction>
       </actuator>
     </transmission>
-
     <link name="${prefix}motor_wheel">
       <visual>
-
-         <!-- HIGH RESOLUTION WHEELS -->
+        <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
-          <xacro:if value="${reflect}">
-            <origin xyz="0 0 0.0" rpy="0 0 0" />
-          </xacro:if>
-          <xacro:unless value="${reflect}">
-            <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
-          </xacro:unless>
-            <geometry>
-              <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
-            </geometry>
-        </xacro:if>
-
-          <!-- LOW RESOLUTION WHEELS -->
-        <xacro:unless value="${hq}">
-          <xacro:if value="${reflect}">
-            <origin xyz="0 0 0.0" rpy="0 0 0" />
-          </xacro:if>
-          <xacro:unless value="${reflect}">
-            <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
-          </xacro:unless>
+		  <xacro:if value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 0" />
+		  </xacro:if>
+		  <xacro:unless value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
+		  </xacro:unless>
           <geometry>
             <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
           </geometry>
+        </xacro:if>
+        <!-- LOW RESOLUTION WHEELS -->
+        <xacro:unless value="${hq}">
+          <xacro:if value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 0" />
+		  </xacro:if>
+		  <xacro:unless value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
+		  </xacro:unless>
+          <geometry>
+            <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.dae" />
+          </geometry>
         </xacro:unless>
-
         <material name="red2">
           <color rgba="0.9 0.1 0.1 1"/>     
         </material>
-      
       </visual>
 
       <collision>
-        <xacro:if value="${reflect}">
-          <origin xyz="0 0 0.0" rpy="0 0 0" />
-        </xacro:if>
-        <xacro:unless value="${reflect}">
-          <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
-        </xacro:unless>
-        <geometry>
-          <mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.stl" />
-        </geometry>        
+		  <xacro:if value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 0" />
+		  </xacro:if>
+		  <xacro:unless value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 ${M_PI}" />
+		  </xacro:unless>
+		  <geometry>
+			<mesh filename="package://rbvogui_description/meshes/wheels/mw_frame.dae" />
+		  </geometry>        
       </collision>
-
       <inertial>
         <mass value="4" />
-          <xacro:if value="${reflect}">
-            <origin xyz="0 0 0.0" rpy="0 0 0"/>
-          </xacro:if>
-        <xacro:unless value="${reflect}">
-          <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}"/>
-        </xacro:unless>
-        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
+        <xacro:if value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 0"/>
+		</xacro:if>
+		<xacro:unless value="${reflect}">
+			<origin xyz="0 0 0.0" rpy="0 0 ${M_PI}"/>
+		</xacro:unless>
+        <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
       </inertial>
-
     </link>
 
-    <xacro:gazebo_color_wheel_frame prefix="${prefix}"/>
 
-    <xacro:wheel prefix="${prefix}" parent="${prefix}motor_wheel" reflect="${reflect}" hq="${hq}">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </xacro:wheel>
-
-    <!--WHEEL TIRE 
+    <!--WHEEL TIRE -->
     <joint name="${prefix}wheel_joint" type="continuous">
       <parent link="${prefix}motor_wheel"/>
       <child link="${prefix}wheel"/>
@@ -147,7 +134,7 @@
 
     <link name="${prefix}wheel">
       <visual>
-   
+        <!-- HIGH RESOLUTION WHEELS -->
         <xacro:if value="${hq}">
 			
 		  <xacro:if value="${reflect}">
@@ -160,7 +147,7 @@
               <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />        
           </geometry>
         </xacro:if>
-
+        <!-- LOW RESOLUTION WHEELS -->
         <xacro:unless value="${hq}">
            <xacro:if value="${reflect}">
 			<origin xyz="0 0 0" rpy="0 0 0" />
@@ -189,20 +176,19 @@
       </collision>
       <inertial>
         <mass value="${wheel_mass}" />
-        
         <xacro:if value="${reflect}">
 			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
 		</xacro:if>
 		<xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
-		</xacro:unless> 
-        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
+		</xacro:unless>
+        <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
       </inertial>
     </link>
 
     <xacro:gazebo_color_wheel prefix="${prefix}"/>
     <xacro:gazebo_color_steer_wheel prefix="${prefix}"/>
--->
+
   </xacro:macro>
 
 </robot>
