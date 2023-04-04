@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot name="rs_helios_16p_support" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="rs_helios_16p_support" params="prefix parent *origin">
+
+	  <joint name="${prefix}_base_joint" type="fixed">
+	    <xacro:insert_block name="origin"/>
+	    <parent link="${parent}"/>
+	    <child link="${prefix}_base_link"/>
+	  </joint>
+	  <link name="${prefix}_base_link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+		  <material name="darkgrey">
+            <color rgba="0.1 0.1 0.1 1"/>
+          </material>
+	      <geometry>
+	        <mesh filename="package://rbvogui_description/meshes/structures/rs_helios_16p_support.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+	        <mesh filename="package://rbvogui_description/meshes/structures/rs_helios_16p_support.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </collision>
+	  </link>
+  </xacro:macro>
+
+</robot>
