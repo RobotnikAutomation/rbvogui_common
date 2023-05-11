@@ -107,7 +107,7 @@
         <xacro:unless value="${reflect}">
           <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}"/>
         </xacro:unless>
-        <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
+        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
       </inertial>
 
     </link>
@@ -196,7 +196,7 @@
 		<xacro:unless value="${reflect}">
 			<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
 		</xacro:unless> 
-        <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
+        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
       </inertial>
     </link>
 
