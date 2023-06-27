@@ -3,7 +3,7 @@
 
   <xacro:include filename="$(find rbvogui_description)/urdf/wheels/wheel.gazebo.xacro" />
 
-  <xacro:property name="wheel_radius" value="0.1165" /> 
+  <xacro:property name="wheel_radius" value="0.1165" />
 
   <xacro:macro name="wheel" params="prefix parent *origin reflect hq">
     <xacro:macro name="cylinder_inertia" params="m r h">
@@ -27,7 +27,12 @@
       <parent link="${parent}"/>
       <child link="${prefix}wheel"/>
       <xacro:insert_block name="origin" />
-      <axis xyz="0 1 0" rpy="0 0 0" />
+      <xacro:if value="${reflect}">
+        <axis xyz="0 1 0" rpy="0 0 0" />
+      </xacro:if>
+      <xacro:unless value="${reflect}">
+        <axis xyz="0 -1 0" rpy="0 0 0" />
+      </xacro:unless>
       <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
       <dynamics damping="${wheel_joint_damping}" friction="${wheel_joint_friction}"/>
     </joint>
@@ -66,7 +71,7 @@
         <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
       </inertial>
     </link>
-    
+
     <!-- GAZEBO PARAMETERS -->
     <xacro:gazebo_rubber_tire_physics name="${prefix}wheel" />
     <!--xacro:gazebo_rubber_tire_material name="${prefix}wheel" /-->
