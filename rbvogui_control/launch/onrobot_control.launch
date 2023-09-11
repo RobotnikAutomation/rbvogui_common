@@ -19,4 +19,15 @@
 
     </group>
 
+    <group if="$(eval arg('gripper_model') == '2fg7')">
+
+        <node name="$(arg gripper_prefix)_action_controller" pkg="controller_manager" type="spawner" output="screen" 
+        args="
+            gripper
+        "
+        />
+
+    </group>
+
+
 </launch>
