@@ -38,7 +38,22 @@
     <xacro:arg name="prefix" default="robot_" />
     <xacro:arg name="gpu" default="true" />
     <xacro:arg name="kinematics" default="omni" />
+    <xacro:arg name="load_kinematics_file" default="false" />
 
+    <!-- Arm configuration -->
+    <xacro:arg name="launch_arm" default="false" />
+    <xacro:arg name="arm_manufacturer" default="none" />
+    <xacro:arg name="arm_model" default="none" />
+
+    <!-- Gripper configuration -->
+    <xacro:arg name="launch_gripper" default="false" />
+    <xacro:arg name="gripper_manufacturer" default="none" />
+    <xacro:arg name="gripper_model" default="none" />
+
+    <!-- Lift configuration -->
+    <xacro:arg name="launch_lift" default="false" />
+    <xacro:arg name="lift_manufacturer" default="none" />
+    <xacro:arg name="lift_model" default="none" />
 
 
     <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics launch_arm arm_manufacturer arm_model load_kinematics_file
