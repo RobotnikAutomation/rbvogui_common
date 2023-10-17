@@ -75,7 +75,7 @@
             <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
         </xacro:motor_wheel>
 
-        <xacro:if value="${kinematics == 'omni'}">
+        <xacro:if value="${kinematics == 'ackermann_4s'}">
             <xacro:motor_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:motor_wheel>
@@ -85,7 +85,7 @@
             </xacro:motor_wheel>
         </xacro:if>
 
-        <xacro:if value="${kinematics == 'ackermann'}">
+        <xacro:if value="${kinematics == 'ackermann_2s'}">
             <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
