@@ -1,0 +1,344 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="cart">
+
+    <xacro:include filename="$(find rbvogui_description)/urdf/inertia.urdf.xacro" />
+
+  <!-- Math -->
+  <xacro:property name="PI" value="3.141592" />
+
+  <!-- Size cart -->
+  <xacro:property name="cart_length" value="1.25" />
+  <xacro:property name="cart_width" value="1.098" />
+  <xacro:property name="cart_height" value="0.25" />
+  <xacro:property name="cart_mass" value="100" />
+
+  <!-- Size wheels -->
+  <xacro:property name="wheels_radius" value="0.20" />
+  <xacro:property name="wheels_width" value="0.08" />
+  <xacro:property name="wheels_center_dist_x" value="0.41" />
+
+  <!-- Size front wheel-->
+  <xacro:property name="front_wheel_radius" value="0.08" />
+  <xacro:property name="front_wheel_width" value="0.05" />
+  <xacro:property name="front_wheel_center_dist_x" value="0.321" />
+  <xacro:property name="front_wheel_center_dist_y" value="0.245"/>
+  
+
+  <!-- Support front wheel cart -->
+  <xacro:property name="support_length" value="${wheels_radius - front_wheel_radius}" />
+  <xacro:property name="support_width" value="0.03" />
+
+  <!-- Hitch -->
+  <xacro:property name="hitch_length" value="0.5" />
+  <xacro:property name="hitch_width" value="0.05" />
+
+
+  <xacro:macro name="cart" params="prefix parent">
+
+    <!-- Robot to Hitch -->
+    <link name="${prefix}hitch">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <xacro:solid_cuboid_inertia w="${hitch_length}" d="${hitch_width}" h="${hitch_width}" m="1"/>
+      </inertial>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <box size="${hitch_length} ${hitch_width} ${hitch_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}robot" type="revolute">
+      <origin xyz="-0.6 0 ${wheels_radius + cart_height/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}hitch"/>
+      <axis xyz="0.0 0.0 1.0"/>
+      <limit effort="1000" velocity="2000" lower="${-PI/6}" upper="${PI/6}"/>
+      <dynamics damping="1.0" friction="20.0"/>
+    </joint>
+
+    <transmission name="${prefix}robot_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}robot">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}robot_act">
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <!-- Hitch to Body -->
+    <link name="${prefix}body">
+      <inertial>
+        <mass value="${cart_mass}" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="${(cart_mass*(cart_width*cart_width+cart_height*cart_height))/12}" ixy="0" ixz="0" 
+                  iyy="${(cart_mass*(cart_length*cart_length+cart_height*cart_height))/12}" iyz="0" 
+                  izz="${(cart_mass*(cart_length*cart_length+cart_width*cart_width))/12}" />
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 ${-cart_height/2}" rpy="${PI/2} 0.0 ${PI}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/cart.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <box size="${cart_length} ${cart_width} ${cart_height}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}robot_link" type="fixed">
+      <origin xyz="${-cart_length/2 -hitch_length/2} 0 0" rpy="0.0 0.0 0.0"/>
+      <parent link="${prefix}hitch"/>
+      <child link="${prefix}body"/>
+    </joint>
+
+    <!-- Left wheel -->
+    <link name="${prefix}left_wheel">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="1" r="${wheels_radius}" h="${wheels_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${wheels_radius}" length="${wheels_width}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${wheels_radius}" length="${wheels_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}body_left_wheel" type="continuous">
+      <origin xyz="${-wheels_center_dist_x} ${cart_width / 2 + wheels_width / 2} ${-cart_height/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="${prefix}body"/>
+      <child link="${prefix}left_wheel"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit effort="1000" velocity="2000"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <transmission name="${prefix}left_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}body_left_wheel">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}left_wheel_act">
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <!-- Right wheel -->
+    <link name="${prefix}right_wheel">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="1" r="${wheels_radius}" h="${wheels_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${wheels_radius}" length="${wheels_width}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${wheels_radius}" length="${wheels_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}body_right_wheel" type="continuous">
+      <origin xyz="${-wheels_center_dist_x} ${-cart_width / 2 - wheels_width / 2} ${-cart_height/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="${prefix}body"/>
+      <child link="${prefix}right_wheel"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit effort="1000" velocity="2000"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <transmission name="${prefix}right_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}body_right_wheel">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}right_wheel_act">
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <!-- Front Right Wheel support -->
+    <link name="${prefix}support_front_right_wheel">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="0 ${PI/2} 0" />
+            <xacro:solid_cuboid_inertia w="${support_length}" d="${support_width}" h="${support_width}" m="1"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${PI/2} 0.0"/>
+        <geometry>
+          <box size="${support_length} ${support_width} ${support_width}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${PI/2} 0.0"/>
+        <geometry>
+          <box size="${support_length} ${support_width} ${support_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}body_front_right_wheel_support" type="continuous">
+      <origin xyz="${front_wheel_center_dist_x} ${-front_wheel_center_dist_y} ${-cart_height/2-support_length/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="${prefix}body"/>
+      <child link="${prefix}support_front_right_wheel"/>
+      <axis xyz="0.0 0.0 1.0"/>
+      <limit effort="1000" velocity="2000"/>
+      <dynamics damping="1.0" friction="1.0"/>
+    </joint>
+
+    <transmission name="${prefix}front_right_wheel_support_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}body_front_right_wheel_support">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}front_right_wheel_support_act">
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+    <!-- Front Left Wheel support -->
+    <link name="${prefix}support_front_left_wheel">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="0 ${PI/2} 0" />
+            <xacro:solid_cuboid_inertia w="${support_length}" d="${support_width}" h="${support_width}" m="1"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${PI/2} 0.0"/>
+        <geometry>
+          <box size="${support_length} ${support_width} ${support_width}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${PI/2} 0.0"/>
+        <geometry>
+          <box size="${support_length} ${support_width} ${support_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}body_front_left_wheel_support" type="continuous">
+      <origin xyz="${front_wheel_center_dist_x} ${front_wheel_center_dist_y} ${-cart_height/2-support_length/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="${prefix}body"/>
+      <child link="${prefix}support_front_left_wheel"/>
+      <axis xyz="0.0 0.0 1.0"/>
+      <limit effort="1000" velocity="2000"/>
+      <dynamics damping="1.0" friction="1.0"/>
+    </joint>
+
+    <transmission name="${prefix}front_left_wheel_support_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}body_front_left_wheel_support">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}front_left_wheel_support_act">
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <!-- Front Left wheel -->
+    <link name="${prefix}front_left_wheel">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="1" r="${front_wheel_radius}" h="${front_wheel_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${front_wheel_radius}" length="${front_wheel_width}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${front_wheel_radius}" length="${front_wheel_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}front_left_wheel_joint" type="continuous">
+      <origin xyz="0 0 ${-support_length/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="${prefix}support_front_left_wheel"/>
+      <child link="${prefix}front_left_wheel"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit effort="1000" velocity="2000"/>
+      <dynamics damping="1.0" friction="1.0"/>
+    </joint>
+
+    <transmission name="${prefix}front_left_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}front_left_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}front_left_wheel_act">
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <!-- Front Right wheel -->
+    <link name="${prefix}front_right_wheel">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="1" r="${front_wheel_radius}" h="${front_wheel_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${front_wheel_radius}" length="${front_wheel_width}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${front_wheel_radius}" length="${front_wheel_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}front_right_wheel_joint" type="continuous">
+      <origin xyz="0 0 ${-support_length/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="${prefix}support_front_right_wheel"/>
+      <child link="${prefix}front_right_wheel"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit effort="1000" velocity="2000"/>
+      <dynamics damping="1.0" friction="1.0"/>
+    </joint>
+
+    <transmission name="${prefix}front_right_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}front_right_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}front_right_wheel_act">
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+
+  </xacro:macro>
+
+  
+</robot>

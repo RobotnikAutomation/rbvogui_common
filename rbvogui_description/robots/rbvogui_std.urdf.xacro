@@ -23,6 +23,9 @@
     <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
     <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps_mast.urdf.xacro" /> 
 
+    <!-- Import cart -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/cart/cart.urdf.xacro" />
+
     <xacro:property name="PI" value="3.1415926535897931"/>
     <xacro:property name="deg2rad" value="0.01745329251"/>
 
@@ -55,9 +58,12 @@
     <xacro:arg name="lift_manufacturer" default="none" />
     <xacro:arg name="lift_model" default="none" />
 
+    <!-- Cart -->
+    <xacro:arg name="has_cart" default="false" />
+
 
     <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics launch_arm arm_manufacturer arm_model load_kinematics_file
-                                        launch_gripper gripper_manufacturer gripper_model launch_lift lift_manufacturer lift_model gpu">
+                                        launch_gripper gripper_manufacturer gripper_model launch_lift lift_manufacturer lift_model gpu has_cart">
 
         <!-- ***************   -->
         <!-- Robots Elements -->
@@ -123,6 +129,11 @@
         </xacro:sensor_rslidar_16>
         -->
 
+        <xacro:if value="${has_cart}">
+            <xacro:cart prefix="cart_" parent="${prefix}base_footprint">
+            </xacro:cart>
+        </xacro:if>
+
     </xacro:macro>
 
     <!-- Gazebo ros control pluggins -->
@@ -131,6 +142,6 @@
     <xacro:rbvogui prefix="$(arg prefix)" kinematics="$(arg kinematics)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
                    launch_arm="$(arg launch_arm)" arm_manufacturer="$(arg arm_manufacturer)" arm_model="$(arg arm_model)"
                    launch_gripper="$(arg launch_gripper)" gripper_manufacturer="$(arg gripper_manufacturer)" gripper_model="$(arg gripper_model)"
-                   launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" />
+                   launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" has_cart="$(arg has_cart)"/>
 
 </robot>

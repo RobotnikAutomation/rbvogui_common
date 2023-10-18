@@ -30,12 +30,15 @@
   <arg name="lift_manufacturer" default="$(optenv ROBOT_LIFT_MANUFACTURER none)"/>
   <arg name="lift_model" default="$(optenv ROBOT_LIFT_MODEL none)"/>
 
+  <!-- Cart -->
+  <arg name="has_cart" default="false"/>
+
   <group unless="$(arg robot_use_custom_xacro_path)" >
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg robot_xacro_path)$(arg robot_xacro)' 
                 prefix:=$(arg prefix) kinematics:=$(arg kinematics) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)
                 launch_arm:=$(arg launch_arm) arm_manufacturer:=$(arg arm_manufacturer) arm_model:=$(arg arm_model)
                 launch_gripper:=$(arg launch_gripper) gripper_manufacturer:=$(arg gripper_manufacturer) gripper_model:=$(arg gripper_model) 
-                launch_lift:=$(arg launch_lift) lift_manufacturer:=$(arg lift_manufacturer) lift_model:=$(arg lift_model)"/>
+                launch_lift:=$(arg launch_lift) lift_manufacturer:=$(arg lift_manufacturer) lift_model:=$(arg lift_model) has_cart:=$(arg has_cart)"/>
   </group>
 
   <group if="$(arg robot_use_custom_xacro_path)" >
@@ -43,7 +46,7 @@
                 prefix:=$(arg prefix) kinematics:=$(arg kinematics) load_kinematics_file:=$(arg load_kinematics_file) gpu:=$(arg gpu)
                 launch_arm:=$(arg launch_arm) arm_manufacturer:=$(arg arm_manufacturer) arm_model:=$(arg arm_model)
                 launch_gripper:=$(arg launch_gripper) gripper_manufacturer:=$(arg gripper_manufacturer) gripper_model:=$(arg gripper_model)
-                launch_lift:=$(arg launch_lift) lift_manufacturer:=$(arg lift_manufacturer) lift_model:=$(arg lift_model)"/>
+                launch_lift:=$(arg launch_lift) lift_manufacturer:=$(arg lift_manufacturer) lift_model:=$(arg lift_model) has_cart:=$(arg has_cart)"/>
   </group>
 
   <!-- publish tfs through the robot_state_publisher -->
