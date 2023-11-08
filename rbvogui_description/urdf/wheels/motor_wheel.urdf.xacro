@@ -102,10 +102,10 @@
       <inertial>
         <mass value="4" />
           <xacro:if value="${reflect}">
-            <origin xyz="0 0 0.0" rpy="0 0 0"/>
+            <origin xyz="0 0 0.12" rpy="0 ${M_PI/2} ${M_PI/2}"/>
           </xacro:if>
         <xacro:unless value="${reflect}">
-          <origin xyz="0 0 0.0" rpy="0 0 ${M_PI}"/>
+          <origin xyz="0 0 0.12" rpy="0 ${M_PI/2} ${3*M_PI/2}"/>
         </xacro:unless>
         <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}" />
       </inertial>
