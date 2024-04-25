@@ -1,18 +1,15 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-
-    <!-- ros control plugin -->
     <xacro:macro name="ros2_control" params="prefix">
         <gazebo>
           <plugin name="ros_control" filename="libgazebo_ros2_control.so">
-            <namespace>$(arg robot_id)</namespace>
-            <parameters>$(arg config_controllers)</parameters>
-            <!--robot_param>robot_description</robot_param-->
-            <!--robot_param_node>robot_state_publisher</robot_param_node-->
-            <!--remaping>$(find rbvogui_description)/config/remapping.yaml</remaping-->
+            <namespace>robot</namespace>
+            <robot_param>robot_description</robot_param>
+            <robot_param_node>robot_state_publisher</robot_param_node>
+            <parameters>$(find rbvogui_gazebo)/config/base_controller.yaml</parameters>
           </plugin>
         </gazebo>
-        
+
         <xacro:macro name="ros2_joint" params="interface jmin jmax prefix name">
           <joint name="${prefix}${name}">
             <command_interface name="${interface}">
@@ -24,6 +21,7 @@
             <state_interface name="effort"/>
           </joint>
         </xacro:macro>
+
         <ros2_control name="GazeboSystem" type="system">
           <hardware>
               <plugin>gazebo_ros2_control/GazeboSystem</plugin>
@@ -39,39 +37,5 @@
           <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_left_wheel_joint"/>
           <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_right_wheel_joint"/>
         </ros2_control>
-    </xacro:macro>
-
-    <xacro:macro name="omni_steering">
-        <gazebo>
-            <plugin name="omni_steering" filename="libgazebo_ros_planar_move.so">
-                <robotNamespace>/robot</robotNamespace>
-                <commandTopic>robotnik_base_control/cmd_vel</commandTopic>  
-                <odometryTopic>robotnik_base_control/odom</odometryTopic>
-                <odometryFrame>odom</odometryFrame>
-                <odometryRate>20.0</odometryRate>
-                <robotBaseFrame>base_footprint</robotBaseFrame>
-            </plugin>
-          </gazebo>
-    </xacro:macro>
-
-    <xacro:macro name="omni_drive_ackermann">
-        <gazebo>
-            <plugin name="omni_drive_ackermann" filename="libomnidrive_ackermann_plugin.so">
-                <!--<robotNamespace>/rbvogui</robotNamespace>-->
-                <!--<robotParam>robot_description</robotParam>-->
-                <broadcastTF>1</broadcastTF>
-                <wheelDiameter>0.220</wheelDiameter>
-                <wheelBase>0.858</wheelBase>
-                <trackWidth>0.454</trackWidth>
-                <wheelTorque>44.2</wheelTorque>
-                <motorWheelTorque>15.0</motorWheelTorque>            
-                <commandTopic>cmd_vel</commandTopic>  <!-- TODO: review topics -->
-                <odometryTopic>odom</odometryTopic>
-                <odometryFrame>odom</odometryFrame>
-                <odometrySource>encoder</odometrySource>
-                <robotBaseFrame>base_footprint</robotBaseFrame>
-                <updateRate>100.0</updateRate>
-            </plugin>
-        </gazebo>
     </xacro:macro>
 </robot>

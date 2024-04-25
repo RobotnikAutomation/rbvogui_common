@@ -33,9 +33,20 @@
     <xacro:property name="publish_bf" value="true" />
 
     <xacro:arg name="robot_id" default="robot" />
-    <xacro:arg name="prefix" default="$(arg robot)_" />
+    <xacro:arg name="prefix" default="$(arg robot_id)_" />
     <xacro:arg name="gpu" default="true" />
     <xacro:arg name="kinematics" default="omni" />
+
+    <xacro:arg name="load_kinematics_file" default="false" />
+    <xacro:arg name="launch_gripper" default="false" />
+    <xacro:arg name="gripper_manufacturer" default="false" />
+    <xacro:arg name="gripper_model" default="false" />
+    <xacro:arg name="launch_lift" default="false" />
+    <xacro:arg name="lift_manufacturer" default="false" />
+    <xacro:arg name="lift_model" default="false" />
+    <xacro:arg name="launch_arm" default="false" />
+    <xacro:arg name="arm_manufacturer" default="false" />
+    <xacro:arg name="arm_model" default="false" />
 
 
 
