@@ -18,7 +18,10 @@
 
     <!-- Import all available sensors -->
     <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
-    <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps_mast.urdf.xacro" /> 
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps_mast.urdf.xacro" />
+
+    <!-- Import cart -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/cart/cart.urdf.xacro" />
 
     <xacro:property name="PI" value="3.1415926535897931"/>
     <xacro:property name="deg2rad" value="0.01745329251"/>
@@ -48,10 +51,12 @@
     <xacro:arg name="arm_manufacturer" default="false" />
     <xacro:arg name="arm_model" default="false" />
 
+    <!-- Cart -->
+    <xacro:arg name="cart" default="false" />
 
 
     <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics launch_arm arm_manufacturer arm_model load_kinematics_file
-                                        launch_gripper gripper_manufacturer gripper_model launch_lift lift_manufacturer lift_model gpu">
+                                        launch_gripper gripper_manufacturer gripper_model launch_lift lift_manufacturer lift_model gpu cart">
 
         <!-- ***************   -->
         <!-- Robots Elements -->
@@ -120,14 +125,20 @@
             <origin xyz="0.1732 0.0 0.3545" rpy="0 0 0"/>
         </xacro:sensor_rslidar_16>
         -->
+
+        <xacro:if value="${cart}">
+            <xacro:cart prefix="${prefix}cart_" parent="${prefix}base_footprint">
+            </xacro:cart>
+        </xacro:if>
+
     </xacro:macro>
 
     <xacro:rbvogui prefix="$(arg prefix)" kinematics="$(arg kinematics)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
                    launch_arm="$(arg launch_arm)" arm_manufacturer="$(arg arm_manufacturer)" arm_model="$(arg arm_model)"
                    launch_gripper="$(arg launch_gripper)" gripper_manufacturer="$(arg gripper_manufacturer)" gripper_model="$(arg gripper_model)"
-                   launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" />
+                   launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" cart="$(arg cart)"/>
 
     <!-- Gazebo ros control pluggins -->
     <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control.urdf.xacro"/>
-    <xacro:ros2_control prefix="$(arg prefix)"/>
+    <xacro:ros2_control prefix="$(arg prefix)" cart="$(arg cart)"/>
 </robot>

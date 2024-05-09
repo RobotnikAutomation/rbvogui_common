@@ -63,13 +63,13 @@ def read_params(ld : launch.LaunchDescription):
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='robot_id',
         description='Frame id of the sensor. (e.g. robot).',
-        default_value='robot')
+        default_value='robot_')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='namespace',
         description='Namespace of the nodes.',
-        default_value=robot_id)
+        default_value='robot')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(

@@ -46,6 +46,7 @@ def read_params(ld : launch.LaunchDescription):
     robot_description = launch.substitutions.LaunchConfiguration('robot_description')
     robot_description_path = launch.substitutions.LaunchConfiguration('robot_description_path')
     controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
+    cart = launch.substitutions.LaunchConfiguration('cart')
 
     # Declare the launch options
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -92,6 +93,11 @@ def read_params(ld : launch.LaunchDescription):
         default_value=[get_package_share_directory('rbvogui_description'), '/test/empty.yaml'])
     )
     
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='cart',
+        description='bool rbvogui with cart',
+        default_value='true')
+    )
     # Parse the launch options
     ret = {}
 
@@ -102,6 +108,7 @@ def read_params(ld : launch.LaunchDescription):
         'robot_id': robot_id,
         'controllers_file': controllers_file,
         'robot_description_path': robot_description_path,
+        'cart': cart
         }
     
     else:
@@ -128,6 +135,10 @@ def read_params(ld : launch.LaunchDescription):
         elif 'ROBOT_DESCRIPTION' in os.environ:
             ret['robot_description_path'] = [get_package_share_directory('rbvogui_description'), '/robots/', os.environ['ROBOT_DESCRIPTION']]
         else: ret['robot_description_path'] = robot_description_path
+
+        if 'CART' in os.environ:
+            ret['cart'] = os.environ['CART']
+        else:  ret['cart'] = cart
 
     return ret
 
@@ -168,6 +179,7 @@ def generate_launch_description():
             " lift_manufacturer:=false",
             " lift_model:=false",
             " config_controllers:=", config_file_rewritten,
+            " cart:=", params['cart']
         ]
     )
 

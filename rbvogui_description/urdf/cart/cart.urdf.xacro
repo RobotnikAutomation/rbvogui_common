@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="cart">
+
+  <xacro:include filename="$(find rbvogui_description)/urdf/inertia.urdf.xacro" />
+  <xacro:include filename="$(find rbvogui_description)/urdf/cart/cart_joint.urdf.xacro" />
+
+  <!-- Math -->
+  <xacro:property name="PI" value="3.141592" />
+
+  <!-- Size cart -->
+  <xacro:property name="cart_length" value="1.25" />
+  <xacro:property name="cart_width" value="1.098" />
+  <xacro:property name="cart_height" value="0.25" />
+  <xacro:property name="cart_mass" value="30" />
+
+  <!-- Size wheels -->
+  <xacro:property name="wheels_radius" value="0.20" />
+  <xacro:property name="wheels_width" value="0.08" />
+  <xacro:property name="wheels_center_dist_x" value="0.41" />
+
+  <!-- Size front wheel-->
+  <xacro:property name="front_wheel_radius" value="0.08" />
+  <xacro:property name="front_wheel_width" value="0.05" />
+  <xacro:property name="front_wheel_center_dist_x" value="0.331" />
+  <xacro:property name="front_wheel_center_dist_y" value="0.245"/>
+  
+
+  <!-- Support front wheel cart -->
+  <xacro:property name="support_length" value="${wheels_radius - front_wheel_radius}" />
+  <xacro:property name="support_width" value="0.03" />
+
+  <!-- Hitch -->
+  <xacro:property name="hitch_length" value="0.5" />
+  <xacro:property name="hitch_width" value="0.05" />
+
+
+  <xacro:macro name="cart" params="prefix parent">
+
+
+    <!-- Robot to Hitch -->
+    <link name="${prefix}hitch_z">
+      <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <xacro:solid_cuboid_inertia w="${0.01}" d="${0.01}" h="${0.01}" m="0.01"/>
+      </inertial>
+    </link>
+
+
+    <link name="${prefix}hitch_y">
+      <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <xacro:solid_cuboid_inertia w="${0.01}" d="${0.01}" h="${0.01}" m="0.01"/>
+      </inertial>
+    </link>
+
+    <link name="${prefix}hitch_x">
+      <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <xacro:solid_cuboid_inertia w="${0.01}" d="${0.01}" h="${0.01}" m="0.01"/>
+      </inertial>
+    </link>
+
+    <!-- Hitch to Body -->
+    <link name="${prefix}body">
+      <inertial>
+        <mass value="${cart_mass}" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="${(cart_mass*(cart_width*cart_width+cart_height*cart_height))/12}" ixy="0" ixz="0" 
+                  iyy="${(cart_mass*(cart_length*cart_length+cart_height*cart_height))/12}" iyz="0" 
+                  izz="${(cart_mass*(cart_length*cart_length+cart_width*cart_width))/12}" />
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 ${-cart_height/2}" rpy="${PI/2} 0.0 ${PI}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/cart.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="red">
+          <color rgba="0.9 0.9 0.9 1"/>     
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <box size="${cart_length} ${cart_width} ${cart_height}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}body">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- Left wheel -->
+    <link name="${prefix}left_wheel">
+      <inertial>
+            <mass value="3" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="3" r="${wheels_radius}" h="${wheels_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0.0 ${PI/2}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/back_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.2 0.2 0.2 0.8"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${wheels_radius}" length="${wheels_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}left_wheel">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <!-- Right wheel -->
+    <link name="${prefix}right_wheel">
+      <inertial>
+            <mass value="3" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="3" r="${wheels_radius}" h="${wheels_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0.0 ${PI/2}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/back_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${wheels_radius}" length="${wheels_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}right_wheel">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <!-- Front Right Wheel support -->
+    <link name="${prefix}support_front_right_wheel">
+      <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 ${PI/2} 0" />
+            <xacro:solid_cuboid_inertia w="${support_length}" d="${support_width}" h="${support_width}" m="0.1"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.06" rpy="${PI/2} 0 -${PI/4}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/support_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${PI/2} 0.0"/>
+        <geometry>
+          <box size="${support_length} ${support_width} ${support_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}support_front_right_wheel">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- Front Left Wheel support -->
+    <link name="${prefix}support_front_left_wheel">
+      <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="0 ${PI/2} 0" />
+            <xacro:solid_cuboid_inertia w="${support_length}" d="${support_width}" h="${support_width}" m="0.1"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.06" rpy="${PI/2} 0 -${PI/4}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/support_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${PI/2} 0.0"/>
+        <geometry>
+          <box size="${support_length} ${support_width} ${support_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}support_front_left_wheel">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- Front Left wheel -->
+    <link name="${prefix}front_left_wheel">
+      <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="0.1" r="${front_wheel_radius}" h="${front_wheel_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 ${PI/2}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/front_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.1 0.1 0.1 1"/>     
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${front_wheel_radius}" length="${front_wheel_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}front_left_wheel">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <!-- Front Right wheel -->
+    <link name="${prefix}front_right_wheel">
+      <inertial>
+            <mass value="0.1" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="0.1" r="${front_wheel_radius}" h="${front_wheel_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 ${PI/2}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/front_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.1 0.1 0.1 1"/>     
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${front_wheel_radius}" length="${front_wheel_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}front_right_wheel">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+
+    <xacro:cart_joints prefix="${prefix}" parent="${parent}"/>
+
+  </xacro:macro>
+
+  
+</robot>
