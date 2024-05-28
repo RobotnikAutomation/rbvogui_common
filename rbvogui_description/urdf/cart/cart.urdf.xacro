@@ -42,7 +42,7 @@
       <inertial>
             <mass value="1" />
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <xacro:solid_cuboid_inertia w="${0.1}" d="${0.1}" h="${0.1}" m="1"/>
+            <xacro:solid_cuboid_inertia w="${0.01}" d="${0.01}" h="${0.01}" m="10"/>
       </inertial>
     </link>
 
@@ -50,14 +50,14 @@
       <inertial>
             <mass value="1" />
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <xacro:solid_cuboid_inertia w="${0.1}" d="${0.1}" h="${0.1}" m="1"/>
+            <xacro:solid_cuboid_inertia w="${0.01}" d="${0.01}" h="${0.01}" m="10"/>
       </inertial>
     </link>
 
     <link name="${prefix}hitch_x">
       <inertial>
             <mass value="1" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
+            <origin xyz="-${hitch_length/2} 0 0" rpy="0 0 0" />
             <xacro:solid_cuboid_inertia w="${hitch_length}" d="${hitch_width}" h="${hitch_width}" m="1"/>
       </inertial>
       <collision>
