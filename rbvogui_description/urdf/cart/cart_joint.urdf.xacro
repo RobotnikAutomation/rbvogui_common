@@ -2,9 +2,16 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_name">
     <xacro:macro name="cart_joints" params="prefix parent">
 
-    <!-- Robot to Hitch -->
+    <!-- Robot to BULON -->
+        <joint name="${prefix}bulon_joint" type="fixed">
+            <origin xyz="${bulon_x} 0 ${bulon_z}" rpy="0.0 0.0 0.0"/>
+            <parent link="${parent}"/>
+            <child link="${prefix}bulon"/>
+        </joint>
+
+    <!-- BULON to Hitch -->
         <joint name="${prefix}hitch_z_joint" type="revolute">
-            <origin xyz="-0.6 0 ${wheels_radius + cart_height/2}" rpy="0.0 0.0 0.0"/>
+            <origin xyz="${hitch_x} 0 ${hitch_z}" rpy="0.0 0.0 0.0"/>
             <parent link="${parent}"/>
             <child link="${prefix}hitch_z"/>
             <axis xyz="0.0 0.0 1.0"/>
@@ -29,54 +36,68 @@
 
     <!-- Hitch to Body -->
         <joint name="${prefix}body_joint" type="revolute">
-            <origin xyz="${-cart_length/2 -hitch_length} 0 0" rpy="0.0 0.0 0.0"/>
+            <origin xyz="${-cart_length/2 -hitch_length/2} 0 0" rpy="0.0 0.0 0.0"/>
             <parent link="${prefix}hitch_x"/>
             <child link="${prefix}body"/>
             <axis xyz="0.0 1.0 0.0"/>
             <limit effort="1000" velocity="2000" lower="-0.2" upper="0.2"/>
         </joint>
 
-    <!-- Left wheel -->
-        <joint name="${prefix}left_wheel_joint" type="continuous">
-            <origin xyz="${-wheels_center_dist_x} ${cart_width / 2 + wheels_width / 2} ${-cart_height/2}" rpy="0.0 0.0 0.0"/>
+    <!-- Rear Left wheel -->
+        <joint name="${prefix}rear_left_wheel_joint" type="continuous">
+            <origin xyz="${rear_wheel_x} ${rear_wheel_y} ${rear_wheel_z}" rpy="0.0 0.0 0.0"/>
             <parent link="${prefix}body"/>
-            <child link="${prefix}left_wheel"/>
+            <child link="${prefix}rear_left_wheel"/>
             <axis xyz="0.0 1.0 0.0"/>
             <limit effort="1000" velocity="2000"/>
         </joint>
 
-    <!-- Right wheel -->
-        <joint name="${prefix}right_wheel_joint" type="continuous">
-            <origin xyz="${-wheels_center_dist_x} ${-cart_width / 2 - wheels_width / 2} ${-cart_height/2}" rpy="0.0 0.0 0.0"/>
+    <!-- Rear Right wheel -->
+        <joint name="${prefix}rear_right_wheel_joint" type="continuous">
+            <origin xyz="${rear_wheel_x} -${rear_wheel_y} ${rear_wheel_z}" rpy="0.0 0.0 0.0"/>
             <parent link="${prefix}body"/>
-            <child link="${prefix}right_wheel"/>
+            <child link="${prefix}rear_right_wheel"/>
             <axis xyz="0.0 1.0 0.0"/>
             <limit effort="1000" velocity="2000"/>
             
         </joint>
 
-    <!-- Front Right Wheel support -->
-        <joint name="${prefix}support_front_right_wheel_joint" type="continuous">
-            <origin xyz="${front_wheel_center_dist_x} ${-front_wheel_center_dist_y} ${-cart_height/2-support_length/2}" rpy="0.0 0.0 0.0"/>
+    <!-- Front Right Wheel support base-->
+        <joint name="${prefix}front_right_wheel_base_support_joint" type="fixed">
+            <origin xyz="${front_caster_wheel_x} ${-front_caster_wheel_y} ${front_caster_wheel_z}" rpy="0.0 0.0 0.0"/>
             <parent link="${prefix}body"/>
-            <child link="${prefix}support_front_right_wheel"/>
+            <child link="${prefix}front_right_wheel_base_support"/>
+        </joint>
+
+    <!-- Front Left Wheel support base-->
+        <joint name="${prefix}front_left_wheel_base_support_joint" type="fixed">
+            <origin xyz="${front_caster_wheel_x} ${front_caster_wheel_y} ${front_caster_wheel_z}" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}body"/>
+            <child link="${prefix}front_left_wheel_base_support"/>
+        </joint>
+
+    <!-- Front Right Wheel support -->
+        <joint name="${prefix}front_right_wheel_support_joint" type="continuous">
+            <origin xyz="${front_caster_wheel_x} ${-front_caster_wheel_y} ${front_caster_wheel_z}" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}body"/>
+            <child link="${prefix}front_right_wheel_support"/>
             <axis xyz="0.0 0.0 1.0"/>
             <limit effort="1000" velocity="2000"/>
         </joint>
 
     <!-- Front Left Wheel support -->
-        <joint name="${prefix}support_front_left_wheel_joint" type="continuous">
-            <origin xyz="${front_wheel_center_dist_x} ${front_wheel_center_dist_y} ${-cart_height/2-support_length/2}" rpy="0.0 0.0 0.0"/>
+        <joint name="${prefix}front_left_wheel_support_joint" type="continuous">
+            <origin xyz="${front_caster_wheel_x} ${front_caster_wheel_y} ${front_caster_wheel_z}" rpy="0.0 0.0 0.0"/>
             <parent link="${prefix}body"/>
-            <child link="${prefix}support_front_left_wheel"/>
+            <child link="${prefix}front_left_wheel_support"/>
             <axis xyz="0.0 0.0 1.0"/>
             <limit effort="1000" velocity="2000"/>
         </joint>
 
     <!-- Front Left wheel -->
         <joint name="${prefix}front_left_wheel_joint" type="continuous">
-            <origin xyz="-0.05 0 ${-support_length/2}" rpy="0.0 0.0 0.0"/>
-            <parent link="${prefix}support_front_left_wheel"/>
+            <origin xyz="${front_wheel_x} 0 ${front_wheel_z}" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}front_left_wheel_support"/>
             <child link="${prefix}front_left_wheel"/>
             <axis xyz="0.0 1.0 0.0"/>
             <limit effort="1000" velocity="2000"/>
@@ -84,8 +105,8 @@
 
     <!-- Front Right wheel -->
         <joint name="${prefix}front_right_wheel_joint" type="continuous">
-            <origin xyz="-0.05 0 ${-support_length/2}" rpy="0.0 0.0 0.0"/>
-            <parent link="${prefix}support_front_right_wheel"/>
+            <origin xyz="${front_wheel_x} 0 ${front_wheel_z}" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}front_right_wheel_support"/>
             <child link="${prefix}front_right_wheel"/>
             <axis xyz="0.0 1.0 0.0"/>
             <limit effort="1000" velocity="2000"/>

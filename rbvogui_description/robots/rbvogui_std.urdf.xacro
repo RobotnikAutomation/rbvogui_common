@@ -105,6 +105,11 @@
         <xacro:sensor_intel_d435 prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link" prefix_topic="/$(arg robot_id)/front_rgbd_camera" use_nominal_extrinsics="true">
             <origin xyz="0.46462 0.0 0.18258" rpy="0 0 0"/>
         </xacro:sensor_intel_d435>
+
+        <!-- Rear Camera -->
+        <xacro:sensor_intel_d435 prefix="${prefix}rear_rgbd_camera" parent="${prefix}base_link" prefix_topic="/$(arg robot_id)/rear_rgbd_camera" use_nominal_extrinsics="true">
+            <origin xyz="-0.503 0.0 0.29" rpy="0 0 -${PI}"/>
+        </xacro:sensor_intel_d435>
         
         <!-- GPS 
         <xacro:sensor_ublox prefix="${prefix}gps" parent="${prefix}chassis_link">
@@ -127,7 +132,7 @@
         -->
 
         <xacro:if value="${cart}">
-            <xacro:cart prefix="${prefix}cart_" parent="${prefix}base_footprint">
+            <xacro:cart prefix="${prefix}cart_" parent="${prefix}base_link">
             </xacro:cart>
         </xacro:if>
 

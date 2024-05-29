@@ -19,10 +19,10 @@
               <joint_name>robot_cart_hitch_y_joint</joint_name>
               <joint_name>robot_cart_hitch_x_joint</joint_name>
               <joint_name>robot_cart_body_joint</joint_name>
-              <joint_name>robot_cart_left_wheel_joint</joint_name>
-              <joint_name>robot_cart_right_wheel_joint</joint_name>
-              <joint_name>robot_cart_support_front_right_wheel_joint</joint_name>
-              <joint_name>robot_cart_support_front_left_wheel_joint</joint_name>
+              <joint_name>robot_cart_rear_left_wheel_joint</joint_name>
+              <joint_name>robot_cart_rear_right_wheel_joint</joint_name>
+              <joint_name>robot_cart_front_right_wheel_support_joint</joint_name>
+              <joint_name>robot_cart_front_left_wheel_support_joint</joint_name>
               <joint_name>robot_cart_front_right_wheel_joint</joint_name>
               <joint_name>robot_cart_front_left_wheel_joint</joint_name>
             </plugin>

@@ -47,6 +47,7 @@ def read_params(ld : launch.LaunchDescription):
     robot_description_path = launch.substitutions.LaunchConfiguration('robot_description_path')
     controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
     cart = launch.substitutions.LaunchConfiguration('cart')
+    launch_joint = launch.substitutions.LaunchConfiguration('launch_joint')
 
     # Declare the launch options
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -98,6 +99,13 @@ def read_params(ld : launch.LaunchDescription):
         description='bool rbvogui with cart',
         default_value='true')
     )
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='launch_joint',
+        description='launch joint_state_publisher_gui',
+        default_value='false')
+    )
+
     # Parse the launch options
     ret = {}
 
@@ -108,7 +116,8 @@ def read_params(ld : launch.LaunchDescription):
         'robot_id': robot_id,
         'controllers_file': controllers_file,
         'robot_description_path': robot_description_path,
-        'cart': cart
+        'cart': cart,
+        'launch_joint': launch_joint
         }
     
     else:
@@ -139,6 +148,8 @@ def read_params(ld : launch.LaunchDescription):
         if 'CART' in os.environ:
             ret['cart'] = os.environ['CART']
         else:  ret['cart'] = cart
+
+        ret['launch_joint'] = launch_joint
 
     return ret
 
@@ -199,7 +210,16 @@ def generate_launch_description():
         }],
     )
 
+    robot_joint_publisher = launch_ros.actions.Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        name='joint_state_publisher_gui',
+        output='screen'
+    )
+
     ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
     ld.add_action(robot_state_publisher)
+    if params['launch_joint']:
+        ld.add_action(robot_joint_publisher)
 
     return ld
