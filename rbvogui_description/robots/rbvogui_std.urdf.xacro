@@ -132,7 +132,7 @@
         -->
 
         <xacro:if value="${cart}">
-            <xacro:cart prefix="${prefix}cart_" parent="${prefix}base_link">
+            <xacro:cart prefix="${prefix}cart_" parent="${prefix}base_link" connection="true">
             </xacro:cart>
         </xacro:if>
 

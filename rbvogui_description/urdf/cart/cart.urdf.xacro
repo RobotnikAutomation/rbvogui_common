@@ -8,9 +8,9 @@
   <xacro:property name="PI" value="3.141592" />
 
   <!-- Size cart -->
-  <xacro:property name="cart_length" value="1.4" />
-  <xacro:property name="cart_width" value="1.4" />
-  <xacro:property name="cart_height" value="0.25" />
+  <xacro:property name="cart_length" value="1.3" />
+  <xacro:property name="cart_width" value="1.3" />
+  <xacro:property name="cart_height" value="0.23" />
   <xacro:property name="cart_mass" value="80" />
 
   <!-- Size wheels -->
@@ -57,7 +57,7 @@
   <xacro:property name="front_wheel_x" value="-0.04545" />
   <xacro:property name="front_wheel_z" value="-0.115" />
 
-  <xacro:macro name="cart" params="prefix parent">
+  <xacro:macro name="cart" params="prefix parent connection">
 
 
     <!-- Robot to bulon NOMBRE PROVISIONAL SUPONGO??-->
@@ -84,25 +84,25 @@
     <!-- bulon to Hitch -->
     <link name="${prefix}hitch_z">
       <inertial>
-            <mass value="1" />
+            <mass value="3" />
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <xacro:solid_cuboid_inertia w="${0.01}" d="${0.01}" h="${0.01}" m="10"/>
+            <xacro:solid_cuboid_inertia w="0.215" d="0.064" h="0.160" m="3"/>
       </inertial>
     </link>
 
     <link name="${prefix}hitch_y">
       <inertial>
-            <mass value="1" />
+            <mass value="3" />
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <xacro:solid_cuboid_inertia w="${0.01}" d="${0.01}" h="${0.01}" m="10"/>
+            <xacro:solid_cuboid_inertia w="0.215" d="0.064" h="0.160" m="3"/>
       </inertial>
     </link>
 
     <link name="${prefix}hitch_x">
       <inertial>
-            <mass value="1" />
-            <origin xyz="0.0 0 0" rpy="0 0 0" />
-            <xacro:solid_cuboid_inertia w="${hitch_length}" d="${hitch_height}" h="${hitch_width}" m="1"/>
+            <mass value="3" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <xacro:solid_cuboid_inertia w="0.215" d="0.064" h="0.160" m="3"/>
       </inertial>
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
@@ -338,8 +338,27 @@
       <material>Gazebo/Grey</material>
     </gazebo>
 
+    <!-- Marker0 -->
+    <link name="${prefix}marker0">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker0.dae" scale="0.1 0.1 0.1"/>
+        </geometry>
+      </visual>
+    </link>
 
-    <xacro:cart_joints prefix="${prefix}" parent="${parent}"/>
+    <!-- Marker1 -->
+    <link name="${prefix}marker1">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker1.dae" scale="0.1 0.1 0.1"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <xacro:cart_joints prefix="${prefix}" parent="${parent}" connection="${connection}"/>
 
   </xacro:macro>
 

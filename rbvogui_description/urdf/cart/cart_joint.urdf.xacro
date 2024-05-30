@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_name">
-    <xacro:macro name="cart_joints" params="prefix parent">
+    <xacro:macro name="cart_joints" params="prefix parent connection">
 
     <!-- Robot to BULON -->
         <joint name="${prefix}bulon_joint" type="fixed">
@@ -15,7 +15,7 @@
             <parent link="${parent}"/>
             <child link="${prefix}hitch_z"/>
             <axis xyz="0.0 0.0 1.0"/>
-            <limit effort="1000" velocity="2000" lower="${-PI/6}" upper="${PI/6}"/>
+            <limit effort="1000" velocity="2000" lower="${-PI/7}" upper="${PI/7}"/>
         </joint>
 
         <joint name="${prefix}hitch_y_joint" type="revolute">
@@ -23,7 +23,7 @@
             <parent link="${prefix}hitch_z"/>
             <child link="${prefix}hitch_y"/>
             <axis xyz="0.0 1.0 0.0"/>
-            <limit effort="1000" velocity="2000" lower="${-PI/6}" upper="${PI/6}"/>
+            <limit effort="1000" velocity="2000" lower="${-PI/7}" upper="${PI/7}"/>
         </joint>
 
         <joint name="${prefix}hitch_x_joint" type="revolute">
@@ -31,7 +31,7 @@
             <parent link="${prefix}hitch_y"/>
             <child link="${prefix}hitch_x"/>
             <axis xyz="1.0 0.0 0.0"/>
-            <limit effort="1000" velocity="2000" lower="${-PI/6}" upper="${PI/6}"/>
+            <limit effort="1000" velocity="2000" lower="${-PI/7}" upper="${PI/7}"/>
         </joint>
 
     <!-- Hitch to Body -->
@@ -110,6 +110,20 @@
             <child link="${prefix}front_right_wheel"/>
             <axis xyz="0.0 1.0 0.0"/>
             <limit effort="1000" velocity="2000"/>
+        </joint>
+
+    <!-- Marker0 -->
+        <joint name="${prefix}marker0_joint" type="fixed">
+            <origin xyz="0.66 -0.08 0.05" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}body"/>
+            <child link="${prefix}marker0"/>
+        </joint>
+
+    <!-- Marker1 -->
+        <joint name="${prefix}marker1_joint" type="fixed">
+            <origin xyz="0.66 0.08 0.05" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}body"/>
+            <child link="${prefix}marker1"/>
         </joint>
 
     </xacro:macro>
