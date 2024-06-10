@@ -5,6 +5,7 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+import launch_ros
 
 
 def generate_launch_description():
@@ -32,6 +33,7 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
+    # ld.add_action(launch_ros.actions.PushRosNamespace(namespace='robot'))
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(declare_slam_params_file_cmd)
     ld.add_action(start_async_slam_toolbox_node)

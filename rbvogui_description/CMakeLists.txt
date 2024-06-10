@@ -7,6 +7,10 @@ install(DIRECTORY launch meshes robots test urdf
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(DIRECTORY launch
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 
 if(BUILD_TESTING)

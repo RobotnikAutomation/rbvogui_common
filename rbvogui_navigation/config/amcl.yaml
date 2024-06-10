@@ -5,7 +5,7 @@ amcl:
     global_frame_id: "robot_map"
     odom_frame_id: "robot_odom"
 
-    robot_model_type: "nav2_amcl::OmniMotionModel"
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
     scan_topic: /robot/front_laser/scan
 
     set_initial_pose: true

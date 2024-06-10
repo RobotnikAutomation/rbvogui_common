@@ -28,8 +28,7 @@
   </xacro:macro>
 
   <xacro:macro name="wheel_350mm" params="prefix parent *origin reflect hq">
-  
-    <!-- TODO: check reflect parameter -->
+
     <!--WHEEL TIRE -->
     <joint name="${prefix}wheel_joint" type="continuous">
       <parent link="${parent}"/>

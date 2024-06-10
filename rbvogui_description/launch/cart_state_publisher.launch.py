@@ -24,7 +24,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import os
-
 import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
@@ -35,18 +34,21 @@ from robotnik_common.launch import RewrittenYaml
 #  USE_SIM_TIME: Use simulation (Gazebo) clock if true
 #  NAMESPACE: Namespace of the node stack.
 #  ROBOT_ID: Frame id of the robot. (e.g. vectornav_link).
-#  MAP_FILE: Path to the map file.
-#  MAP_FILE_ABS: Absolute path to the map file.
+#  CONTROLLERS_FILE: Path to the controllers.yaml file.
+#  ROBOT_DESCRIPTION: Name of the robot description file.
+#  ROBOT_DESCRIPTION_PATH: Path to the robot description file.
 
 def read_params(ld : launch.LaunchDescription):
     environment = launch.substitutions.LaunchConfiguration('environment')
     use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time')
     namespace = launch.substitutions.LaunchConfiguration('namespace')
     robot_id = launch.substitutions.LaunchConfiguration('robot_id')
-    map_name = launch.substitutions.LaunchConfiguration('map_name')
-    map_file_abs = launch.substitutions.LaunchConfiguration('map_file_abs')
-    amcl_file = launch.substitutions.LaunchConfiguration('amcl_file')
-    map_frame_id = launch.substitutions.LaunchConfiguration('map_frame_id')
+    robot_description = launch.substitutions.LaunchConfiguration('robot_description')
+    robot_description_path = launch.substitutions.LaunchConfiguration('robot_description_path')
+    controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
+    cart = launch.substitutions.LaunchConfiguration('cart')
+    connected = launch.substitutions.LaunchConfiguration('connected')
+    launch_joint = launch.substitutions.LaunchConfiguration('launch_joint')
 
     # Declare the launch options
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -66,7 +68,7 @@ def read_params(ld : launch.LaunchDescription):
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='robot_id',
         description='Frame id of the sensor. (e.g. robot).',
-        default_value='robot')
+        default_value='cart')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -76,29 +78,35 @@ def read_params(ld : launch.LaunchDescription):
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='map_name',
-        description='Name of the map file.',
-        default_value='map')
+        name='robot_description',
+        description='Robot description.',
+        default_value='cart.urdf.xacro')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='map_file_abs',
-        description='Absolute path to the map file.',
-        default_value=[get_package_share_directory('rbvogui_navigation'), '/maps/', map_name, '.yaml'])
+        name='robot_description_path',
+        description='Path to the robot description file.',
+        default_value=[get_package_share_directory('rbvogui_description'), '/urdf/cart/', robot_description])
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='amcl_file',
-        description='Absolute path to the amcl file.',
-        default_value=[get_package_share_directory('rbvogui_navigation'), '/config/amcl.yaml'])
+        name='controllers_file',
+        description='ROS 2 controller file.',
+        default_value=[get_package_share_directory('rbvogui_description'), '/test/empty.yaml'])
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='map_frame_id',
-        description='Frame id of the map.',
-        default_value=[robot_id, '_map'])
+        name='launch_joint',
+        description='launch joint_state_publisher_gui',
+        default_value='false')
     )
-    
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='connected',
+        description='launch cart connected to the robot',
+        default_value='false')
+    )
+
     # Parse the launch options
     ret = {}
 
@@ -107,97 +115,81 @@ def read_params(ld : launch.LaunchDescription):
         'use_sim_time': use_sim_time,
         'namespace': namespace,
         'robot_id': robot_id,
-        'map_file_abs': map_file_abs,
-        'amcl_file': amcl_file,
-        'map_frame_id': map_frame_id
+        'controllers_file': controllers_file,
+        'robot_description_path': robot_description_path,
+        'launch_joint': launch_joint,
+        'connected': connected
         }
-    
+
     else:
         if 'USE_SIM_TIME' in os.environ:
-            ret['use_sim_time'] =  launch.substitutions.EnvironmentVariable('USE_SIM_TIME')
+            ret['use_sim_time'] = os.environ['USE_SIM_TIME']
         else: ret['use_sim_time'] = use_sim_time
 
         if 'ROBOT_ID' in os.environ:
-            ret['robot_id'] = launch.substitutions.EnvironmentVariable('ROBOT_ID')
+            ret['robot_id'] = os.environ['ROBOT_ID']
         else: ret['robot_id'] = robot_id
 
         if 'NAMESPACE' in os.environ:
-            ret['namespace'] = launch.substitutions.EnvironmentVariable('NAMESPACE')
+            ret['namespace'] = os.environ['NAMESPACE']
         elif 'ROBOT_ID' in os.environ:
-            ret['namespace'] = launch.substitutions.EnvironmentVariable('ROBOT_ID')
+            ret['namespace'] = os.environ['ROBOT_ID']
         else:  ret['namespace'] = namespace
 
-        if 'MAP_FILE_ABS' in os.environ:
-            ret['map_file_abs'] = launch.substitutions.EnvironmentVariable('MAP_FILE_ABS')
-        if 'MAP_NAME' in os.environ:
-            ret['map_file_abs'] = [get_package_share_directory('rbvogui_navigation'), '/maps/', launch.substitutions.EnvironmentVariable('MAP_NAME'), '.yaml']
-        else: ret['map_file_abs'] = map_file_abs
+        if 'CONTROLLERS_FILE' in os.environ:
+            ret['controllers_file'] = os.environ['CONTROLLERS_FILE']
+        else: ret['controllers_file'] = controllers_file
 
-        if 'AMCL_FILE' in os.environ:
-            ret['amcl_file'] = launch.substitutions.EnvironmentVariable('AMCL_FILE')
-        else: ret['amcl_file'] = amcl_file
+        if 'ROBOT_DESCRIPTION_PATH' in os.environ:
+            ret['robot_description_path'] = os.environ['ROBOT_DESCRIPTION_PATH']
+        elif 'ROBOT_DESCRIPTION' in os.environ:
+            ret['robot_description_path'] = [get_package_share_directory('rbvogui_description'), '/robots/', os.environ['ROBOT_DESCRIPTION']]
+        else: ret['robot_description_path'] = robot_description_path
 
-        if 'MAP_FRAME_ID' in os.environ:
-            ret['map_frame_id'] = launch.substitutions.EnvironmentVariable('MAP_FRAME_ID')
-        else: ret['map_frame_id'] = map_frame_id
+        if 'CART' in os.environ:
+            ret['cart'] = os.environ['CART']
+        else:  ret['cart'] = cart
+
+        ret['launch_joint'] = launch_joint
+        ret['connected'] = connected
 
     return ret
 
 
 def generate_launch_description():
-    
+
     ld = launch.LaunchDescription()
+
     params = read_params(ld)
 
-    lifecycle_nodes = ['map_server', 'amcl']
-
-    amcl_rewritten = RewrittenYaml(
-        source_file=params['amcl_file'],
-        param_rewrites={
-            'use_sim_time': params['use_sim_time'],
-            'base_frame_id': [params['robot_id'], '_base_footprint'],
-            'odom_frame_id': [params['robot_id'], '_odom'],
-            'global_frame_id': params['map_frame_id'],
-        },
-        root_key=[params['robot_id']],
-        convert_types=True,
+    cart_description_content = launch.substitutions.Command(
+        [
+            launch.substitutions.PathJoinSubstitution(
+                [launch.substitutions.FindExecutable(name="xacro")]),
+            " ",
+            get_package_share_directory('rbvogui_description'), '/urdf/cart/cart.urdf.xacro',
+            " prefix:=robot_",
+            " connected:=", params['connected'],
+        ]
     )
 
-    map_server = launch_ros.actions.Node(
-        package='nav2_map_server',
-        executable='map_server',
-        name='map_server',
-        parameters=[{
-            'use_sim_time': params['use_sim_time'],
-            'yaml_filename': params['map_file_abs'],
-            'topic_name': 'map',
-            'frame_id': params['map_frame_id'],
-        }],
-        output='screen')
-    
-    amcl_node = launch_ros.actions.Node(
-        package='nav2_amcl',
-        executable='amcl',
-        name='amcl',
-        parameters=[
-            {'use_sim_time': params['use_sim_time']},
-            amcl_rewritten
-        ],
-        output='screen')
+    # Create parameter 
+    cart_description_param = launch_ros.descriptions.ParameterValue(cart_description_content, value_type=str)
 
-    lifecycle_manager = launch_ros.actions.Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager_localization',
+    cart_state_publisher = launch_ros.actions.Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='cart_state_publisher',
         output='screen',
         parameters=[{
             'use_sim_time': params['use_sim_time'],
-            'autostart': True,
-            'node_names': lifecycle_nodes}])
-    
-    ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
-    ld.add_action(map_server)
-    ld.add_action(amcl_node)
-    ld.add_action(lifecycle_manager)
+            'robot_description': cart_description_param,
+            'publish_frequency': 100.0,
+            'frame_prefix': ''
+        }],
+    )
+
+    # ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
+    ld.add_action(cart_state_publisher)
 
     return ld

@@ -135,7 +135,7 @@ def generate_launch_description():
             root_key=params['namespace'],
             param_rewrites={
                 'use_sim_time': params['use_sim_time'],
-                'robot_base_frame': [params['robot_id'], '_base_link'],
+                'robot_base_frame': [params['robot_id'], 'base_link'],
             },
             convert_types=True)
 

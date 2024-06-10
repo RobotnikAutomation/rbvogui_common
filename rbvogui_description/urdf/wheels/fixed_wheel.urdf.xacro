@@ -28,14 +28,12 @@
   </xacro:macro>
 
   <xacro:macro name="fixed_wheel" params="prefix parent *origin reflect hq">
-    <!-- TODO: check reflect parameter -->
-    <!--MOTOR WHEEL -->
+
     <joint name="${prefix}fixed_wheel_joint" type="fixed">
       <parent link="${parent}"/>
       <child link="${prefix}fixed_wheel"/>
       <xacro:insert_block name="origin" />
       <axis xyz="0 0 1" rpy="0 0 0" />
-      <!-- limit effort="${steer_joint_effort_limit}" velocity="${steer_joint_velocity_limit}" lower="-1.5708" upper="1.5708" / -->
       <limit effort="${steer_joint_effort_limit}" velocity="${steer_joint_velocity_limit}" lower="-3.00" upper="3.00"/>
       <joint_properties damping="${steer_joint_damping}" friction="${steer_joint_friction}"/>
     </joint>
@@ -105,66 +103,6 @@
     <xacro:wheel prefix="${prefix}" parent="${prefix}fixed_wheel" reflect="${reflect}" hq="${hq}">
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:wheel>
-
-    <!--WHEEL TIRE 
-    <joint name="${prefix}wheel_joint" type="continuous">
-      <parent link="${prefix}fixed_wheel"/>
-      <child link="${prefix}wheel"/>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-      <axis xyz="0 1 0" rpy="0 0 0" />
-      <limit effort="${wheel_joint_effort_limit}" velocity="${wheel_joint_velocity_limit}"/>
-      <joint_properties damping="${wheel_joint_damping}" friction="{wheel_joint_friction}"/>
-    </joint>
-
-    <transmission name="${prefix}wheel_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}wheel_joint">
-        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${prefix}wheel_motor">
-        <hardwareInterface>hardware_interface/VelocityActuatorInterface</hardwareInterface>
-        <mechanicalReduction>${wheel_mechanical_reduction}</mechanicalReduction>
-      </actuator>
-    </transmission>
-
-    <link name="${prefix}wheel">
-      <visual>
-         HIGH RESOLUTION WHEELS 
-        <xacro:if value="${hq}">
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <xacro:if value="${reflect}">
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />
-            </xacro:if>
-            <xacro:unless value="${reflect}">
-              <mesh filename="package://rbvogui_description/meshes/wheels/wheel_sxl.stl" />
-            </xacro:unless>
-          </geometry>
-        </xacro:if>
-         LOW RESOLUTION WHEELS 
-        <xacro:unless value="${hq}">
-          <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
-          <geometry>
-            <cylinder length="${wheel_height}" radius="${wheel_radius}" />
-          </geometry>
-        </xacro:unless>
-      </visual>
-      <collision>
-        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
-        <geometry>
-          <sphere radius="${wheel_radius}" />
-        </geometry>
-      </collision>
-      <inertial>
-        <mass value="${wheel_mass}" />
-        <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
-        <cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_height}" />
-      </inertial>
-    </link>
-
-    <xacro:gazebo_color_wheel prefix="${prefix}"/>
-    <xacro:gazebo_color_steer_wheel prefix="${prefix}"/>
--->
   </xacro:macro>
 
 </robot>
