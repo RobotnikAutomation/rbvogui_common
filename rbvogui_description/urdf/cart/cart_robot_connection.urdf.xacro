@@ -9,18 +9,18 @@
   <xacro:property name="bulon_z" value="0.391" />
 
   <!-- Transform from hitch to chassis UNKOWN -->
-  <xacro:property name="hitch_x" value="-0.620" />
-  <xacro:property name="hitch_z" value="0.161" />
+  <xacro:property name="hitch_x" value="-0.347" />
+  <xacro:property name="hitch_z" value="0.175" />
 
   <!-- Hitch -->
-  <xacro:property name="hitch_length" value="0.215" />
+  <xacro:property name="hitch_length" value="0.32" />
   <xacro:property name="hitch_width" value="0.160" />
   <xacro:property name="hitch_height" value="0.064" />
 
   <xacro:macro name="cart_connection" params="prefix connected">
 
     <!-- Robot to bulon NOMBRE PROVISIONAL SUPONGO??-->
-            <link name="${prefix}bulon">
+            <!-- <link name="${prefix}bulon">
                 <inertial>
                     <mass value="1" />
                     <origin xyz="0 0 0" rpy="0 0 0" />
@@ -44,21 +44,21 @@
                 <origin xyz="${bulon_x} 0 ${bulon_z}" rpy="0.0 0.0 0.0"/>
                 <parent link="robot_base_link"/>
                 <child link="${prefix}bulon"/>
-            </joint>
+            </joint> -->
 
             <!-- bulon to Hitch -->
             <link name="${prefix}hitch_z">
             <inertial>
                     <mass value="3" />
-                    <origin xyz="0 0 0" rpy="0 0 0" />
-                    <xacro:solid_cuboid_inertia w="0.215" d="0.064" h="0.160" m="3"/>
+                    <origin xyz="${hitch_length/2} 0 0" rpy="0 0 0" />
+                    <xacro:solid_cuboid_inertia w="${hitch_length}" d="${hitch_height}" h="${hitch_width}" m="3"/>
             </inertial>
             </link>
 
             <xacro:if value="${connected}">
               <joint name="${prefix}hitch_z_joint" type="revolute">
-                  <origin xyz="${hitch_x - bulon_x} 0 ${hitch_z-bulon_z}" rpy="0.0 0.0 0.0"/>
-                  <parent link="${prefix}bulon"/>
+                  <origin xyz="${hitch_x} 0 ${hitch_z}" rpy="0.0 0.0 0.0"/>
+                  <parent link="robot_base_link"/>
                   <child link="${prefix}hitch_z"/>
                   <axis xyz="0.0 0.0 1.0"/>
                   <limit effort="1000" velocity="2000" lower="${-PI/9}" upper="${PI/9}"/>
@@ -66,8 +66,8 @@
             </xacro:if>
             <xacro:unless value="${connected}">
               <joint name="${prefix}hitch_z_joint" type="fixed">
-                  <origin xyz="${hitch_x - bulon_x} 0 ${hitch_z-bulon_z}" rpy="0.0 0.0 0.0"/>
-                  <parent link="${prefix}bulon"/>
+                  <origin xyz="${hitch_x} 0 ${hitch_z}" rpy="0.0 0.0 0.0"/>
+                  <parent link="robot_base_link"/>
                   <child link="${prefix}hitch_z"/>
               </joint>
             </xacro:unless>
@@ -75,8 +75,8 @@
             <link name="${prefix}hitch_y">
             <inertial>
                     <mass value="3" />
-                    <origin xyz="0 0 0" rpy="0 0 0" />
-                    <xacro:solid_cuboid_inertia w="0.215" d="0.064" h="0.160" m="3"/>
+                    <origin xyz="${hitch_length/2} 0 0" rpy="0 0 0" />
+                    <xacro:solid_cuboid_inertia w="${hitch_length}" d="${hitch_height}" h="${hitch_width}" m="3"/>
             </inertial>
             </link>
 
@@ -97,29 +97,30 @@
               </joint>
             </xacro:unless>
 
-            <link name="${prefix}hitch_x">
-            <inertial>
-                    <mass value="3" />
-                    <origin xyz="0 0 0" rpy="0 0 0" />
-                    <xacro:solid_cuboid_inertia w="0.215" d="0.064" h="0.160" m="3"/>
-            </inertial>
-            <visual>
-                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
-                <geometry>
-                <box size="0.215 0.160 0.064"/>
-                </geometry>
-            </visual>
-            <collision>
-                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
-                <geometry>
-                <box size="${hitch_length} ${hitch_width} ${hitch_height}"/>
-                </geometry>
-            </collision>
-            </link>
-
             <xacro:if value="${connected}">
+              <link name="${prefix}hitch_x">
+                <inertial>
+                        <mass value="3" />
+                        <origin xyz="${hitch_length/2} 0 0" rpy="0 0 0" />
+                        <xacro:solid_cuboid_inertia w="${hitch_length}" d="${hitch_height}" h="${hitch_width}" m="3"/>
+                </inertial>
+                <visual>
+                    <origin xyz="${hitch_length} 0.0 0.0" rpy="-${PI/2} ${PI} ${PI/2}"/>
+                    <geometry>
+                    <!-- <box size="0.215 0.160 0.064"/> -->
+                    <mesh filename="package://rbvogui_description/meshes/cart/trolley_support_closed.stl" scale="1.0 1.0 1.0"/>
+                    </geometry>
+                </visual>
+                <collision>
+                    <origin xyz="${hitch_length/2} 0 0" rpy="0 0 0" />
+                    <geometry>
+                    <box size="${hitch_length} ${hitch_width} ${hitch_height}"/>
+                    </geometry>
+                </collision>
+              </link>
+
               <joint name="${prefix}hitch_x_joint" type="revolute">
-                  <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                  <origin xyz="${-hitch_length} 0.0 0.0" rpy="0.0 0.0 0.0"/>
                   <parent link="${prefix}hitch_y"/>
                   <child link="${prefix}hitch_x"/>
                   <axis xyz="1.0 0.0 0.0"/>
@@ -127,8 +128,29 @@
               </joint>
             </xacro:if>
             <xacro:unless value="${connected}">
+              <link name="${prefix}hitch_x">
+                <inertial>
+                        <mass value="3" />
+                        <origin xyz="${hitch_length/2} 0 0" rpy="0 0 0" />
+                        <xacro:solid_cuboid_inertia w="${hitch_length}" d="${hitch_height}" h="${hitch_width}" m="3"/>
+                </inertial>
+                <visual>
+                    <origin xyz="${hitch_length} 0.0 0.0" rpy="-${PI/2} ${PI} ${PI/2}"/>
+                    <geometry>
+                    <!-- <box size="0.215 0.160 0.064"/> -->
+                    <mesh filename="package://rbvogui_description/meshes/cart/trolley_support.stl" scale="1.0 1.0 1.0"/>
+                    </geometry>
+                </visual>
+                <collision>
+                    <origin xyz="${hitch_length/2} 0 0" rpy="0 0 0" />
+                    <geometry>
+                    <box size="${hitch_length} ${hitch_width} ${hitch_height}"/>
+                    </geometry>
+                </collision>
+              </link>
+
               <joint name="${prefix}hitch_x_joint" type="fixed">
-                  <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                  <origin xyz="${-hitch_length} 0.0 0.0" rpy="0.0 0.0 0.0"/>
                   <parent link="${prefix}hitch_y"/>
                   <child link="${prefix}hitch_x"/>
               </joint>

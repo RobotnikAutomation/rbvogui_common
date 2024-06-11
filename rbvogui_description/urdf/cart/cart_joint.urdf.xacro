@@ -10,7 +10,7 @@
 
         <xacro:if value="${connected}">
             <joint name="${prefix}chassis_joint" type="revolute">
-                <origin xyz="${-cart_length/2 -hitch_length/2} 0 0" rpy="0.0 0.0 0.0"/>
+                <origin xyz="${-cart_length/2 - 0.1} 0 0" rpy="0.0 0.0 0.0"/>
                 <parent link="robot_hitch_x"/>
                 <child link="${prefix}chassis"/>
                 <axis xyz="0.0 1.0 0.0"/>
@@ -102,18 +102,32 @@
             <dynamics damping="0.8" friction="2.0"/>
         </joint>
 
-    <!-- Marker0 -->
-        <joint name="${prefix}marker0_joint" type="fixed">
-            <origin xyz="0.67 -0.12 0.05" rpy="0.0 0.0 0.0"/>
+    <!-- Marker00 -->
+        <joint name="${prefix}marker00_joint" type="fixed">
+            <origin xyz="0.67 -0.3 0.05" rpy="0.0 0.0 0.0"/>
             <parent link="${prefix}chassis"/>
-            <child link="${prefix}marker0"/>
+            <child link="${prefix}marker00"/>
         </joint>
 
-    <!-- Marker1 -->
-        <joint name="${prefix}marker1_joint" type="fixed">
-            <origin xyz="0.67 0.12 0.05" rpy="0.0 0.0 0.0"/>
+    <!-- Marker01 -->
+        <joint name="${prefix}marker01_joint" type="fixed">
+            <origin xyz="0.67 0.3 0.05" rpy="0.0 0.0 0.0"/>
             <parent link="${prefix}chassis"/>
-            <child link="${prefix}marker1"/>
+            <child link="${prefix}marker01"/>
+        </joint>
+
+    <!-- Marker10 -->
+        <joint name="${prefix}marker10_joint" type="fixed">
+            <origin xyz="0.67 -0.08 0.05" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}chassis"/>
+            <child link="${prefix}marker10"/>
+        </joint>
+
+    <!-- Marker11 -->
+        <joint name="${prefix}marker11_joint" type="fixed">
+            <origin xyz="0.67 0.08 0.05" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}chassis"/>
+            <child link="${prefix}marker11"/>
         </joint>
 
     </xacro:macro>

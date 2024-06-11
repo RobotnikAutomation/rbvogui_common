@@ -33,7 +33,7 @@
   <xacro:property name="support_width" value="0.03" />
 
   <!-- Hitch -->
-  <xacro:property name="hitch_length" value="0.215" />
+  <xacro:property name="hitch_length" value="0.3" />
   <xacro:property name="hitch_width" value="0.160" />
   <xacro:property name="hitch_height" value="0.064" />
 
@@ -44,8 +44,8 @@
   <xacro:property name="bulon_z" value="0.391" />
 
   <!-- Transform from hitch to chassis UNKOWN -->
-  <xacro:property name="hitch_x" value="-0.620" />
-  <xacro:property name="hitch_z" value="0.161" />
+  <xacro:property name="hitch_x" value="-0.347" />
+  <xacro:property name="hitch_z" value="0.175" />
 
   <!-- Transform from chassis to wheels -->
   <xacro:property name="front_caster_wheel_x" value="0.620" />
@@ -291,8 +291,8 @@
       <material>Gazebo/Grey</material>
     </gazebo>
 
-    <!-- Marker0 -->
-    <link name="${prefix}marker0">
+    <!-- Marker00 -->
+    <link name="${prefix}marker00">
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
         <geometry>
@@ -301,8 +301,28 @@
       </visual>
     </link>
 
-    <!-- Marker1 -->
-    <link name="${prefix}marker1">
+    <!-- Marker01 -->
+    <link name="${prefix}marker01">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker0.dae" scale="0.16 0.16 0.16"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Marker10 -->
+    <link name="${prefix}marker10">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker1.dae" scale="0.16 0.16 0.16"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Marker11 -->
+    <link name="${prefix}marker11">
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
         <geometry>
