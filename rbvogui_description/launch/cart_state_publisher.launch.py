@@ -187,9 +187,9 @@ def generate_launch_description():
             'publish_frequency': 100.0,
             'frame_prefix': ''
         }],
+        namespace=params['namespace']
     )
 
-    # ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
     ld.add_action(cart_state_publisher)
 
     return ld

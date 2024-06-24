@@ -151,6 +151,6 @@
                    launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" cart="$(arg cart)" connected="$(arg connected)"/>
 
     <!-- Gazebo ros control pluggins -->
-    <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control.urdf.xacro"/>
+    <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control_ackermann.urdf.xacro"/>
     <xacro:ros2_control prefix="$(arg prefix)"/>
 </robot>

@@ -47,6 +47,7 @@ def read_params(ld : launch.LaunchDescription):
     robot_description_path = launch.substitutions.LaunchConfiguration('robot_description_path')
     controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
     cart = launch.substitutions.LaunchConfiguration('cart')
+    connected = launch.substitutions.LaunchConfiguration('connected')
     launch_joint = launch.substitutions.LaunchConfiguration('launch_joint')
 
     # Declare the launch options
@@ -93,11 +94,17 @@ def read_params(ld : launch.LaunchDescription):
         description='ROS 2 controller file.',
         default_value=[get_package_share_directory('rbvogui_description'), '/test/empty.yaml'])
     )
-    
+
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='cart',
         description='bool rbvogui with cart',
         default_value='true')
+    )
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='connected',
+        description='bool if cart is connected',
+        default_value='false')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -117,6 +124,7 @@ def read_params(ld : launch.LaunchDescription):
         'controllers_file': controllers_file,
         'robot_description_path': robot_description_path,
         'cart': cart,
+        'connected': connected,
         'launch_joint': launch_joint
         }
     
@@ -149,6 +157,7 @@ def read_params(ld : launch.LaunchDescription):
             ret['cart'] = os.environ['CART']
         else:  ret['cart'] = cart
 
+        ret['connected'] = connected
         ret['launch_joint'] = launch_joint
 
     return ret
@@ -190,7 +199,8 @@ def generate_launch_description():
             " lift_manufacturer:=false",
             " lift_model:=false",
             " config_controllers:=", config_file_rewritten,
-            " cart:=", params['cart']
+            " cart:=", params['cart'],
+            " connected:=", params['connected']
         ]
     )
 
@@ -208,18 +218,20 @@ def generate_launch_description():
             'publish_frequency': 100.0,
             'frame_prefix': ''
         }],
+        namespace=params['namespace']
     )
 
     robot_joint_publisher = launch_ros.actions.Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         name='joint_state_publisher_gui',
-        output='screen'
+        output='screen',
+        condition = launch.conditions.IfCondition(
+            params['launch_joint']),
+        namespace=params['namespace']
     )
 
-    ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
     ld.add_action(robot_state_publisher)
-    if params['launch_joint']:
-        ld.add_action(robot_joint_publisher)
+    ld.add_action(robot_joint_publisher)
 
     return ld
