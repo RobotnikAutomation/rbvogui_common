@@ -75,6 +75,7 @@
         </xacro:steering_wheel>
 
         <xacro:if value="${kinematics == 'omni'}">
+            <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control.urdf.xacro"/>
             <xacro:steering_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:steering_wheel>
@@ -85,13 +86,23 @@
         </xacro:if>
 
         <xacro:if value="${kinematics == 'ackermann'}">
-            <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+            <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control_ackermann.urdf.xacro"/>
+
+            <!-- TODO CHANGE WHEN CONTROLLER IS BETTER ADAPTED -->
+            <!-- <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:fixed_wheel>
 
             <xacro:fixed_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
                 <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
-            </xacro:fixed_wheel>
+            </xacro:fixed_wheel> -->
+            <xacro:steering_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:steering_wheel>
+
+            <xacro:steering_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:steering_wheel>
         </xacro:if>
 
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
@@ -143,6 +154,9 @@
             </xacro:if>
         </xacro:if>
 
+        <!-- Gazebo ros control pluggins -->
+        <xacro:ros2_control prefix="${prefix}"/>ç
+
     </xacro:macro>
 
     <xacro:rbvogui prefix="$(arg prefix)" kinematics="$(arg kinematics)" load_kinematics_file="$(arg load_kinematics_file)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
@@ -150,7 +164,4 @@
                    launch_gripper="$(arg launch_gripper)" gripper_manufacturer="$(arg gripper_manufacturer)" gripper_model="$(arg gripper_model)"
                    launch_lift="$(arg launch_lift)" lift_manufacturer="$(arg lift_manufacturer)" lift_model="$(arg lift_model)" cart="$(arg cart)" connected="$(arg connected)"/>
 
-    <!-- Gazebo ros control pluggins -->
-    <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control_ackermann.urdf.xacro"/>
-    <xacro:ros2_control prefix="$(arg prefix)"/>
 </robot>

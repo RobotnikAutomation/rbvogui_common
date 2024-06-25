@@ -184,7 +184,7 @@ def generate_launch_description():
             params['robot_description_path'],
             " robot_id:=", params['robot_id'],
             " prefix:=",   params['robot_id'], "_",
-            " kinematics:=omni",
+            " kinematics:=ackermann",
             " load_kinematics_file:=false",
             " gpu:=false",
             " publish_bf:=true",
