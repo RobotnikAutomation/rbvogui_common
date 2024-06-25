@@ -49,6 +49,7 @@ def read_params(ld : launch.LaunchDescription):
     cart = launch.substitutions.LaunchConfiguration('cart')
     connected = launch.substitutions.LaunchConfiguration('connected')
     launch_joint = launch.substitutions.LaunchConfiguration('launch_joint')
+    kinematics = launch.substitutions.LaunchConfiguration('kinematics')
 
     # Declare the launch options
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -113,6 +114,12 @@ def read_params(ld : launch.LaunchDescription):
         default_value='false')
     )
 
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='kinematics',
+        description='kinematics of the robot (omni or ackermann)',
+        default_value='omni')
+    )
+
     # Parse the launch options
     ret = {}
 
@@ -125,7 +132,8 @@ def read_params(ld : launch.LaunchDescription):
         'robot_description_path': robot_description_path,
         'cart': cart,
         'connected': connected,
-        'launch_joint': launch_joint
+        'launch_joint': launch_joint,
+        'kinematics': kinematics
         }
     
     else:
@@ -159,6 +167,7 @@ def read_params(ld : launch.LaunchDescription):
 
         ret['connected'] = connected
         ret['launch_joint'] = launch_joint
+        ret['kinematics'] = kinematics
 
     return ret
 
@@ -184,7 +193,7 @@ def generate_launch_description():
             params['robot_description_path'],
             " robot_id:=", params['robot_id'],
             " prefix:=",   params['robot_id'], "_",
-            " kinematics:=ackermann",
+            " kinematics:=", params['kinematics'],
             " load_kinematics_file:=false",
             " gpu:=false",
             " publish_bf:=true",
