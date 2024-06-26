@@ -174,7 +174,6 @@ def generate_launch_description():
             'frame_id': params['map_frame_id'],
         }],
         output='screen',
-        namespace=params['namespace']
         )
     
     amcl_node = launch_ros.actions.Node(
@@ -186,7 +185,7 @@ def generate_launch_description():
             amcl_rewritten
         ],
         output='screen',
-        namespace=params['namespace'])
+        )
 
     lifecycle_manager = launch_ros.actions.Node(
         package='nav2_lifecycle_manager',
@@ -198,6 +197,7 @@ def generate_launch_description():
             'autostart': True,
             'node_names': lifecycle_nodes}])
     
+    ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
     ld.add_action(map_server)
     ld.add_action(amcl_node)
     ld.add_action(lifecycle_manager)
