@@ -195,7 +195,8 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': params['use_sim_time'],
             'autostart': True,
-            'node_names': lifecycle_nodes}])
+            'node_names': lifecycle_nodes}],
+        )
     
     ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
     ld.add_action(map_server)

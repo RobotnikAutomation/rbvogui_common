@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="markers">
+
+  <xacro:arg name="prefix" default="robot_cart_" />
+
+  <xacro:macro name="markers" params="prefix">
+    <!-- Marker00 -->
+    <link name="${prefix}marker00">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker3.dae" scale="0.20 0.20 0.20"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}marker00_joint" type="fixed">
+        <origin xyz="0.67 -0.3 0.05" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}chassis"/>
+        <child link="${prefix}marker00"/>
+    </joint>
+
+    <!-- Marker01 -->
+    <link name="${prefix}marker01">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker3.dae" scale="0.20 0.20 0.20"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}marker01_joint" type="fixed">
+        <origin xyz="0.67 0.3 0.05" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}chassis"/>
+        <child link="${prefix}marker01"/>
+    </joint>
+
+    <!-- Marker10 -->
+    <link name="${prefix}marker10">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker4.dae" scale="0.20 0.20 0.20"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}marker10_joint" type="fixed">
+        <origin xyz="0.67 -0.10 0.05" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}chassis"/>
+        <child link="${prefix}marker10"/>
+    </joint>
+
+    <!-- Marker11 -->
+    <link name="${prefix}marker11">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/Markers/meshes/Marker4.dae" scale="0.20 0.20 0.20"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}marker11_joint" type="fixed">
+        <origin xyz="0.67 0.10 0.05" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}chassis"/>
+        <child link="${prefix}marker11"/>
+    </joint>
+  </xacro:macro>
+
+</robot>

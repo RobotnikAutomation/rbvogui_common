@@ -143,7 +143,7 @@
         -->
 
         <xacro:if value="${cart}">
-            <xacro:include filename="$(find rbvogui_description)/urdf/cart/cart_robot_connection.urdf.xacro" />
+            <xacro:include filename="$(find rbvogui_description)/urdf/cart/robot_cart_connection.urdf.xacro" />
 
             <xacro:cart_connection prefix="${prefix}" connected="${connected}"/>
 
@@ -155,7 +155,7 @@
         </xacro:if>
 
         <!-- Gazebo ros control pluggins -->
-        <xacro:ros2_control prefix="${prefix}"/>ç
+        <xacro:ros2_control prefix="${prefix}"/>
 
     </xacro:macro>
 

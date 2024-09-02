@@ -29,10 +29,11 @@ def generate_launch_description():
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
-        output='screen')
+        output='screen',)
 
     ld = LaunchDescription()
 
+    # ld.add_action(launch_ros.actions.PushRosNamespace(namespace="robot"))
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(declare_slam_params_file_cmd)
     ld.add_action(start_async_slam_toolbox_node)
