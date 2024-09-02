@@ -5,6 +5,7 @@
   <xacro:include filename="$(find rbvogui_description)/urdf/cart/cart_joint.urdf.xacro" />
   <xacro:include filename="$(find rbvogui_description)/urdf/cart/robot_cart_connection.urdf.xacro" />
   <xacro:include filename="$(find rbvogui_description)/urdf/cart/markers.urdf.xacro" />
+  <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 
   <xacro:arg name="prefix" default="robot_" />
   <xacro:arg name="connected" default="false" />
@@ -307,6 +308,11 @@
     <gazebo reference="${prefix}front_right_wheel">
       <material>Gazebo/Grey</material>
     </gazebo>
+
+    <!-- hokuyo ust10 -->
+    <xacro:sensor_hokuyo_ust10lx prefix="${prefix}rear_laser" parent="${prefix}chassis" gpu="false" prefix_topic="/${prefix}/rear_laser">
+        <origin xyz="-0.63 0.0 -0.023" rpy="${PI} 0 ${-PI*3/4}"/>
+    </xacro:sensor_hokuyo_ust10lx>
 
     <xacro:cart_joints prefix="${prefix}" connected="${connected}"/>
     <xacro:markers prefix="${prefix}"/>
