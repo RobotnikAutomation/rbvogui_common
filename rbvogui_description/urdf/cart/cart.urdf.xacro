@@ -310,8 +310,8 @@
     </gazebo>
 
     <!-- hokuyo ust10 -->
-    <xacro:sensor_hokuyo_ust10lx prefix="${prefix}rear_laser" parent="${prefix}chassis" gpu="false" prefix_topic="/${prefix}/rear_laser">
-        <origin xyz="-0.63 0.0 -0.023" rpy="${PI} 0 ${-PI*3/4}"/>
+    <xacro:sensor_hokuyo_ust10lx prefix="${prefix}rear_laser" parent="${prefix}chassis" gpu="false" prefix_topic="/${prefix}rear_laser">
+        <origin xyz="-0.63 0.0 -0.023" rpy="${PI} 0 ${-PI/2}"/>
     </xacro:sensor_hokuyo_ust10lx>
 
     <xacro:cart_joints prefix="${prefix}" connected="${connected}"/>
