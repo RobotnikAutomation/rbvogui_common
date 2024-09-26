@@ -4,20 +4,16 @@
   <xacro:arg name="prefix" default="robot_" />
   <xacro:arg name="connected" default="true" />
 
-  <!-- Transform from robot_base_link to bulon -->
-  <xacro:property name="bulon_x" value="-0.669" />
-  <xacro:property name="bulon_z" value="0.391" />
-
   <!-- Transform from hitch to chassis UNKOWN -->
   <xacro:property name="hitch_x" value="-0.347" />
-  <xacro:property name="hitch_z" value="0.22" />
+  <xacro:property name="hitch_z" value="0.3" />
 
   <!-- Hitch -->
   <xacro:property name="hitch_length" value="0.32" />
   <xacro:property name="hitch_width" value="0.160" />
   <xacro:property name="hitch_height" value="0.064" />
 
-  <xacro:macro name="cart_connection" params="prefix connected">
+  <xacro:macro name="cart_connection" params="prefix connected parent">
 
     <xacro:if value="${connected}">
   
@@ -71,7 +67,7 @@
     <!-- Bulon joint to robot-->
     <joint name="${prefix}bulon_joint" type="fixed">
         <origin xyz="${hitch_x} 0.0 ${hitch_z}" rpy="0.0 0.0 0.0"/>
-        <parent link="${prefix}base_link"/>
+        <parent link="${parent}"/>
         <child link="${prefix}bulon"/>
     </joint>
 

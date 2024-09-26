@@ -29,7 +29,7 @@ import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 
-from robotnik_common.launch import RewrittenYaml
+from nav2_common.launch import RewrittenYaml
 
 # Environment variables
 #  USE_SIM_TIME: Use simulation (Gazebo) clock if true
@@ -158,6 +158,7 @@ def generate_launch_description():
             'base_frame_id': [params['robot_id'], '_base_footprint'],
             'odom_frame_id': [params['robot_id'], '_odom'],
             'global_frame_id': params['map_frame_id'],
+            'scan_topic': ['/', params['robot_id'], '/front_laser/scan'],
         },
         root_key=[params['robot_id']],
         convert_types=True,
@@ -167,6 +168,7 @@ def generate_launch_description():
         package='nav2_map_server',
         executable='map_server',
         name='map_server',
+        namespace=params['namespace'],
         parameters=[{
             'use_sim_time': params['use_sim_time'],
             'yaml_filename': params['map_file_abs'],
@@ -180,6 +182,7 @@ def generate_launch_description():
         package='nav2_amcl',
         executable='amcl',
         name='amcl',
+        namespace=params['namespace'],
         parameters=[
             {'use_sim_time': params['use_sim_time']},
             amcl_rewritten
@@ -192,13 +195,13 @@ def generate_launch_description():
         executable='lifecycle_manager',
         name='lifecycle_manager_localization',
         output='screen',
+        namespace=params['namespace'],
         parameters=[{
             'use_sim_time': params['use_sim_time'],
             'autostart': True,
             'node_names': lifecycle_nodes}],
         )
-    
-    ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
+
     ld.add_action(map_server)
     ld.add_action(amcl_node)
     ld.add_action(lifecycle_manager)

@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="front_wheel">
+
+  <!-- Math -->
+  <xacro:property name="PI" value="3.141592" />
+
+  <!-- Size wheels -->
+  <xacro:property name="wheels_radius" value="0.225" />
+
+  <!-- Size front wheel-->
+  <xacro:property name="front_wheel_radius" value="0.08" />
+  <xacro:property name="front_wheel_width" value="0.05" />
+
+  <!-- Support front wheel cart -->
+  <xacro:property name="support_length" value="${wheels_radius - front_wheel_radius + 0}" />
+  <xacro:property name="support_width" value="0.03" />
+
+  <!-- Transform from front_caster_wheel to front_wheel -->
+  <xacro:property name="front_wheel_x" value="-0.04545" />
+  <xacro:property name="front_wheel_z" value="-0.115" />
+
+  <xacro:macro name="front_wheel" params="prefix parent *origin">
+
+    <!-- Front Wheel Base Support -->
+    <joint name="${prefix}front_wheel_base_support_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+        <parent link="${parent}"/>
+        <child link="${prefix}front_wheel_base_support"/>
+    </joint>
+
+    <link name="${prefix}front_wheel_base_support">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/base_support_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <gazebo reference="${prefix}front_right_wheel_base_support">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- Front Wheel support -->
+
+    <joint name="${prefix}front_wheel_support_joint" type="continuous">
+      <xacro:insert_block name="origin"/>
+        <parent link="${parent}"/>
+        <child link="${prefix}front_wheel_support"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit effort="1000" velocity="2000"/>
+        <dynamics damping="0.8" friction="2.0"/>
+    </joint>
+
+    <link name="${prefix}front_wheel_support">
+      <inertial>
+            <mass value="1" />
+            <origin xyz="0 0 0" rpy="0 ${PI/2} 0" />
+            <xacro:solid_cuboid_inertia w="${support_length}" d="${support_width}" h="${support_width}" m="1"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 -${40*PI/180}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/support_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${PI/2} 0.0"/>
+        <geometry>
+          <box size="${support_length} ${support_width} ${support_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}front_right_wheel_support">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- Front Wheel  -->
+    <joint name="${prefix}front_wheel_joint" type="continuous">
+        <origin xyz="${front_wheel_x} 0 ${front_wheel_z}" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}front_wheel_support"/>
+        <child link="${prefix}front_wheel"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit effort="1000" velocity="2000"/>
+        <dynamics damping="0.8" friction="2.0"/>
+    </joint>
+
+    
+    <link name="${prefix}front_wheel">
+      <inertial>
+        <mass value="1" />
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+        <xacro:solid_cylinder_inertia m="1" r="${front_wheel_radius}" h="${front_wheel_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 ${PI/2}"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/front_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.1 0.1 0.1 1"/>     
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${front_wheel_radius}" length="${front_wheel_width}"/>
+        </geometry>
+        <contact_coefficients mu="1.0" kp="1.0" kd="1.0" />
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}front_wheel">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

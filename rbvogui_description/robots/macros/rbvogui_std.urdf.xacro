@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!-- RBVogui v3.0 -->
+<robot name="rbvogui" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- ***************** -->
+    <!-- Imported elements -->
+    <!-- ***************** -->
+
+    <!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+    <!-- Import rbvogui base elements-->
+    <xacro:include filename="$(find rbvogui_description)/urdf/bases/rbvogui_base.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/ros2_control.urdf.xacro"/>
+
+    <!-- Import rbvogui wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/steering_wheel.urdf.xacro" />
+
+    <!-- Import rbvogui fix wheels -->
+    <xacro:include filename="$(find rbvogui_description)/urdf/wheels/fixed_wheel.urdf.xacro" />
+
+    <!-- Import all available sensors -->
+    <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+    <xacro:include filename="$(find rbvogui_description)/urdf/structures/gps_mast.urdf.xacro" />
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+
+    <!-- Wheel parameters -->
+    <xacro:property name="wheel_offset_x" value="0.368" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+    <xacro:property name="wheel_offset_y" value="0.235" />
+    <xacro:property name="wheel_offset_z" value="0.0" />
+
+    <!-- Flag to select the high or low quality model -->
+    <xacro:property name="hq" value="true" />
+    <xacro:property name="publish_bf" value="true" />
+
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics gpu robot_id controllers">
+
+        <!-- ***************   -->
+        <!-- Robots Elements -->
+        <!-- *************** -->
+
+        <!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+
+        <xacro:rbvogui_base prefix="${prefix}" publish_bf="${publish_bf}" hq="${hq}"/>
+
+        <xacro:steering_wheel prefix="${prefix}front_right_" parent="${prefix}base_link" reflect="false" hq="true">
+            <origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+        </xacro:steering_wheel>
+
+        <xacro:steering_wheel prefix="${prefix}front_left_" parent="${prefix}base_link" reflect="true" hq="true">
+            <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+        </xacro:steering_wheel>
+
+        <xacro:if value="${kinematics == 'omni'}">
+            <xacro:steering_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:steering_wheel>
+
+            <xacro:steering_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:steering_wheel>
+        </xacro:if>
+
+        <xacro:if value="${kinematics == 'ackermann'}">
+
+            <!-- TODO CHANGE WHEN CONTROLLER IS BETTER ADAPTED -->
+            <!-- <xacro:fixed_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:fixed_wheel>
+
+            <xacro:fixed_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:fixed_wheel> -->
+            <xacro:steering_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
+                <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:steering_wheel>
+
+            <xacro:steering_wheel prefix="${prefix}back_right_" parent="${prefix}base_link" reflect="false" hq="true">
+                <origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+            </xacro:steering_wheel>
+        </xacro:if>
+
+        <!-- SENSORS see robotnik_sensors for the specific configuration -->
+
+        <!-- IMU -->
+        <xacro:sensor_vectornav prefix="${prefix}" parent="${prefix}chassis_link" topic="/${robot_id}/imu/data">
+            <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
+        </xacro:sensor_vectornav>
+
+        <!-- Front Camera -->
+        <xacro:sensor_intel_d435 prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link" prefix_topic="/${robot_id}/front_rgbd_camera" use_nominal_extrinsics="true">
+            <origin xyz="0.46462 0.0 0.18258" rpy="0 0 0"/>
+        </xacro:sensor_intel_d435>
+
+        <!-- Rear Camera -->
+        <xacro:sensor_intel_d435 prefix="${prefix}rear_rgbd_camera" parent="${prefix}base_link" prefix_topic="/${robot_id}/rear_rgbd_camera" use_nominal_extrinsics="true">
+            <origin xyz="-0.503 0.0 0.29" rpy="0 0 -${PI}"/>
+        </xacro:sensor_intel_d435>
+
+        <!-- 2d laser -->
+        <xacro:sensor_sick_s300 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/${robot_id}/front_laser">
+          <origin xyz="0.53 0.33 0.1145" rpy="${PI} 0 ${PI/4}"/>
+        </xacro:sensor_sick_s300>
+
+        <xacro:sensor_sick_s300 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/${robot_id}/rear_laser">
+          <origin xyz="-0.53 -0.33 0.1145" rpy="${PI} 0 ${-PI*3/4}"/>
+        </xacro:sensor_sick_s300>
+
+        <xacro:ros2_control prefix="${prefix}" robot_id="${robot_id}" controllers="${controllers}"/>
+
+    </xacro:macro>
+
+</robot>

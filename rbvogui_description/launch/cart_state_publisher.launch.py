@@ -28,7 +28,6 @@ import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 
-from robotnik_common.launch import RewrittenYaml
 
 # Environment variables
 #  USE_SIM_TIME: Use simulation (Gazebo) clock if true
@@ -43,10 +42,6 @@ def read_params(ld : launch.LaunchDescription):
     use_sim_time = launch.substitutions.LaunchConfiguration('use_sim_time')
     namespace = launch.substitutions.LaunchConfiguration('namespace')
     robot_id = launch.substitutions.LaunchConfiguration('robot_id')
-    robot_description = launch.substitutions.LaunchConfiguration('robot_description')
-    robot_description_path = launch.substitutions.LaunchConfiguration('robot_description_path')
-    controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
-    cart = launch.substitutions.LaunchConfiguration('cart')
     connected = launch.substitutions.LaunchConfiguration('connected')
     launch_joint = launch.substitutions.LaunchConfiguration('launch_joint')
 
@@ -78,34 +73,17 @@ def read_params(ld : launch.LaunchDescription):
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='robot_description',
-        description='Robot description.',
-        default_value='cart.urdf.xacro')
-    )
-
-    ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='robot_description_path',
-        description='Path to the robot description file.',
-        default_value=[get_package_share_directory('rbvogui_description'), '/urdf/cart/', robot_description])
-    )
-
-    ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='controllers_file',
-        description='ROS 2 controller file.',
-        default_value=[get_package_share_directory('rbvogui_description'), '/test/empty.yaml'])
+        name='connected',
+        description='Bool to connect the cart',
+        default_value='false')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='launch_joint',
         description='launch joint_state_publisher_gui',
-        default_value='false')
+        default_value='true')
     )
 
-    ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='connected',
-        description='launch cart connected to the robot',
-        default_value='false')
-    )
 
     # Parse the launch options
     ret = {}
@@ -115,12 +93,10 @@ def read_params(ld : launch.LaunchDescription):
         'use_sim_time': use_sim_time,
         'namespace': namespace,
         'robot_id': robot_id,
-        'controllers_file': controllers_file,
-        'robot_description_path': robot_description_path,
+        'connected': connected,
         'launch_joint': launch_joint,
-        'connected': connected
         }
-
+    
     else:
         if 'USE_SIM_TIME' in os.environ:
             ret['use_sim_time'] = os.environ['USE_SIM_TIME']
@@ -136,22 +112,13 @@ def read_params(ld : launch.LaunchDescription):
             ret['namespace'] = os.environ['ROBOT_ID']
         else:  ret['namespace'] = namespace
 
-        if 'CONTROLLERS_FILE' in os.environ:
-            ret['controllers_file'] = os.environ['CONTROLLERS_FILE']
-        else: ret['controllers_file'] = controllers_file
+        if 'CONNECTED' in os.environ:
+            ret['connected'] = os.environ['CONNECTED']
+        else:  ret['connected'] = connected
 
-        if 'ROBOT_DESCRIPTION_PATH' in os.environ:
-            ret['robot_description_path'] = os.environ['ROBOT_DESCRIPTION_PATH']
-        elif 'ROBOT_DESCRIPTION' in os.environ:
-            ret['robot_description_path'] = [get_package_share_directory('rbvogui_description'), '/robots/', os.environ['ROBOT_DESCRIPTION']]
-        else: ret['robot_description_path'] = robot_description_path
-
-        if 'CART' in os.environ:
-            ret['cart'] = os.environ['CART']
-        else:  ret['cart'] = cart
-
-        ret['launch_joint'] = launch_joint
-        ret['connected'] = connected
+        if 'LAUNCH_JOINT' in os.environ:
+            ret['launch_joint'] = os.environ['LAUNCH_JOINT']
+        else:  ret['launch_joint'] = launch_joint
 
     return ret
 
@@ -167,13 +134,14 @@ def generate_launch_description():
             launch.substitutions.PathJoinSubstitution(
                 [launch.substitutions.FindExecutable(name="xacro")]),
             " ",
-            get_package_share_directory('rbvogui_description'), '/urdf/cart/cart.urdf.xacro',
-            " prefix:=robot_",
+            get_package_share_directory('rbvogui_description'),'/urdf/cart/cart.urdf.xacro'
+            " prefix:=",   params['robot_id'], "_",
             " connected:=", params['connected'],
+            " namespace:=", params['namespace'],
         ]
     )
 
-    # Create parameter 
+    # Create parameter
     cart_description_param = launch_ros.descriptions.ParameterValue(cart_description_content, value_type=str)
 
     cart_state_publisher = launch_ros.actions.Node(
@@ -190,6 +158,17 @@ def generate_launch_description():
         namespace=params['namespace']
     )
 
+    cart_joint_publisher = launch_ros.actions.Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        name='cart_joint_state_publisher_gui',
+        output='screen',
+        condition = launch.conditions.IfCondition(
+            params['launch_joint']),
+        namespace=params['namespace']
+    )
+
     ld.add_action(cart_state_publisher)
+    ld.add_action(cart_joint_publisher)
 
     return ld

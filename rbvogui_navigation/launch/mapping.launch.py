@@ -6,9 +6,46 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 import launch_ros
+import launch
 
+def read_params(ld : launch.LaunchDescription):
+    environment = launch.substitutions.LaunchConfiguration('environment')
+    namespace = launch.substitutions.LaunchConfiguration('namespace')
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='environment',
+        description='Read params from environment variables.',
+        choices=['true', 'false'],
+        default_value='true')
+    )
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='namespace',
+        description='Namespace of the nodes.',
+        default_value='robot')
+    )
+    
+    # Parse the launch options
+    ret = {}
+
+    if environment == 'false':
+        ret = {
+        'namespace': namespace,
+        }
+    
+    else:
+        if 'NAMESPACE' in os.environ:
+            ret['namespace'] = launch.substitutions.EnvironmentVariable('NAMESPACE')
+        elif 'ROBOT_ID' in os.environ:
+            ret['namespace'] = launch.substitutions.EnvironmentVariable('ROBOT_ID')
+        else:  ret['namespace'] = namespace
+
+    return ret
 
 def generate_launch_description():
+
+    ld = launch.LaunchDescription()
+    params = read_params(ld)
     use_sim_time = LaunchConfiguration('use_sim_time')
     slam_params_file = LaunchConfiguration('slam_params_file')
 
@@ -26,14 +63,13 @@ def generate_launch_description():
           slam_params_file,
           {'use_sim_time': use_sim_time}
         ],
+        remappings=[('/map', ['/', params['namespace'], '/map'])],
+        namespace=params['namespace'],
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
         output='screen',)
 
-    ld = LaunchDescription()
-
-    # ld.add_action(launch_ros.actions.PushRosNamespace(namespace="robot"))
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(declare_slam_params_file_cmd)
     ld.add_action(start_async_slam_toolbox_node)

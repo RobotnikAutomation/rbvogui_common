@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="cart_base">
+
+  <xacro:include filename="$(find rbvogui_description)/urdf/inertia.urdf.xacro" />
+  <xacro:include filename="$(find rbvogui_description)/urdf/cart/cart_front_wheel.urdf.xacro" />
+  <xacro:include filename="$(find rbvogui_description)/urdf/cart/cart_rear_wheel.urdf.xacro" />
+  <xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+
+  <xacro:arg name="prefix" default="robot_" />
+  <xacro:arg name="connected" default="false" />
+
+  <!-- Math -->
+  <xacro:property name="PI" value="3.141592" />
+
+  <!-- Size cart -->
+  <xacro:property name="cart_length" value="1.3" />
+  <xacro:property name="cart_width" value="1.3" />
+  <xacro:property name="cart_height" value="0.23" />
+  <xacro:property name="cart_mass" value="80" />
+
+  <xacro:property name="hitch_x" value="-0.347" />
+  <xacro:property name="hitch_z" value="0.175" />
+
+  <!-- Transform from chassis to wheels -->
+  <xacro:property name="front_caster_wheel_x" value="0.620" />
+  <xacro:property name="front_caster_wheel_y" value="0.6045" />
+  <xacro:property name="front_caster_wheel_z" value="-0.11201" />
+
+  <xacro:property name="rear_wheel_x" value="-0.40883" />
+  <xacro:property name="rear_wheel_y" value="0.5895" />
+  <xacro:property name="rear_wheel_z" value="-0.075" />
+
+  <xacro:macro name="cart_base" params="prefix connected namespace">
+
+  <!-- Footprint -->
+    <xacro:unless value="${connected}">
+      <link name="${prefix}base_footprint"/>
+    </xacro:unless>
+
+    <xacro:if value="${connected}">
+        <joint name="${prefix}chassis_joint" type="revolute">
+            <origin xyz="${-cart_length/2 - 0.285} 0 0" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}hitch_x"/>
+            <child link="${prefix}chassis"/>
+            <axis xyz="0.0 1.0 0.0"/>
+            <limit effort="1000" velocity="2000" lower="-0.2" upper="0.2"/>
+        </joint>
+    </xacro:if>
+
+    <xacro:unless value="${connected}">
+        <joint name="${prefix}chassis_joint" type="fixed">
+            <origin xyz="0 0 0.3" rpy="0.0 0.0 0.0"/>
+            <parent link="${prefix}base_footprint"/>
+            <child link="${prefix}chassis"/>
+        </joint>
+    </xacro:unless>
+
+    <!-- Chassis -->
+    <link name="${prefix}chassis">
+      <inertial>
+        <mass value="${cart_mass}" />
+        <origin xyz="-0.1 0 -0.1" rpy="0 0 0" />
+        <inertia ixx="${(cart_mass*(cart_width*cart_width+cart_height*cart_height))/12}" ixy="0" ixz="0" 
+                  iyy="${(cart_mass*(cart_length*cart_length+cart_height*cart_height))/12}" iyz="0" 
+                  izz="${(cart_mass*(cart_length*cart_length+cart_width*cart_width))/12}" />
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0" rpy="0 0.0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/cart.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="red">
+          <color rgba="0.9 0.9 0.9 1"/>     
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <box size="${cart_length} ${cart_width} ${cart_height}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}chassis">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+    <!-- Lanza -->
+
+    <joint name="${prefix}lanza_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.0" rpy="3.141592 0.0 0.0"/>
+        <parent link="${prefix}chassis"/>
+        <child link="${prefix}lanza"/>
+    </joint>
+
+    <link name="${prefix}lanza">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/lanza.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/lanza.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <xacro:rear_wheel prefix="${prefix}right_" parent="${prefix}chassis">
+      <origin xyz="${rear_wheel_x} ${-rear_wheel_y} ${rear_wheel_z}" rpy="0.0 0.0 0.0"/>
+    </xacro:rear_wheel>
+
+    <xacro:rear_wheel prefix="${prefix}left_" parent="${prefix}chassis">
+      <origin xyz="${rear_wheel_x} ${rear_wheel_y} ${rear_wheel_z}" rpy="0.0 0.0 0.0"/>
+    </xacro:rear_wheel>
+
+    <xacro:front_wheel prefix="${prefix}right_" parent="${prefix}chassis">
+      <origin xyz="${front_caster_wheel_x} ${-front_caster_wheel_y} ${front_caster_wheel_z}" rpy="0.0 0.0 0.0"/>
+    </xacro:front_wheel>
+
+    <xacro:front_wheel prefix="${prefix}left_" parent="${prefix}chassis">
+      <origin xyz="${front_caster_wheel_x} ${front_caster_wheel_y} ${front_caster_wheel_z}" rpy="0.0 0.0 0.0"/>
+    </xacro:front_wheel>
+
+    <!-- hokuyo ust10 -->
+    <xacro:sensor_hokuyo_ust10lx prefix="${prefix}rear_laser" parent="${prefix}chassis" gpu="false" prefix_topic="/${prefix}rear_laser">
+        <origin xyz="-0.63 0.0 -0.023" rpy="${PI} 0 ${-PI/2}"/>
+    </xacro:sensor_hokuyo_ust10lx>
+
+    <gazebo>
+      <plugin name="cart_joint_state" filename="libgazebo_ros_joint_state_publisher.so">
+        <ros>
+          <xacro:if value="${connected}">
+            <namespace>${namespace}</namespace>
+          </xacro:if>
+          <xacro:unless value="${connected}">
+            <namespace>${namespace}/cart</namespace>
+          </xacro:unless>
+        </ros>
+        <update_rate>30</update_rate>
+        <xacro:if value="${connected}">
+          <joint_name>${prefix}hitch_x_joint</joint_name>
+          <joint_name>${prefix}hitch_y_joint</joint_name>
+          <joint_name>${prefix}hitch_z_joint</joint_name>
+          <joint_name>${prefix}chassis_joint</joint_name>
+        </xacro:if>
+        <joint_name>${prefix}left_rear_wheel_joint</joint_name>
+        <joint_name>${prefix}right_rear_wheel_joint</joint_name>
+        <joint_name>${prefix}right_front_wheel_support_joint</joint_name>
+        <joint_name>${prefix}left_front_wheel_support_joint</joint_name>
+        <joint_name>${prefix}right_front_wheel_joint</joint_name>
+        <joint_name>${prefix}left_front_wheel_joint</joint_name>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

@@ -28,7 +28,6 @@ import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 
-from robotnik_common.launch import RewrittenYaml
 
 # Environment variables
 #  USE_SIM_TIME: Use simulation (Gazebo) clock if true
@@ -45,11 +44,11 @@ def read_params(ld : launch.LaunchDescription):
     robot_id = launch.substitutions.LaunchConfiguration('robot_id')
     robot_description = launch.substitutions.LaunchConfiguration('robot_description')
     robot_description_path = launch.substitutions.LaunchConfiguration('robot_description_path')
-    controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
     cart = launch.substitutions.LaunchConfiguration('cart')
     connected = launch.substitutions.LaunchConfiguration('connected')
     launch_joint = launch.substitutions.LaunchConfiguration('launch_joint')
     kinematics = launch.substitutions.LaunchConfiguration('kinematics')
+    controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
 
     # Declare the launch options
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -81,7 +80,7 @@ def read_params(ld : launch.LaunchDescription):
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='robot_description',
         description='Robot description.',
-        default_value='rbvogui_std.urdf.xacro')
+        default_value='rbvogui.urdf.xacro')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -91,27 +90,21 @@ def read_params(ld : launch.LaunchDescription):
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
-        name='controllers_file',
-        description='ROS 2 controller file.',
-        default_value=[get_package_share_directory('rbvogui_description'), '/test/empty.yaml'])
-    )
-
-    ld.add_action(launch.actions.DeclareLaunchArgument(
         name='cart',
-        description='bool rbvogui with cart',
-        default_value='true')
+        description='Bool to spawn the rbvogui with a cart',
+        default_value='false')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='connected',
-        description='bool if cart is connected',
+        description='Bool to connect the cart',
         default_value='false')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='launch_joint',
         description='launch joint_state_publisher_gui',
-        default_value='false')
+        default_value='true')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -119,6 +112,13 @@ def read_params(ld : launch.LaunchDescription):
         description='kinematics of the robot (omni or ackermann)',
         default_value='omni')
     )
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+            name='controllers_file',
+            description='Absolute path to the controllers file.',
+            default_value=[get_package_share_directory('rbvogui_gazebo'), '/config/', kinematics, '_controller.yaml'])
+    )
+
 
     # Parse the launch options
     ret = {}
@@ -128,12 +128,12 @@ def read_params(ld : launch.LaunchDescription):
         'use_sim_time': use_sim_time,
         'namespace': namespace,
         'robot_id': robot_id,
-        'controllers_file': controllers_file,
         'robot_description_path': robot_description_path,
         'cart': cart,
         'connected': connected,
         'launch_joint': launch_joint,
-        'kinematics': kinematics
+        'kinematics': kinematics,
+        'controllers_file': controllers_file
         }
     
     else:
@@ -151,10 +151,6 @@ def read_params(ld : launch.LaunchDescription):
             ret['namespace'] = os.environ['ROBOT_ID']
         else:  ret['namespace'] = namespace
 
-        if 'CONTROLLERS_FILE' in os.environ:
-            ret['controllers_file'] = os.environ['CONTROLLERS_FILE']
-        else: ret['controllers_file'] = controllers_file
-
         if 'ROBOT_DESCRIPTION_PATH' in os.environ:
             ret['robot_description_path'] = os.environ['ROBOT_DESCRIPTION_PATH']
         elif 'ROBOT_DESCRIPTION' in os.environ:
@@ -165,9 +161,22 @@ def read_params(ld : launch.LaunchDescription):
             ret['cart'] = os.environ['CART']
         else:  ret['cart'] = cart
 
-        ret['connected'] = connected
-        ret['launch_joint'] = launch_joint
-        ret['kinematics'] = kinematics
+        if 'CONNECTED' in os.environ:
+            ret['connected'] = os.environ['CONNECTED']
+        else:  ret['connected'] = connected
+
+        if 'LAUNCH_JOINT' in os.environ:
+            ret['launch_joint'] = os.environ['LAUNCH_JOINT']
+        else:  ret['launch_joint'] = launch_joint
+
+        if 'KINEMATICS' in os.environ:
+            ret['kinematics'] = os.environ['KINEMATICS']
+        else:  ret['kinematics'] = kinematics
+
+        if 'CONTROLLERS_FILE' in os.environ:
+            ret['controllers_file'] = os.environ['CONTROLLERS_FILE']
+        else:  ret['controllers_file'] = controllers_file
+
 
     return ret
 
@@ -177,13 +186,6 @@ def generate_launch_description():
     ld = launch.LaunchDescription()
 
     params = read_params(ld)
-    
-    config_file_rewritten = RewrittenYaml(
-        source_file=params['controllers_file'],
-        param_rewrites={},
-        root_key=[params['namespace'],],
-        convert_types=True,
-    )
 
     robot_description_content = launch.substitutions.Command(
         [
@@ -194,22 +196,12 @@ def generate_launch_description():
             " robot_id:=", params['robot_id'],
             " prefix:=",   params['robot_id'], "_",
             " kinematics:=", params['kinematics'],
-            " load_kinematics_file:=false",
             " gpu:=false",
             " publish_bf:=true",
             " hq:=true",
-            " launch_arm:=false",
-            " arm_manufacturer:=false",
-            " arm_model:=false",
-            " launch_gripper:=false" ,
-            " gripper_manufacturer:=false",
-            " gripper_model:=false",
-            " launch_lift:=false",
-            " lift_manufacturer:=false",
-            " lift_model:=false",
-            " config_controllers:=", config_file_rewritten,
             " cart:=", params['cart'],
-            " connected:=", params['connected']
+            " connected:=", params['connected'],
+            " controllers:=", params['controllers_file']
         ]
     )
 

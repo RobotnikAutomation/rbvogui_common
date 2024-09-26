@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rear_wheel">
+
+  <xacro:arg name="prefix" default="robot_" />
+  <xacro:arg name="connected" default="false" />
+
+  <!-- Math -->
+  <xacro:property name="PI" value="3.141592" />
+
+  <!-- Size wheels -->
+  <xacro:property name="wheels_radius" value="0.225" />
+  <xacro:property name="wheels_width" value="0.08" />
+
+  <xacro:macro name="rear_wheel" params="prefix parent *origin">
+
+    <!-- Rear wheel -->
+
+    <joint name="${prefix}rear_wheel_joint" type="continuous">
+        <xacro:insert_block name="origin" />
+        <parent link="${parent}"/>
+        <child link="${prefix}rear_wheel"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit effort="1000" velocity="2000"/>
+        <dynamics damping="0.8" friction="2.0"/>
+    </joint>
+
+    <link name="${prefix}rear_wheel">
+      <inertial>
+            <mass value="3" />
+            <origin xyz="0 0 0" rpy="${PI/2} 0 0" />
+            <xacro:solid_cylinder_inertia m="3" r="${wheels_radius}" h="${wheels_width}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0.0 0"/>
+        <geometry>
+          <mesh filename="package://rbvogui_description/meshes/cart/back_wheel.stl" scale="1.0 1.0 1.0"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.2 0.2 0.2 0.8"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${PI/2} 0.0 0.0"/>
+        <geometry>
+          <cylinder radius="${wheels_radius}" length="${wheels_width}"/>
+        </geometry>
+        <contact_coefficients mu="1.0" kp="1.0" kd="1.0" />
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}rear_wheel">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

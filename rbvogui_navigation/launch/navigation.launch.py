@@ -29,7 +29,7 @@ import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 
-from robotnik_common.launch import RewrittenYaml
+from nav2_common.launch import RewrittenYaml
 
 # Environment variables
 #  USE_SIM_TIME: Use simulation (Gazebo) clock if true
@@ -44,6 +44,7 @@ def read_params(ld : launch.LaunchDescription):
     namespace = launch.substitutions.LaunchConfiguration('namespace')
     robot_id = launch.substitutions.LaunchConfiguration('robot_id')
     nav_config_file = launch.substitutions.LaunchConfiguration('nav_config_file')
+    kinematics = launch.substitutions.LaunchConfiguration('kinematics')
 
     # Declare the launch options
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -63,7 +64,7 @@ def read_params(ld : launch.LaunchDescription):
     ld.add_action(launch.actions.DeclareLaunchArgument(
         name='robot_id',
         description='Frame id of the sensor. (e.g. robot).',
-        default_value='robot_')
+        default_value='robot')
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -73,9 +74,15 @@ def read_params(ld : launch.LaunchDescription):
     )
 
     ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='kinematics',
+        description='kinematics of the robot (omni or ackermann)',
+        default_value='omni')
+    )
+
+    ld.add_action(launch.actions.DeclareLaunchArgument(
         name='nav_config_file',
         description='Absolute path to the amcl file.',
-        default_value=[get_package_share_directory('rbvogui_navigation'), '/config/nav.yaml'])
+        default_value=[get_package_share_directory('rbvogui_navigation'), '/config/nav_', kinematics, '.yaml'])
     )
     
     # Parse the launch options
@@ -125,9 +132,9 @@ def generate_launch_description():
                        'velocity_smoother']
 
     remappings = [
-        ('/odom', '/robot/robotnik_base_controller/odom'),
+        ('/odom', ['/', params['namespace'], '/robotnik_base_controller/odom']),
         ('/front_laser/scan', ['/', params['namespace'], '/front_laser/scan']),
-        ('/rear_laser/scan',  ['/', params['namespace'], '/rear_laser/scan'])
+        ('/rear_laser/scan',  ['/', params['namespace'], '/rear_laser/scan']),
     ]
 
     configured_params = RewrittenYaml(
@@ -135,7 +142,9 @@ def generate_launch_description():
             root_key=params['namespace'],
             param_rewrites={
                 'use_sim_time': params['use_sim_time'],
-                'robot_base_frame': [params['robot_id'], 'base_link'],
+                'robot_base_frame': [params['robot_id'], '_base_link'],
+                'global_frame': [params['robot_id'], '_map'],
+
             },
             convert_types=True)
 
@@ -149,6 +158,7 @@ def generate_launch_description():
                 executable='controller_server',
                 output='screen',
                 respawn_delay=2.0,
+                namespace=params['namespace'],
                 parameters=[
                     {'use_sim_time': params['use_sim_time']},
                     configured_params],
@@ -159,6 +169,7 @@ def generate_launch_description():
                 name='smoother_server',
                 output='screen',
                 respawn_delay=2.0,
+                namespace=params['namespace'],
                 parameters=[
                     {'use_sim_time': params['use_sim_time']},
                     configured_params],
@@ -168,6 +179,7 @@ def generate_launch_description():
                 executable='planner_server',
                 name='planner_server',
                 output='screen',
+                namespace=params['namespace'],
                 respawn_delay=2.0,
                 parameters=[
                     {'use_sim_time': params['use_sim_time']},
@@ -178,6 +190,7 @@ def generate_launch_description():
                 executable='behavior_server',
                 name='behavior_server',
                 output='screen',
+                namespace=params['namespace'],
                 respawn_delay=2.0,
                 parameters=[
                     {'use_sim_time': params['use_sim_time']},
@@ -188,6 +201,7 @@ def generate_launch_description():
                 executable='bt_navigator',
                 name='bt_navigator',
                 output='screen',
+                namespace=params['namespace'],
                 respawn_delay=2.0,
                 parameters=[
                     {'use_sim_time': params['use_sim_time']},
@@ -198,6 +212,7 @@ def generate_launch_description():
                 executable='waypoint_follower',
                 name='waypoint_follower',
                 output='screen',
+                namespace=params['namespace'],
                 respawn_delay=2.0,
                 parameters=[
                     {'use_sim_time': params['use_sim_time']},
@@ -208,6 +223,7 @@ def generate_launch_description():
                 executable='velocity_smoother',
                 name='velocity_smoother',
                 output='screen',
+                namespace=params['namespace'],
                 respawn_delay=2.0,
                 parameters=[
                     {'use_sim_time': params['use_sim_time']},
@@ -219,6 +235,7 @@ def generate_launch_description():
                 executable='lifecycle_manager',
                 name='lifecycle_manager_navigation',
                 output='screen',
+                namespace=params['namespace'],
                 parameters=[{
                     'use_sim_time': params['use_sim_time'],
                     'autostart': True,
@@ -227,7 +244,6 @@ def generate_launch_description():
     )
 
     # Set environment variables
-    ld.add_action(launch_ros.actions.PushRosNamespace(namespace=params['namespace']))
     ld.add_action(stdout_linebuf_envvar)
     ld.add_action(load_nodes)
 

@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-    <xacro:macro name="ros2_control" params="prefix">
+    <xacro:macro name="ros2_control" params="prefix robot_id controllers">
         <gazebo>
           <plugin name="ros_control" filename="libgazebo_ros2_control.so">
-            <namespace>robot</namespace>
+            <namespace>${robot_id}</namespace>
             <robot_param>robot_description</robot_param>
             <robot_param_node>robot_state_publisher</robot_param_node>
-            <parameters>$(find rbvogui_gazebo)/config/base_controller.yaml</parameters>
+            <parameters>${controllers}</parameters>
           </plugin>
-
         </gazebo>
 
         <xacro:macro name="ros2_joint" params="interface jmin jmax prefix name">
