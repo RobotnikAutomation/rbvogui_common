@@ -52,15 +52,15 @@ docking_server:
     docks: ['home_dock', 'back_dock']
     home_dock:
       type: 'front_dock'
-      frame: robot_map
-      pose: [-2.442, 0.0, 0.0]
+      frame: 'robot_map'
+      pose: [1.589, 0.505, 0.348]
     back_dock:
       type: 'rear_dock'
-      frame: robot_map
+      frame: 'robot_map'
       pose: [-2.442, 0.0, 0.0]
 
     controller:
       k_phi: 3.0
       k_delta: 2.0
-      v_linear_min: 0.15
-      v_linear_max: 0.15
+      v_linear_min: 0.1
+      v_linear_max: 0.2

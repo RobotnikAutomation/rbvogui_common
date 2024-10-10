@@ -32,14 +32,10 @@ set(dependencies
   opennav_docking_core
 )
 
-add_executable(dock_pose_publisher src/dock_pose_publisher.cpp)
-ament_target_dependencies(dock_pose_publisher ${dependencies})
-
 add_executable(static_dock_pose_publisher src/static_dock_pose_publisher.cpp)
 ament_target_dependencies(static_dock_pose_publisher ${dependencies})
 
 install(TARGETS
-  dock_pose_publisher
   static_dock_pose_publisher
   DESTINATION lib/${PROJECT_NAME})
 
