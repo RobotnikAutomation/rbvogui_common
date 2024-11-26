@@ -1,42 +1,62 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-    <xacro:macro name="ros2_control" params="prefix robot_id controllers">
-        <gazebo>
-          <plugin name="ros_control" filename="libgazebo_ros2_control.so">
-            <namespace>${robot_id}</namespace>
-            <robot_param>robot_description</robot_param>
-            <robot_param_node>robot_state_publisher</robot_param_node>
-            <parameters>${controllers}</parameters>
-          </plugin>
-        </gazebo>
+  <!-- Define the ros2_joint macro outside of ros2_control -->
+  <xacro:macro name="ros2_joint" params="interface jmin jmax prefix name">
+    <joint name="${prefix}${name}">
+      <command_interface name="${interface}">
+        <param name="min">${jmin}</param>
+        <param name="max">${jmax}</param>
+      </command_interface>
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+    </joint>
+  </xacro:macro>
 
-        <xacro:macro name="ros2_joint" params="interface jmin jmax prefix name">
-          <joint name="${prefix}${name}">
-            <command_interface name="${interface}">
-              <param name="min">${jmin}</param>
-              <param name="max">${jmax}</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-            <state_interface name="effort"/>
-          </joint>
-        </xacro:macro>
+  <!-- Define the ros2_control macro that includes plugins for Gazebo Classic or Ignition -->
+  <xacro:macro name="ros2_control" params="prefix robot_id controllers simulator">
+    <gazebo>
+      <xacro:if value="${simulator == 'ignition'}">
+        <plugin name="ign_ros2_control::IgnitionROS2ControlPlugin" filename="ign_ros2_control-system">
+          <ros>
+            <namespace>${robot_id}</namespace>  <!-- Define the namespace for the robot -->
+          </ros>
+          <robotParam>robot_description</robotParam>  <!-- Namespace for the robot parameter -->
+          <robotParamNode>robot_state_publisher</robotParamNode>  <!-- Node name for the control manager -->
+          <parameters>${controllers}</parameters>
+        </plugin>
+      </xacro:if>
+      <xacro:if value="${simulator == 'classic'}">
+        <plugin name="ros_control" filename="libgazebo_ros2_control.so">
+          <ros>
+            <namespace>${robot_id}</namespace>  <!-- Define the namespace for the robot -->
+          </ros>
+          <robotParam>robot_description</robotParam>  <!-- Namespace for the robot parameter -->
+          <robotParamNode>robot_state_publisher</robotParamNode>  <!-- Node name for the control manager -->
+          <parameters>${controllers}</parameters>
+        </plugin>
+      </xacro:if>
+    </gazebo>
 
-        <ros2_control name="GazeboSystem" type="system">
-          <hardware>
-              <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-          </hardware>
+    <ros2_control name="GazeboSystem" type="system">
+      <hardware>
+        <xacro:if value="${simulator == 'classic'}">
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </xacro:if>
+        <xacro:if value="${simulator == 'ignition'}">
+          <plugin>ign_ros2_control/IgnitionSystem</plugin>
+        </xacro:if>
+      </hardware>
 
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_steering_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_steering_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_left_steering_joint"/>
-          <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_right_steering_joint"/>
-
-          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_left_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_right_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_left_wheel_joint"/>
-          <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_right_wheel_joint"/>
-
-        </ros2_control>
-    </xacro:macro>
+      <!-- Calls to the ros2_joint macro to create joints -->
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_left_steering_joint" />
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="front_right_steering_joint" />
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_left_steering_joint" />
+      <xacro:ros2_joint interface="position" jmin="-2" jmax="2" prefix="${prefix}" name="back_right_steering_joint" />
+      <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_left_wheel_joint" />
+      <xacro:ros2_joint interface="velocity" jmin="-10" jmax="10" prefix="${prefix}" name="front_right_wheel_joint" />
+      <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_left_wheel_joint" />
+      <xacro:ros2_joint interface="velocity" jmin="-20" jmax="20" prefix="${prefix}" name="back_right_wheel_joint" />
+    </ros2_control>
+  </xacro:macro>
 </robot>
