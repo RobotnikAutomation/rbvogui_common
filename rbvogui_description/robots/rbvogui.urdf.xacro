@@ -19,9 +19,10 @@
     <xacro:arg name="gpu" default="true" />
     <xacro:arg name="kinematics" default="omni" />
     <xacro:arg name="controllers" default="$(find rbvogui_gazebo)/config/omni_controller.yaml" />
+    <xacro:arg name="simulator" default="classic" />
 
     <xacro:rbvogui robot_id="$(arg robot_id)" prefix="$(arg prefix)" kinematics="$(arg kinematics)" gpu="$(arg gpu)" publish_bf="${publish_bf}" hq="${hq}"
-                    controllers="$(arg controllers)"/>
+                    controllers="$(arg controllers)" simulator="$(arg simulator)"/>
 
 
     <!-- Cart -->
