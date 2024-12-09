@@ -50,7 +50,7 @@
             <origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
         </xacro:steering_wheel>
 
-        <xacro:if value="${kinematics == 'omni'}">
+        <xacro:if value="${kinematics == 'omni' or kinematics == 'swerve'}">
             <xacro:steering_wheel prefix="${prefix}back_left_" parent="${prefix}base_link" reflect="true" hq="true">
                 <origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
             </xacro:steering_wheel>
