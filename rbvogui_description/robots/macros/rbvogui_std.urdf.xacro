@@ -32,7 +32,7 @@
     <xacro:property name="hq" value="true" />
     <xacro:property name="publish_bf" value="true" />
 
-    <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics gpu robot_id controllers">
+    <xacro:macro name="rbvogui" params="prefix publish_bf hq kinematics gpu robot_id controllers simulator:='classic'">
 
         <!-- ***************   -->
         <!-- Robots Elements -->
@@ -82,30 +82,30 @@
         <!-- SENSORS see robotnik_sensors for the specific configuration -->
 
         <!-- IMU -->
-        <xacro:sensor_vectornav prefix="${prefix}" parent="${prefix}chassis_link" topic="/${robot_id}/imu/data">
+        <xacro:sensor_vectornav prefix="${prefix}" parent="${prefix}chassis_link" topic="/${robot_id}/imu/data" simulator="${simulator}">
             <origin xyz="0.3 -0.3 0.0725" rpy="0 0 0"/>
         </xacro:sensor_vectornav>
 
         <!-- Front Camera -->
-        <xacro:sensor_intel_d435 prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link" prefix_topic="/${robot_id}/front_rgbd_camera" use_nominal_extrinsics="true">
+        <xacro:sensor_intel_d435 prefix="${prefix}front_rgbd_camera" parent="${prefix}chassis_link" prefix_topic="/${robot_id}/front_rgbd_camera" use_nominal_extrinsics="true" simulator="${simulator}">
             <origin xyz="0.46462 0.0 0.18258" rpy="0 0 0"/>
         </xacro:sensor_intel_d435>
 
         <!-- Rear Camera -->
-        <xacro:sensor_intel_d435 prefix="${prefix}rear_rgbd_camera" parent="${prefix}base_link" prefix_topic="/${robot_id}/rear_rgbd_camera" use_nominal_extrinsics="true">
+        <xacro:sensor_intel_d435 prefix="${prefix}rear_rgbd_camera" parent="${prefix}base_link" prefix_topic="/${robot_id}/rear_rgbd_camera" use_nominal_extrinsics="true" simulator="${simulator}">
             <origin xyz="-0.503 0.0 0.29" rpy="0 0 -${PI}"/>
         </xacro:sensor_intel_d435>
 
         <!-- 2d laser -->
-        <xacro:sensor_sick_s300 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/${robot_id}/front_laser">
+        <xacro:sensor_sick_s300 prefix="${prefix}front_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/${robot_id}/front_laser" simulator="${simulator}">
           <origin xyz="0.53 0.33 0.1145" rpy="${PI} 0 ${PI/4}"/>
         </xacro:sensor_sick_s300>
 
-        <xacro:sensor_sick_s300 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/${robot_id}/rear_laser">
+        <xacro:sensor_sick_s300 prefix="${prefix}rear_laser" parent="${prefix}chassis_link" gpu="${gpu}" prefix_topic="/${robot_id}/rear_laser" simulator="${simulator}">
           <origin xyz="-0.53 -0.33 0.1145" rpy="${PI} 0 ${-PI*3/4}"/>
         </xacro:sensor_sick_s300>
 
-        <xacro:ros2_control prefix="${prefix}" robot_id="${robot_id}" controllers="${controllers}"/>
+        <xacro:ros2_control prefix="${prefix}" robot_id="${robot_id}" controllers="${controllers}" simulator="${simulator}"/>
 
     </xacro:macro>
 

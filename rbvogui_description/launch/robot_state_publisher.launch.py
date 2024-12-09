@@ -49,6 +49,7 @@ def read_params(ld : launch.LaunchDescription):
     launch_joint = launch.substitutions.LaunchConfiguration('launch_joint')
     kinematics = launch.substitutions.LaunchConfiguration('kinematics')
     controllers_file = launch.substitutions.LaunchConfiguration('controllers_file')
+    simulator = launch.substitutions.LaunchConfiguration('simulator')
 
     # Declare the launch options
     ld.add_action(launch.actions.DeclareLaunchArgument(
@@ -119,6 +120,12 @@ def read_params(ld : launch.LaunchDescription):
             default_value=[get_package_share_directory('rbvogui_gazebo'), '/config/', kinematics, '_controller.yaml'])
     )
 
+    ld.add_action(launch.actions.DeclareLaunchArgument(
+        name='simulator',
+        description='simulator (classic or ignition)',
+        default_value='classic')
+    )
+
 
     # Parse the launch options
     ret = {}
@@ -133,7 +140,8 @@ def read_params(ld : launch.LaunchDescription):
         'connected': connected,
         'launch_joint': launch_joint,
         'kinematics': kinematics,
-        'controllers_file': controllers_file
+        'controllers_file': controllers_file,
+        'simulator': simulator
         }
     
     else:
@@ -177,6 +185,10 @@ def read_params(ld : launch.LaunchDescription):
             ret['controllers_file'] = os.environ['CONTROLLERS_FILE']
         else:  ret['controllers_file'] = controllers_file
 
+        if 'SIMULATOR' in os.environ:
+            ret['simulator'] = os.environ['SIMULATOR']
+        else: ret['simulator'] = simulator
+
 
     return ret
 
@@ -201,7 +213,8 @@ def generate_launch_description():
             " hq:=true",
             " cart:=", params['cart'],
             " connected:=", params['connected'],
-            " controllers:=", params['controllers_file']
+            " controllers:=", params['controllers_file'],
+            " simulator:=", params['simulator']
         ]
     )
 
