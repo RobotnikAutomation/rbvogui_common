@@ -63,7 +63,9 @@ def generate_launch_description():
           slam_params_file,
           {'use_sim_time': use_sim_time}
         ],
-        remappings=[('/map', ['/', params['namespace'], '/map'])],
+        remappings=[('/map', ['/', params['namespace'], '/map']),
+                    ('/intensity_map', ['/', params['namespace'], '/intensity_map'])
+                    ],
         namespace=params['namespace'],
         package='slam_toolbox',
         executable='async_slam_toolbox_node',

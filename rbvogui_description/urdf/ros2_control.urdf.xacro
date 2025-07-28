@@ -26,7 +26,17 @@
           <parameters>${controllers}</parameters>
         </plugin>
       </xacro:if>
-      <xacro:if value="${simulator == 'classic'}">
+      <xacro:if value="${simulator == 'classic'}">        
+        <plugin name="libgazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+          <ros>
+            <namespace>robot</namespace>
+            <remapping>odom:=ground_truth</remapping>
+            </ros>
+            <frame_name>robot_map</frame_name>
+            <body_name>robot_base_footprint</body_name>
+            <update_rate>200.0</update_rate>
+            <gaussian_noise>0.01</gaussian_noise>
+        </plugin>
         <plugin name="ros_control" filename="libgazebo_ros2_control.so">
           <ros>
             <namespace>${robot_id}</namespace>  <!-- Define the namespace for the robot -->

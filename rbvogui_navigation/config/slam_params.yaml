@@ -40,8 +40,8 @@
       # General Parameters
       use_scan_matching: true
       use_scan_barycenter: true
-      minimum_travel_distance: 0.5
-      minimum_travel_heading: 0.5
+      minimum_travel_distance: 0.0 #0.5
+      minimum_travel_heading: 0.0 #0.5
       scan_buffer_size: 10
       scan_buffer_maximum_scan_distance: 10.0
       link_match_minimum_response_fine: 0.1  
@@ -73,3 +73,9 @@
       minimum_angle_penalty: 0.9
       minimum_distance_penalty: 0.5
       use_response_expansion: true
+
+      # Intensity Parameters
+      min_laser_intensity: 10.0
+      max_laser_intensity: 5.0
+      intensity_strategy: "mean"
+      min_intensity_counter: 1
